@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 
 import helpers.Logger;
 import view.GUI;
+import view.pages.Home;
 
 public class App {
     /* Design Pattern: Singleton */
@@ -37,7 +38,8 @@ public class App {
     /* Ponto de partida da Interface Gráfica */
     public static void main(String args[]) {
         GUI gui = new GUI();
-        App.get().gui = gui;        
+        App.get().gui = gui;
+        gui.navigate(new Home()); // começamos na página inicial
     }
 
     

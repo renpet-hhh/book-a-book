@@ -1,4 +1,4 @@
-Compilação: `javac model/App.java`
+Compilação: `javac -encoding utf8 ./model/App.java`
 
 Execução: `java model/App`
 
