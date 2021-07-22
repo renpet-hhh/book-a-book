@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 
 import helpers.Logger;
 import view.GUI;
+import view.Page;
 import view.pages.Home;
 
 public class App {
@@ -19,6 +20,7 @@ public class App {
     public Login getLogin() { return this.login; }
     /* Estado da VIEW */
     private GUI gui;
+    public void navigate(Page page) { this.gui.navigate(page); }
     public JFrame getFrame() { return this.gui.getFrame(); }
     /* Estado da biblioteca */
     private final Library library = new Library();

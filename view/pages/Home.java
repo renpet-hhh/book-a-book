@@ -1,7 +1,6 @@
 package view.pages;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Image;
 import java.awt.Dimension;
 // import java.awt.image.BufferedImage;
@@ -16,6 +15,8 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
+import model.App;
+import model.commands.NavigateCmd;
 import view.components.Label;
 import view.Margin;
 import view.Page;
@@ -102,6 +103,7 @@ public class Home implements Page {
         JComponent component = Box.createVerticalBox();
         Label mainText = new Label("Olá olá lorem ipsum pssum lorem ");
         JButton enterAsGuestBttn = new JButton("Acessar a biblioteca sem conta");
+        enterAsGuestBttn.addActionListener(e -> App.get().invoke(new NavigateCmd(NavigateCmd.PESQUISABIBLIOGRAFICA)));
         component.add(Margin.rigidVertical(20));
         component.add(mainText);
         component.add(Margin.rigidVertical(20));
