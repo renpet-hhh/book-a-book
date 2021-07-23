@@ -18,6 +18,7 @@ import view.pages.admin.RegisterBooks;
 import view.pages.admin.RegisterUsers;
 import view.pages.admin.SearchBooks;
 import view.pages.admin.SearchUsers;
+import view.pages.admin.Settings;
 
 public class AdminMenu extends JMenuBar {
 
@@ -47,7 +48,7 @@ public class AdminMenu extends JMenuBar {
     private JMenu administracao() {
         App app = App.get();
         JMenuItem relatorios = MenuFactory.createMenuItem("Relatórios");
-        JMenuItem configs = MenuFactory.createMenuItem("Configurações");
+        JMenuItem configs = MenuFactory.createMenuItem("Configurações", e -> app.invoke(new NavigateCmd(new Settings())));
         JMenuItem cadastroDeAdmins = MenuFactory.createMenuItem("Cadastro de Admins", e -> app.invoke(new NavigateCmd(new RegisterAdmins())));
         JMenu menu = MenuFactory.createMenu("Administração", relatorios, configs, cadastroDeAdmins);
         return menu;
