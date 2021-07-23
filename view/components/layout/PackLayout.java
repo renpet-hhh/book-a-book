@@ -5,6 +5,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 /* LayoutManager que funciona como o BoxLayout,
 mas limita o seu tamanho máximo como o máximo dos tamanhos mínimos de seus subcomponentes.
@@ -41,6 +43,19 @@ public class PackLayout extends BoxLayout {
             dim.setSize(maxsize, dim.getHeight());
         }
         return dim;
+    }
+
+    public static JComponent createHorizontalBox() {
+        JComponent box = new JPanel();
+        PackLayout layout = new PackLayout(box, PackLayout.X_AXIS);
+        box.setLayout(layout);
+        return box;
+    }
+    public static JComponent createVerticalBox() {
+        JComponent box = new JPanel();
+        PackLayout layout = new PackLayout(box, PackLayout.Y_AXIS);
+        box.setLayout(layout);
+        return box;
     }
 
 }

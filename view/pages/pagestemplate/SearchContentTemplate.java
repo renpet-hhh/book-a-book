@@ -29,7 +29,7 @@ public class SearchContentTemplate {
     final static Color BGCOLOR = new Color(187, 187, 187);
     final static Color MENUCOLOR = new Color(66, 66, 69);
     final static Color LABELCOLOR = new Color(220, 220, 220);
-    final static Color MAINWRAPPERCOLOR = new Color(255, 252, 252);
+    public static Color MAINWRAPPERCOLOR = new Color(255, 252, 252);
 
     /* Constrói um componente com labels seguidos de campos de texto.
     Se checked for true, também adiciona checkboxes à esquerda dos labels */
