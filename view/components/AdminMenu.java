@@ -13,6 +13,7 @@ import javax.swing.JMenuItem;
 import model.App;
 import model.commands.NavigateCmd;
 import view.components.base.MenuFactory;
+import view.pages.admin.EmprestimosEDevolucoes;
 import view.pages.admin.RegisterAdmins;
 import view.pages.admin.RegisterBooks;
 import view.pages.admin.RegisterUsers;
@@ -34,7 +35,7 @@ public class AdminMenu extends JMenuBar {
     private JMenu circulacao() {
         App app = App.get();
         JMenuItem cadastro = MenuFactory.createMenuItem("Cadastro de Usuários", e -> app.invoke(new NavigateCmd(new RegisterUsers())));
-        JMenuItem emprestimos = MenuFactory.createMenuItem("Empréstimos e Devoluções");
+        JMenuItem emprestimos = MenuFactory.createMenuItem("Empréstimos e Devoluções", e -> app.invoke(new NavigateCmd(new EmprestimosEDevolucoes())));
         JMenuItem reservas = MenuFactory.createMenuItem("Reservas");
         JMenu menu = MenuFactory.createMenu("Circulação", cadastro, emprestimos, reservas);
         return menu;

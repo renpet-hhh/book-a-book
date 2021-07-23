@@ -15,7 +15,7 @@ public class SearchTemplate {
     final static int LEFTRIGHTMARGINWRAPPER = MenuFactory.WRAPPERHORIZONTALMARGIN;
 
 
-    private static JComponent pathComponent(String text) {
+    public static JComponent pathComponent(String text) {
         JComponent component = Box.createHorizontalBox();
         Label label = new Label(text);
         component.add(Margin.rigidHorizontal(LEFTRIGHTMARGINWRAPPER));

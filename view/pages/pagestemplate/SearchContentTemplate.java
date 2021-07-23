@@ -25,6 +25,7 @@ public class SearchContentTemplate {
     final static int SPACEBETWEENBUTTONSANDMAINCONTENT = 30;
     final static int FIELDMINWIDTH = 200;
     final static int FIELDMAXWIDTH = 500;
+    final static int DEFAULTVERTICALMARGINWHENNOGLUEISUSED = 20;
 
     final static Color BGCOLOR = new Color(187, 187, 187);
     final static Color MENUCOLOR = new Color(66, 66, 69);
@@ -33,7 +34,7 @@ public class SearchContentTemplate {
 
     /* Constrói um componente com labels seguidos de campos de texto.
     Se checked for true, também adiciona checkboxes à esquerda dos labels */
-    private static JComponent mainContent(String[] labelsText, boolean checked) {
+    public static JComponent mainContent(String[] labelsText, boolean checked) {
         JComponent component = new JPanel();
         PackLayout layout = new PackLayout(component, PackLayout.Y_AXIS);
         component.setLayout(layout);
@@ -63,6 +64,17 @@ public class SearchContentTemplate {
     /* Constrói um componente com labels seguidos de texto, e ao final uma lista de botões.
     Se checked for true, também adiciona checkboxes à esquerda dos labels */
     public static JComponent build(String[] labelsText, String[] buttonsText, boolean checked) {
+        return build(labelsText, buttonsText, checked, LEFTRIGHTMARGINWRAPPER);
+    }
+    
+    public static JComponent build(String[] labelsText, String[] buttonsText, boolean checked, int horizontalMargin) {
+        return build(labelsText, buttonsText, checked, horizontalMargin, true);
+    }
+    public static JComponent build(String[] labelsText, String[] buttonsText, boolean checked, boolean useGlue) {
+        return build(labelsText, buttonsText, checked, LEFTRIGHTMARGINWRAPPER, useGlue);
+    }
+
+    public static JComponent build(String[] labelsText, String[] buttonsText, boolean checked, int horizontalMargin, boolean useGlue) {
         JComponent wrapper2 = Box.createHorizontalBox();
         JComponent wrapper1 = Box.createVerticalBox();
         Box buttons = Box.createHorizontalBox();
@@ -75,18 +87,19 @@ public class SearchContentTemplate {
             buttons.add(bttn);
         }
         buttons.add(Box.createHorizontalGlue());
-        wrapper1.add(Box.createVerticalGlue());
+        if (useGlue) wrapper1.add(Box.createVerticalGlue());
+        else wrapper1.add(Margin.rigidVertical(DEFAULTVERTICALMARGINWHENNOGLUEISUSED));
         wrapper1.add(mainContent(labelsText, checked));
         wrapper1.add(Margin.rigidVertical(SPACEBETWEENBUTTONSANDMAINCONTENT));
         wrapper1.add(buttons);
-        wrapper1.add(Box.createVerticalGlue());
+        if (useGlue) wrapper1.add(Box.createVerticalGlue());
+        else wrapper1.add(Margin.rigidVertical(DEFAULTVERTICALMARGINWHENNOGLUEISUSED));
         wrapper1.setOpaque(true);
         wrapper1.setBackground(MAINWRAPPERCOLOR);
-        wrapper2.add(Margin.rigidHorizontal(LEFTRIGHTMARGINWRAPPER));
+        wrapper2.add(Margin.rigidHorizontal(horizontalMargin));
         wrapper2.add(wrapper1);
-        wrapper2.add(Margin.rigidHorizontal(LEFTRIGHTMARGINWRAPPER));
+        wrapper2.add(Margin.rigidHorizontal(horizontalMargin));
         return wrapper2;
     }
-    
 
 }
