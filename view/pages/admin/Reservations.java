@@ -14,9 +14,9 @@ import view.components.base.MenuFactory;
 import view.pages.pagestemplate.SearchContentTemplate;
 import view.pages.pagestemplate.SearchTemplate;
 
-public class EmprestimosEDevolucoes implements Page {
+public class Reservations implements Page {
     
-    public final static String TITLE = "Empréstimos e Devoluções";
+    public final static String TITLE = "Reservas";
     @Override
     public String getTitle() { return TITLE; }
 
@@ -32,14 +32,14 @@ public class EmprestimosEDevolucoes implements Page {
         frame.setLayout(bLayout);
         JComponent menubar = AdminMenu.withWrapper();
         String[] labelsText = new String[] {
-            "Cód. do Livro:", "Matrícula Usuário:"
+            "Matrícula Usuário:"
         };
         String[] topButtonText = new String[] {"Buscar"};
         JComponent searchContent = SearchContentTemplate.build(labelsText, topButtonText, false, false);
-        String[] bottomButtonsText = new String[] {"Cancelar", "Emprestar/Devolver"};
+        String[] bottomButtonsText = new String[] {"Cancelar", "Emprestar"};
         JComponent buttons = SearchContentTemplate.build(new String[0], bottomButtonsText, false, false);
         frame.add(menubar);
-        frame.add(SearchTemplate.pathComponent("Circulação >> Empréstimos e Devoluções"));
+        frame.add(SearchTemplate.pathComponent("Circulação >> Reservas"));
         frame.add(searchContent);
         frame.add(info());
         frame.add(buttons);
