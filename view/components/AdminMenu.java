@@ -13,6 +13,7 @@ import javax.swing.JMenuItem;
 import model.App;
 import model.commands.NavigateCmd;
 import view.components.base.MenuFactory;
+import view.pages.admin.RegisterBooks;
 import view.pages.admin.SearchBooks;
 import view.pages.admin.SearchUsers;
 
@@ -34,8 +35,9 @@ public class AdminMenu extends JMenuBar {
         return menu;
     }
 
-    private JMenu catalogacao() {
-        JMenu menu = MenuFactory.createMenu("Catalogação");
+    private JButton catalogacao() {
+        App app = App.get();
+        JButton menu = MenuFactory.createButton("Catalogação", e -> app.invoke(new NavigateCmd(new RegisterBooks())));
         return menu;
     }
 
@@ -62,7 +64,7 @@ public class AdminMenu extends JMenuBar {
         this.setLayout(bLayout);
         JMenu pesquisaMenu = this.pesquisa();
         JMenu circulacaoMenu = this.circulacao();
-        JMenu catalogMenu = this.catalogacao();
+        JButton catalogMenu = this.catalogacao();
         JMenu adminMenu = this.administracao();
         JButton helpBttn = this.ajuda();
         JButton exitBttn = this.sair();

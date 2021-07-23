@@ -5,10 +5,13 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
+
 import view.components.Label;
 import view.components.base.MenuFactory;
 import view.Margin;
 import view.components.fixed.LimitedJTextField;
+import view.components.layout.PackLayout;
 
 public class SearchContentTemplate {
 
@@ -29,39 +32,27 @@ public class SearchContentTemplate {
     final static Color MAINWRAPPERCOLOR = new Color(255, 252, 252);
 
     private static JComponent mainContent(String[] labelsText) {
-        JComponent component = Box.createHorizontalBox();
-        Box checks = Box.createVerticalBox();
+        JComponent component = new JPanel();
+        PackLayout layout = new PackLayout(component, PackLayout.Y_AXIS);
+        component.setLayout(layout);
         for (int i = 0; i < labelsText.length; i++) {
+            Box line = Box.createHorizontalBox();
             JCheckBox check = new JCheckBox();
             check.setOpaque(false);
+            Label label = new Label(labelsText[i]);
+            LimitedJTextField textField = new LimitedJTextField(FIELDMINWIDTH, FIELDMAXWIDTH);
+            line.add(check);
+            line.add(Margin.rigidHorizontal(SPACEBETWEENCHECKANDLABEL));
+            line.add(label);
+            line.add(Box.createHorizontalGlue()); // dá certo porcausa de PackLayout
+            line.add(Margin.rigidHorizontal(SPACEBETWEENLABELANDFIELD));
+            line.add(textField);
             if (i > 0) {
-                checks.add(Margin.rigidVertical(VERTICALGAPMAINCONTENT));
+                component.add(Margin.rigidVertical(VERTICALGAPMAINCONTENT));
             }
-            checks.add(check);
+            component.add(line);
         }
-        Box labels = Box.createVerticalBox();
-        for (int i = 0; i < labelsText.length; i++) {
-            Label labelComponent = new Label(labelsText[i]);
-            if (i > 0) {
-                labels.add(Margin.rigidVertical(VERTICALGAPMAINCONTENT));
-            }
-            labels.add(labelComponent);
-        }
-        Box fields = Box.createVerticalBox();
-        for (int i = 0; i < labelsText.length; i++) {
-            LimitedJTextField field = new LimitedJTextField(FIELDMINWIDTH, FIELDMAXWIDTH);
-            if (i > 0) {
-                fields.add(Margin.rigidVertical(VERTICALGAPMAINCONTENT));
-            }
-            fields.add(field);
-        }
-        component.add(Margin.rigidHorizontal(LEFTRIGHTMARGINMAINCONTENT));
-        component.add(checks);
-        component.add(Margin.rigidHorizontal(SPACEBETWEENCHECKANDLABEL));
-        component.add(labels);
-        component.add(Margin.rigidHorizontal(SPACEBETWEENLABELANDFIELD));
-        component.add(fields);
-        component.add(Margin.rigidHorizontal(LEFTRIGHTMARGINMAINCONTENT));
+        component.setBackground(MAINWRAPPERCOLOR);
         return component;
     }
 
