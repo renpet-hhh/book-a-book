@@ -31,7 +31,6 @@ public class SearchTemplate {
         frame.add(pathComponent(path));
         frame.add(content);
         frame.add(Margin.rigidVertical(BOTTOMMARGINMAINWRAPPER));
-        frame.pack();
     }
     
 }

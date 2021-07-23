@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.Dimension;
 import javax.swing.JFrame;
 
 import helpers.Logger;
@@ -21,6 +22,7 @@ public class App {
     /* Estado da VIEW */
     private GUI gui;
     public void navigate(Page page) { this.gui.navigate(page); }
+    public Page getCurrentPage() { return this.gui.getCurrentPage(); }
     public JFrame getFrame() { return this.gui.getFrame(); }
     /* Estado da biblioteca */
     private final Library library = new Library();
@@ -42,6 +44,8 @@ public class App {
         GUI gui = new GUI();
         App.get().gui = gui;
         gui.navigate(new Home()); // começamos na página inicial
+        App.get().getFrame().setSize(new Dimension(1200, 700));
+        App.get().getFrame().revalidate();
     }
 
     

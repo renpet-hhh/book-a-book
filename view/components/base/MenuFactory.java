@@ -14,6 +14,7 @@ import javax.swing.JMenuItem;
 import model.App;
 import model.commands.NavigateCmd;
 import view.Margin;
+import view.pages.Home;
 
 public abstract class MenuFactory {
 
@@ -51,11 +52,16 @@ public abstract class MenuFactory {
         return menu;
     }
 
-    public static JMenuItem createMenuItem(String text) {
+    public static JMenuItem createMenuItem(String text, ActionListener handler) {
         JMenuItem item = new JMenuItem(text);
         item.setForeground(MENUITEMLABELCOLOR);
         item.setBackground(MENUITEMCOLOR);
+        item.addActionListener(handler);
         return item;
+    }
+
+    public static JMenuItem createMenuItem(String text) {
+        return MenuFactory.createMenuItem(text, null);
     }
 
     public static JButton createButton(String text, ActionListener handler) {
@@ -74,7 +80,7 @@ public abstract class MenuFactory {
     }
 
     public static JButton exitButton() {
-        JButton button = MenuFactory.createButton("Sair", e -> App.get().invoke(new NavigateCmd(NavigateCmd.PAGINAINICIAL)));
+        JButton button = MenuFactory.createButton("Sair", e -> App.get().invoke(new NavigateCmd(new Home())));
         return button;
     }
 

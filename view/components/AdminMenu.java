@@ -10,13 +10,18 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import model.App;
+import model.commands.NavigateCmd;
 import view.components.base.MenuFactory;
+import view.pages.admin.SearchBooks;
+import view.pages.admin.SearchUsers;
 
 public class AdminMenu extends JMenuBar {
 
     private JMenu pesquisa() {
-        JMenuItem livros = MenuFactory.createMenuItem("Livros");
-        JMenuItem usuarios = MenuFactory.createMenuItem("Usuários");
+        App app = App.get();
+        JMenuItem livros = MenuFactory.createMenuItem("Livros", e -> app.invoke(new NavigateCmd(new SearchBooks())));
+        JMenuItem usuarios = MenuFactory.createMenuItem("Usuários", e -> app.invoke(new NavigateCmd(new SearchUsers())));
         JMenu menu = MenuFactory.createMenu("Pesquisa", livros, usuarios);
         return menu;
     }

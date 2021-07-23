@@ -2,39 +2,26 @@ package model.commands;
 
 import model.App;
 import model.Command;
-import view.pages.Home;
-import view.pages.Search;
+import view.Page;
 
 public class NavigateCmd implements Command {
 
-    /* O título da página, utilizado como código para navegação */
-    public static final String PAGINAINICIAL = "Página Inicial";
-    public static final String PESQUISABIBLIOGRAFICA = "Pesquisa Bibliográfica";
 
-    private String pageTitle;
+    private Page page;
 
-    public NavigateCmd(String pageTitle) {
-        this.pageTitle = pageTitle;
+    public NavigateCmd(Page page) {
+        this.page = page;
     }
 
     @Override
     public void execute() {
         App app = App.get();
-        app.getFrame().setTitle(this.pageTitle);
-        switch (this.pageTitle) {
-            case PAGINAINICIAL:
-                app.navigate(new Home());
-                break;
-            case PESQUISABIBLIOGRAFICA:
-                app.navigate(new Search());
-                break;
-            default:
-                break;
-        }
+        app.getFrame().setTitle(this.page.getTitle());
+        app.navigate(this.page);
     }
 
     @Override
     public String log() {
-        return "NavigateCmd: " + this.pageTitle; 
+        return "NavigateCmd: " + this.page.getTitle(); 
     }
 }

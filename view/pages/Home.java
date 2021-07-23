@@ -21,8 +21,13 @@ import view.components.Label;
 import view.Margin;
 import view.Page;
 import view.components.fixed.FixedJTextField;
+import view.pages.admin.SearchBooks;
 
 public class Home implements Page {
+
+    public final static String TITLE = "Página Inicial";
+    @Override
+    public String getTitle() { return TITLE; }
 
     final static int LOGOHEIGHT = 100;
     final static int LOGOMARGIN = 20;
@@ -103,7 +108,9 @@ public class Home implements Page {
         JComponent component = Box.createVerticalBox();
         Label mainText = new Label("Olá olá lorem ipsum pssum lorem ");
         JButton enterAsGuestBttn = new JButton("Acessar a biblioteca sem conta");
-        enterAsGuestBttn.addActionListener(e -> App.get().invoke(new NavigateCmd(NavigateCmd.PESQUISABIBLIOGRAFICA)));
+        /* o botão deve levar até Pesquisa para Guest, mas enquanto não temos sistema de login implementado,
+        vou fazer com que o botão para uma página de Admin */
+        enterAsGuestBttn.addActionListener(e -> App.get().invoke(new NavigateCmd(new SearchBooks())));
         component.add(Margin.rigidVertical(20));
         component.add(mainText);
         component.add(Margin.rigidVertical(20));
@@ -155,6 +162,6 @@ public class Home implements Page {
         frame.add(header);
         frame.add(mainWrapper);
         frame.add(foot);
-        frame.pack();
     }
+
 }
