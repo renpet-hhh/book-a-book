@@ -31,18 +31,22 @@ public class SearchContentTemplate {
     final static Color LABELCOLOR = new Color(220, 220, 220);
     final static Color MAINWRAPPERCOLOR = new Color(255, 252, 252);
 
-    private static JComponent mainContent(String[] labelsText) {
+    /* Constrói um componente com labels seguidos de campos de texto.
+    Se checked for true, também adiciona checkboxes à esquerda dos labels */
+    private static JComponent mainContent(String[] labelsText, boolean checked) {
         JComponent component = new JPanel();
         PackLayout layout = new PackLayout(component, PackLayout.Y_AXIS);
         component.setLayout(layout);
         for (int i = 0; i < labelsText.length; i++) {
             Box line = Box.createHorizontalBox();
-            JCheckBox check = new JCheckBox();
-            check.setOpaque(false);
+            if (checked) {
+                JCheckBox check = new JCheckBox();
+                check.setOpaque(false);
+                line.add(check);
+                line.add(Margin.rigidHorizontal(SPACEBETWEENCHECKANDLABEL));
+            }
             Label label = new Label(labelsText[i]);
             LimitedJTextField textField = new LimitedJTextField(FIELDMINWIDTH, FIELDMAXWIDTH);
-            line.add(check);
-            line.add(Margin.rigidHorizontal(SPACEBETWEENCHECKANDLABEL));
             line.add(label);
             line.add(Box.createHorizontalGlue()); // dá certo porcausa de PackLayout
             line.add(Margin.rigidHorizontal(SPACEBETWEENLABELANDFIELD));
@@ -56,7 +60,9 @@ public class SearchContentTemplate {
         return component;
     }
 
-    public static JComponent build(String[] labelsText, String[] buttonsText) {
+    /* Constrói um componente com labels seguidos de texto, e ao final uma lista de botões.
+    Se checked for true, também adiciona checkboxes à esquerda dos labels */
+    public static JComponent build(String[] labelsText, String[] buttonsText, boolean checked) {
         JComponent wrapper2 = Box.createHorizontalBox();
         JComponent wrapper1 = Box.createVerticalBox();
         Box buttons = Box.createHorizontalBox();
@@ -70,7 +76,7 @@ public class SearchContentTemplate {
         }
         buttons.add(Box.createHorizontalGlue());
         wrapper1.add(Box.createVerticalGlue());
-        wrapper1.add(mainContent(labelsText));
+        wrapper1.add(mainContent(labelsText, checked));
         wrapper1.add(Margin.rigidVertical(SPACEBETWEENBUTTONSANDMAINCONTENT));
         wrapper1.add(buttons);
         wrapper1.add(Box.createVerticalGlue());

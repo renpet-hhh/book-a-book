@@ -8,9 +8,9 @@ import view.components.AdminMenu;
 import view.pages.pagestemplate.SearchContentTemplate;
 import view.pages.pagestemplate.SearchTemplate;
 
-public class RegisterBooks implements Page {
+public class RegisterUsers implements Page {
     
-    public final static String TITLE = "Catalogação";
+    public final static String TITLE = "Cadastro de Usuários";
     @Override
     public String getTitle() { return TITLE; }
 
@@ -18,12 +18,12 @@ public class RegisterBooks implements Page {
     public void paint(JFrame frame) {
         JComponent menubar = AdminMenu.withWrapper();
         String[] labelsText = new String[] {
-            "Título:", "Subtítulo:", "Autor 1:", "Autor 2:", "Autor 3:",
-            "Edição:", "Ano de publicação:", "Local de publicação:", "Exemplares:", "ISBN:"
+            "Nome Completo:", "Data de Nascimento:", "Documento:", "Endereço:", "E-mail:",
+            "Contato:", "Senha:", "Confirmar senha:"
         };
         String[] buttonsText = new String[] {"Cancelar", "Cadastrar"};
         JComponent content = SearchContentTemplate.build(labelsText, buttonsText, false);
-        String path = "Catalogação";
+        String path = "Circulação >> Cadastro de Usuários";
         SearchTemplate.build(frame, menubar, content, path);
     }
 

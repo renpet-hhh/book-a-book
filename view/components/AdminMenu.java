@@ -14,6 +14,7 @@ import model.App;
 import model.commands.NavigateCmd;
 import view.components.base.MenuFactory;
 import view.pages.admin.RegisterBooks;
+import view.pages.admin.RegisterUsers;
 import view.pages.admin.SearchBooks;
 import view.pages.admin.SearchUsers;
 
@@ -28,7 +29,8 @@ public class AdminMenu extends JMenuBar {
     }
 
     private JMenu circulacao() {
-        JMenuItem cadastro = MenuFactory.createMenuItem("Cadastro de Usuários");
+        App app = App.get();
+        JMenuItem cadastro = MenuFactory.createMenuItem("Cadastro de Usuários", e -> app.invoke(new NavigateCmd(new RegisterUsers())));
         JMenuItem emprestimos = MenuFactory.createMenuItem("Empréstimos e Devoluções");
         JMenuItem reservas = MenuFactory.createMenuItem("Reservas");
         JMenu menu = MenuFactory.createMenu("Circulação", cadastro, emprestimos, reservas);

@@ -19,7 +19,7 @@ public class SearchBooks implements Page {
         JComponent menubar = AdminMenu.withWrapper();
         String[] labelsText = new String[] {"Título:", "Autor:"};
         String[] buttonsText = new String[] {"Cancelar", "Buscar"};
-        JComponent content = SearchContentTemplate.build(labelsText, buttonsText);
+        JComponent content = SearchContentTemplate.build(labelsText, buttonsText, true);
         String path = "Pesquisa >> Livros";
         SearchTemplate.build(frame, menubar, content, path);
     }
