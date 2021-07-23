@@ -6,16 +6,15 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import view.components.Label;
-
+import view.components.base.MenuFactory;
 import view.Margin;
-import view.components.LibraryMenu;
 import view.components.fixed.LimitedJTextField;
 
 public class SearchContentTemplate {
 
     final static int VERTICALGAPMAINCONTENT = 15;
     final static int LEFTRIGHTMARGINMAINCONTENT = 50;
-    final static int LEFTRIGHTMARGINWRAPPER = LibraryMenu.WRAPPERHORIZONTALMARGIN;
+    final static int LEFTRIGHTMARGINWRAPPER = MenuFactory.WRAPPERHORIZONTALMARGIN;
     final static int BOTTOMMARGINMAINWRAPPER = 80;
     final static int SPACEBETWEENCHECKANDLABEL = 2;
     final static int SPACEBETWEENLABELANDFIELD = 10;

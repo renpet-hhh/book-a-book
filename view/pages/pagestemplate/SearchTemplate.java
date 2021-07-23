@@ -6,13 +6,13 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import view.components.Label;
-import view.components.LibraryMenu;
+import view.components.base.MenuFactory;
 import view.Margin;
 
 public class SearchTemplate {
 
     final static int BOTTOMMARGINMAINWRAPPER = 80;
-    final static int LEFTRIGHTMARGINWRAPPER = LibraryMenu.WRAPPERHORIZONTALMARGIN;
+    final static int LEFTRIGHTMARGINWRAPPER = MenuFactory.WRAPPERHORIZONTALMARGIN;
 
 
     private static JComponent pathComponent(String text) {
