@@ -1,12 +1,10 @@
 package view.pages;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.Dimension;
-// import java.awt.image.BufferedImage;
-// import java.io.File;
 
-// import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -43,6 +41,9 @@ public class Home implements Page {
     final static int FOOTMARGIN = 10;
     final static int FOOTSPACEBETWEEN = 20;
     final static int MAINCONTENTLEFTRIGHTWIDTH = 191;
+    final static int SPACEBETWEENABOUTANDHELP = 5;
+    final static int RIGHTMARGINHELP = 25;
+    final static int LEFTMARGINHEADERTOP = 15;
 
     final static Color LEFTRIGHTCOLOR = new Color(225, 225, 225);
     final static Color LOGOCOLOR = new Color(187, 187, 187);
@@ -51,7 +52,7 @@ public class Home implements Page {
     final static Color LABELCOLOR = new Color(255, 255, 255);
     public final static Color FORGOTPASSWORDCOLOR = new Color(138, 185, 240);
 
-    public JComponent headerLeft() {
+    public static JComponent headerLeft() {
         ImageIcon originalImg = new ImageIcon("./images/logoufc.png");
         Image image = originalImg.getImage(); // transform it 
         Image newimg = image.getScaledInstance(-1, LOGOHEIGHT,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
@@ -63,28 +64,47 @@ public class Home implements Page {
         return wrapper;
     }
 
-    public JComponent headerRight(JFrame frame) {
+    public static JComponent headerRight(JFrame frame, boolean isHomePage) {
+        App app = App.get();
         int height = LOGOHEIGHT + 2 * LOGOMARGIN;
         Box component = Box.createVerticalBox();
         Box top = Box.createHorizontalBox();
+        if (!isHomePage) {
+            JButton homeButton = new JButton("Início");
+            homeButton.setForeground(LABELCOLOR);
+            homeButton.setBackground(HEADERRIGHTCOLOR);
+            homeButton.setBorderPainted(false);
+            homeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            homeButton.addActionListener(e -> app.invoke(new NavigateCmd(new Home())));
+            top.add(Margin.rigidHorizontal(LEFTMARGINHEADERTOP));
+            top.add(homeButton);
+        }
+        JButton aboutButton = new JButton("Sobre");
+        aboutButton.setForeground(LABELCOLOR);
+        aboutButton.setBackground(HEADERRIGHTCOLOR);
+        aboutButton.setBorderPainted(false);
+        aboutButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        aboutButton.addActionListener(e -> app.invoke(new NavigateCmd(new About())));
         top.add(Box.createHorizontalGlue());
-        top.add(new Label("Sobre", LABELCOLOR));
-        top.add(Margin.rigidHorizontal(5));
+        top.add(aboutButton);
+        top.add(Margin.rigidHorizontal(SPACEBETWEENABOUTANDHELP));
         top.add(new Label("Ajuda", LABELCOLOR));
-        top.add(Margin.rigidHorizontal(25));
+        top.add(Margin.rigidHorizontal(RIGHTMARGINHELP));
         top.setMaximumSize(new Dimension(Integer.MAX_VALUE, height / 2 - 2 * HEADERTOPMARGIN));
         Box bottom = Box.createHorizontalBox();
-        bottom.add(Box.createHorizontalGlue());
-        JButton forgotPasswordBttn = ForgotPassword.getButton(frame);
-        bottom.add(Margin.horizontal(forgotPasswordBttn, FORGOTPASSWORDMARGIN));
-        JTextField username = new FixedJTextField(USERNAMEFIELDWIDTH, "Nome de usuário");
-        bottom.add(username);
-        bottom.add(Margin.rigidHorizontal(INPUTFIELDSMARGINBETWEEN));
-        bottom.add(new FixedJTextField(PASSWORDFIELDWIDTH, "Senha"));
-        bottom.add(Margin.rigidHorizontal(ENTERLEFTMARGIN));
-        bottom.add(new Label("Entrar", LABELCOLOR));
-        bottom.add(Margin.rigidHorizontal(ENTERRIGHTMARGIN));
-        bottom.setMaximumSize(new Dimension(Integer.MAX_VALUE, height / 2 - 2 * HEADERBOTTOMMARGIN));
+        if (isHomePage) {
+            bottom.add(Box.createHorizontalGlue());
+            JButton forgotPasswordBttn = ForgotPassword.getButton(frame);
+            bottom.add(Margin.horizontal(forgotPasswordBttn, FORGOTPASSWORDMARGIN));
+            JTextField username = new FixedJTextField(USERNAMEFIELDWIDTH, "Nome de usuário");
+            bottom.add(username);
+            bottom.add(Margin.rigidHorizontal(INPUTFIELDSMARGINBETWEEN));
+            bottom.add(new FixedJTextField(PASSWORDFIELDWIDTH, "Senha"));
+            bottom.add(Margin.rigidHorizontal(ENTERLEFTMARGIN));
+            bottom.add(new Label("Entrar", LABELCOLOR));
+            bottom.add(Margin.rigidHorizontal(ENTERRIGHTMARGIN));
+            bottom.setMaximumSize(new Dimension(Integer.MAX_VALUE, height / 2 - 2 * HEADERBOTTOMMARGIN));
+        }
         component.add(Margin.vertical(top, HEADERTOPMARGIN));
         component.add(Margin.vertical(bottom, HEADERBOTTOMMARGIN));
         component.add(Box.createVerticalGlue());
@@ -93,10 +113,10 @@ public class Home implements Page {
     }
 
 
-    public JComponent header(JFrame frame) {
+    public static JComponent header(JFrame frame, boolean isHomePage) {
         Box component = Box.createHorizontalBox();
-        JComponent left = this.headerLeft();
-        JComponent right = this.headerRight(frame);
+        JComponent left = Home.headerLeft();
+        JComponent right = Home.headerRight(frame, isHomePage);
         component.add(left);
         component.add(right);
         component.setMinimumSize(new Dimension(left.getWidth(), 0));
@@ -106,7 +126,7 @@ public class Home implements Page {
         return component;
     }
 
-    public JComponent mainContent() {
+    public static JComponent mainContent() {
         JComponent component = Box.createVerticalBox();
         Label mainText = new Label("Olá olá lorem ipsum pssum lorem ");
         JButton enterAsGuestBttn = new JButton("Acessar a biblioteca sem conta");
@@ -121,7 +141,7 @@ public class Home implements Page {
         return component;
     }
 
-    public JComponent mainWrapper() {
+    public static JComponent mainWrapper() {
         JComponent component = Box.createHorizontalBox();
         Box.Filler left = new Box.Filler(new Dimension(MAINCONTENTLEFTRIGHTWIDTH, 0), new Dimension(MAINCONTENTLEFTRIGHTWIDTH, 0), new Dimension(MAINCONTENTLEFTRIGHTWIDTH, Integer.MAX_VALUE));
         Box.Filler right = new Box.Filler(new Dimension(MAINCONTENTLEFTRIGHTWIDTH, 0), new Dimension(MAINCONTENTLEFTRIGHTWIDTH, 0), new Dimension(MAINCONTENTLEFTRIGHTWIDTH, Integer.MAX_VALUE));
@@ -132,14 +152,14 @@ public class Home implements Page {
         component.add(left);
         component.add(Box.createHorizontalGlue());
         component.add(Margin.rigidHorizontal(15));
-        component.add(this.mainContent());
+        component.add(Home.mainContent());
         component.add(Margin.rigidHorizontal(15));
         component.add(Box.createHorizontalGlue());
         component.add(right);
         return component;
     }
 
-    public JComponent foot() {
+    public static JComponent foot() {
         Box component = Box.createHorizontalBox();
         Label terms = new Label("Termos de Serviço", LABELCOLOR);
         Label privacy = new Label("Política de Privacidade", LABELCOLOR);
@@ -157,10 +177,9 @@ public class Home implements Page {
     public void paint(JFrame frame) {
         BoxLayout bLayout = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS);
         frame.setLayout(bLayout);
-        frame.setTitle("Página inicial");
-        JComponent header = this.header(frame);
-        JComponent foot = this.foot();
-        JComponent mainWrapper = this.mainWrapper();
+        JComponent header = Home.header(frame, true);
+        JComponent foot = Home.foot();
+        JComponent mainWrapper = Home.mainWrapper();
         frame.add(header);
         frame.add(mainWrapper);
         frame.add(foot);
