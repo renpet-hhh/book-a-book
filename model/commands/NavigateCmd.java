@@ -16,6 +16,9 @@ public class NavigateCmd implements Command {
     @Override
     public void execute() {
         App app = App.get();
+        if (this.page == app.getCurrentPage()) {
+            return; // não fazemos nada quando já estamos na página de destino
+        }
         app.getFrame().setTitle(this.page.getTitle());
         app.navigate(this.page);
     }
