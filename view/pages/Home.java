@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 
 import model.App;
 import model.commands.NavigateCmd;
+import view.components.ForgotPassword;
 import view.components.Label;
 import view.Margin;
 import view.Page;
@@ -45,10 +46,10 @@ public class Home implements Page {
 
     final static Color LEFTRIGHTCOLOR = new Color(225, 225, 225);
     final static Color LOGOCOLOR = new Color(187, 187, 187);
-    final static Color HEADERRIGHTCOLOR = new Color(66, 66, 69);
+    public final static Color HEADERRIGHTCOLOR = new Color(66, 66, 69);
     final static Color FOOTCOLOR = HEADERRIGHTCOLOR;
     final static Color LABELCOLOR = new Color(255, 255, 255);
-    final static Color FORGOTPASSWORDCOLOR = new Color(138, 185, 240);
+    public final static Color FORGOTPASSWORDCOLOR = new Color(138, 185, 240);
 
     public JComponent headerLeft() {
         ImageIcon originalImg = new ImageIcon("./images/logoufc.png");
@@ -62,7 +63,7 @@ public class Home implements Page {
         return wrapper;
     }
 
-    public JComponent headerRight() {
+    public JComponent headerRight(JFrame frame) {
         int height = LOGOHEIGHT + 2 * LOGOMARGIN;
         Box component = Box.createVerticalBox();
         Box top = Box.createHorizontalBox();
@@ -74,7 +75,8 @@ public class Home implements Page {
         top.setMaximumSize(new Dimension(Integer.MAX_VALUE, height / 2 - 2 * HEADERTOPMARGIN));
         Box bottom = Box.createHorizontalBox();
         bottom.add(Box.createHorizontalGlue());
-        bottom.add(Margin.horizontal(new Label("Esqueceu a senha?", FORGOTPASSWORDCOLOR), FORGOTPASSWORDMARGIN));
+        JButton forgotPasswordBttn = ForgotPassword.getButton(frame);
+        bottom.add(Margin.horizontal(forgotPasswordBttn, FORGOTPASSWORDMARGIN));
         JTextField username = new FixedJTextField(USERNAMEFIELDWIDTH, "Nome de usuário");
         bottom.add(username);
         bottom.add(Margin.rigidHorizontal(INPUTFIELDSMARGINBETWEEN));
@@ -91,10 +93,10 @@ public class Home implements Page {
     }
 
 
-    public JComponent header() {
+    public JComponent header(JFrame frame) {
         Box component = Box.createHorizontalBox();
         JComponent left = this.headerLeft();
-        JComponent right = this.headerRight();
+        JComponent right = this.headerRight(frame);
         component.add(left);
         component.add(right);
         component.setMinimumSize(new Dimension(left.getWidth(), 0));
@@ -156,7 +158,7 @@ public class Home implements Page {
         BoxLayout bLayout = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS);
         frame.setLayout(bLayout);
         frame.setTitle("Página inicial");
-        JComponent header = this.header();
+        JComponent header = this.header(frame);
         JComponent foot = this.foot();
         JComponent mainWrapper = this.mainWrapper();
         frame.add(header);
