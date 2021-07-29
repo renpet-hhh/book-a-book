@@ -15,7 +15,7 @@ import view.components.AdminMenu;
 import view.components.LabeledTextField;
 import view.components.base.MenuFactory;
 import view.pages.pagestemplate.SearchContentTemplate;
-import view.pages.pagestemplate.SearchTemplate;
+import view.pages.pagestemplate.LayoutTemplate;
 
 public class Reports implements Page {
 
@@ -36,7 +36,7 @@ public class Reports implements Page {
         JComponent menubar = AdminMenu.withWrapper();
         String path = "Administração >> Relatórios";
         JComponent content = this.content();
-        SearchTemplate.build(frame, menubar, content, path);
+        LayoutTemplate.build(frame, menubar, content, path);
     }
 
     private JComboBox<String> chooser() {

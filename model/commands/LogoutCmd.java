@@ -5,15 +5,16 @@ import java.util.Arrays;
 import model.App;
 import model.Command;
 import model.Login;
+import view.pages.Home;
 
 public class LogoutCmd implements Command {
 
     @Override
     public void execute() {
-        Login login = App.get().getLogin();
-        login.setUsername("");
-        login.setIsLoggedIn(false);
-        login.setIsAdmin(false);
+        App app = App.get();
+        Login login = app.getLogin();
+        login.logout();
+        app.invoke(new NavigateCmd(new Home()));
     }
     
     @Override

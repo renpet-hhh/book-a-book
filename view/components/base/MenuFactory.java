@@ -12,9 +12,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import model.App;
-import model.commands.NavigateCmd;
+import model.commands.LogoutCmd;
 import view.Margin;
-import view.pages.Home;
 
 public abstract class MenuFactory {
 
@@ -80,7 +79,7 @@ public abstract class MenuFactory {
     }
 
     public static JButton exitButton() {
-        JButton button = MenuFactory.createButton("Sair", e -> App.get().invoke(new NavigateCmd(new Home())));
+        JButton button = MenuFactory.createButton("Sair", e -> App.get().invoke(new LogoutCmd()));
         return button;
     }
 

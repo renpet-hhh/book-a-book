@@ -5,11 +5,13 @@ import java.util.Arrays;
 import model.App;
 import model.Command;
 import model.Login;
+import view.pages.admin.SearchBooks;
+import view.pages.user.Profile;
 
 public class LoginCmd implements Command {
 
-    String username;
-    boolean isAdmin;
+    private String username;
+    private boolean isAdmin;
 
     public LoginCmd(String username, boolean isAdmin) {
         this.username = username;
@@ -18,10 +20,16 @@ public class LoginCmd implements Command {
 
     @Override
     public void execute() {
-        Login login = App.get().getLogin();
+        App app = App.get();
+        Login login = app.getLogin();
         login.setUsername(this.username);
         login.setIsLoggedIn(true);
         login.setIsAdmin(this.isAdmin);
+        if (!this.isAdmin) {
+            app.invoke(new NavigateCmd(new Profile()));
+        } else {
+            app.invoke(new NavigateCmd(new SearchBooks()));
+        }
     }
 
     @Override

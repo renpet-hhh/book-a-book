@@ -1,11 +1,15 @@
 package view.pages.pagestemplate;
 
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.Color;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import view.components.Label;
 import view.components.base.MenuFactory;
@@ -14,6 +18,12 @@ import view.components.fixed.LimitedJTextField;
 import view.components.layout.PackLayout;
 
 public class SearchContentTemplate {
+    /* Template para construção de layouts de pesquisa.
+
+    Esse layout é basicamente uma sequência vertical de labels + textFields,
+    seguidos por botões dispostos horizontalmente.
+    
+    Opcionalmente coloca um checkbox à esquerda de cada label. */
 
     final static int VERTICALGAPMAINCONTENT = 15;
     final static int LEFTRIGHTMARGINMAINCONTENT = 50;
@@ -25,29 +35,71 @@ public class SearchContentTemplate {
     final static int SPACEBETWEENBUTTONSANDMAINCONTENT = 30;
     final static int FIELDMINWIDTH = 200;
     final static int FIELDMAXWIDTH = 500;
-    final static int DEFAULTVERTICALMARGINWHENNOGLUEISUSED = 20;
+    final static int DEFAULTVERTICALMARGIN = 20;
 
     final static Color BGCOLOR = new Color(187, 187, 187);
     final static Color MENUCOLOR = new Color(66, 66, 69);
     final static Color LABELCOLOR = new Color(220, 220, 220);
     public static Color MAINWRAPPERCOLOR = new Color(255, 252, 252);
 
+    private String[] labelsText;
+    private String[] buttonsText;
+    private ActionListener[] handlers;
+    private boolean checked;
+    private int horizontalMargin;
+    private boolean useGlue;
+    private JButton[] buttons;
+    private List<JTextField> textFields;
+
+    public JButton[] getButtons() { return this.buttons; }
+    public List<JTextField> getTextFields() { return this.textFields; }
+
+    public SearchContentTemplate(String[] labelsText, String[] buttonsText, ActionListener[] handlers, boolean checked) {
+        this(labelsText, buttonsText, handlers, checked, LEFTRIGHTMARGINWRAPPER, true);
+    }
+
+    public SearchContentTemplate(String[] labelsText, String[] buttonsText, ActionListener[] handlers, boolean checked, int horizontalMargin, boolean useGlue) {
+        this.labelsText = labelsText;
+        this.buttonsText = buttonsText;
+        this.handlers = handlers;
+        this.checked = checked;
+        this.horizontalMargin = horizontalMargin;
+        this.useGlue = useGlue;
+        this.buttons = new JButton[buttonsText == null ? 0 : buttonsText.length];
+        this.textFields = new ArrayList<>();
+    }
+    public void setHandlers(ActionListener[] handlers) {
+        this.handlers = handlers;
+        for (int i = 0; i < handlers.length; i++) {
+            this.buttons[i].addActionListener(handlers[i]);
+        }
+    }
+
     /* Constrói um componente com labels seguidos de campos de texto.
     Se checked for true, também adiciona checkboxes à esquerda dos labels */
     public static JComponent mainContent(String[] labelsText, boolean checked) {
+        return new SearchContentTemplate(labelsText, null, null, checked).mainContent();
+    }
+
+    public JComponent mainContent() {
         JComponent component = new JPanel();
         PackLayout layout = new PackLayout(component, PackLayout.Y_AXIS);
         component.setLayout(layout);
         for (int i = 0; i < labelsText.length; i++) {
+            // vamos construir a linha horizontal,
+            // ela será composta por uma sequência: checkbox (opcional) + label + textfield
             Box line = Box.createHorizontalBox();
             if (checked) {
+                // caller quer o checkbox! vamos adicioná-lo
                 JCheckBox check = new JCheckBox();
                 check.setOpaque(false);
                 line.add(check);
                 line.add(Margin.rigidHorizontal(SPACEBETWEENCHECKANDLABEL));
             }
+            // adicinamos o label, e depois o textfield
             Label label = new Label(labelsText[i]);
             LimitedJTextField textField = new LimitedJTextField(FIELDMINWIDTH, FIELDMAXWIDTH);
+            this.textFields.add(textField);
             line.add(label);
             line.add(Box.createHorizontalGlue()); // dá certo porcausa de PackLayout
             line.add(Margin.rigidHorizontal(SPACEBETWEENLABELANDFIELD));
@@ -68,38 +120,63 @@ public class SearchContentTemplate {
     }
     
     public static JComponent build(String[] labelsText, String[] buttonsText, boolean checked, int horizontalMargin) {
-        return build(labelsText, buttonsText, checked, horizontalMargin, true);
+        return build(labelsText, buttonsText, null, checked, horizontalMargin, true);
     }
     public static JComponent build(String[] labelsText, String[] buttonsText, boolean checked, boolean useGlue) {
-        return build(labelsText, buttonsText, checked, LEFTRIGHTMARGINWRAPPER, useGlue);
+        return build(labelsText, buttonsText, null, checked, LEFTRIGHTMARGINWRAPPER, useGlue);
     }
 
-    public static JComponent build(String[] labelsText, String[] buttonsText, boolean checked, int horizontalMargin, boolean useGlue) {
-        JComponent wrapper2 = Box.createHorizontalBox();
-        JComponent wrapper1 = Box.createVerticalBox();
-        Box buttons = Box.createHorizontalBox();
-        buttons.add(Box.createHorizontalGlue());
+    public static JComponent build(String[] labelsText, String[] buttonsText, ActionListener[] handlers, boolean checked) {
+        return build(labelsText, buttonsText, handlers, checked, LEFTRIGHTMARGINWRAPPER);
+    }
+    
+    public static JComponent build(String[] labelsText, String[] buttonsText, ActionListener[] handlers, boolean checked, int horizontalMargin) {
+        return build(labelsText, buttonsText, handlers, checked, horizontalMargin, true);
+    }
+    public static JComponent build(String[] labelsText, String[] buttonsText, ActionListener[] handlers, boolean checked, boolean useGlue) {
+        return build(labelsText, buttonsText, handlers, checked, LEFTRIGHTMARGINWRAPPER, useGlue);
+    }
+
+    public static JComponent build(String[] labelsText, String[] buttonsText, ActionListener[] handlers, boolean checked, int horizontalMargin, boolean useGlue) {
+        return new SearchContentTemplate(labelsText, buttonsText, handlers, checked, horizontalMargin, useGlue).build();
+    }
+
+    public JComponent build() {
+        // Constrói um componente que é basicamente uma sequência vertical de labels + textfields,
+        // seguido por botões dispostos horizontalmente
+        // Além disso, há uma margem padrão, por isso essa declaração de wrappers abaixo.
+        JComponent wrapper = Box.createVerticalBox(); // wrapper vertical
+        Box buttonsComponent = Box.createHorizontalBox(); // botões na horizontal
+        buttonsComponent.add(Box.createHorizontalGlue()); // vamos colocar cola no início e no fim para centralizar os botões
         for (int i = 0; i < buttonsText.length; i++) {
             JButton bttn = new JButton(buttonsText[i]);
-            if (i > 0) {
-                buttons.add(Margin.rigidHorizontal(SPACEBETWEENBUTTONS));
+            this.buttons[i] = bttn;
+            if (handlers != null) {
+                ActionListener handler = handlers[i];
+                if (handler != null) {
+                    bttn.addActionListener(handler);
+                }
             }
-            buttons.add(bttn);
+            if (i > 0) {
+                // espaçamento padrão entre botões
+                buttonsComponent.add(Margin.rigidHorizontal(SPACEBETWEENBUTTONS));
+            }
+            // adicionamos o botão
+            buttonsComponent.add(bttn);
         }
-        buttons.add(Box.createHorizontalGlue());
-        if (useGlue) wrapper1.add(Box.createVerticalGlue());
-        else wrapper1.add(Margin.rigidVertical(DEFAULTVERTICALMARGINWHENNOGLUEISUSED));
-        wrapper1.add(mainContent(labelsText, checked));
-        wrapper1.add(Margin.rigidVertical(SPACEBETWEENBUTTONSANDMAINCONTENT));
-        wrapper1.add(buttons);
-        if (useGlue) wrapper1.add(Box.createVerticalGlue());
-        else wrapper1.add(Margin.rigidVertical(DEFAULTVERTICALMARGINWHENNOGLUEISUSED));
-        wrapper1.setOpaque(true);
-        wrapper1.setBackground(MAINWRAPPERCOLOR);
-        wrapper2.add(Margin.rigidHorizontal(horizontalMargin));
-        wrapper2.add(wrapper1);
-        wrapper2.add(Margin.rigidHorizontal(horizontalMargin));
-        return wrapper2;
+        buttonsComponent.add(Box.createHorizontalGlue()); // cola final, pra centralizar os botões
+        // se useGlue for verdadeiro, vamos colocar uma cola no início e no final do wrapper vertical,
+        // para que o conteúdo fique centralizado e expanda se houver espaço disponível
+        if (useGlue) wrapper.add(Box.createVerticalGlue());
+        wrapper.add(Margin.rigidVertical(DEFAULTVERTICALMARGIN));
+        wrapper.add(this.mainContent()); // conteúdo principal: é a sequência de labels + textfields
+        wrapper.add(Margin.rigidVertical(SPACEBETWEENBUTTONSANDMAINCONTENT));
+        wrapper.add(buttonsComponent); // botões dispostos na horizontal
+        if (useGlue) wrapper.add(Box.createVerticalGlue());
+        wrapper.add(Margin.rigidVertical(DEFAULTVERTICALMARGIN));
+        wrapper.setOpaque(true);
+        wrapper.setBackground(MAINWRAPPERCOLOR);
+        return Margin.horizontal(wrapper, this.horizontalMargin);
     }
 
 }

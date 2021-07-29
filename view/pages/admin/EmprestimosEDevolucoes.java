@@ -12,7 +12,7 @@ import view.components.AdminMenu;
 import view.components.Label;
 import view.components.base.MenuFactory;
 import view.pages.pagestemplate.SearchContentTemplate;
-import view.pages.pagestemplate.SearchTemplate;
+import view.pages.pagestemplate.LayoutTemplate;
 
 public class EmprestimosEDevolucoes implements Page {
     
@@ -39,7 +39,7 @@ public class EmprestimosEDevolucoes implements Page {
         String[] bottomButtonsText = new String[] {"Cancelar", "Emprestar/Devolver"};
         JComponent buttons = SearchContentTemplate.build(new String[0], bottomButtonsText, false, false);
         frame.add(menubar);
-        frame.add(SearchTemplate.pathComponent("Circulação >> Empréstimos e Devoluções"));
+        frame.add(LayoutTemplate.pathComponent("Circulação >> Empréstimos e Devoluções"));
         frame.add(searchContent);
         frame.add(info());
         frame.add(buttons);

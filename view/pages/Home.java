@@ -3,6 +3,8 @@ package view.pages;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.Dimension;
 
 import javax.swing.Box;
@@ -14,7 +16,9 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 
 import model.App;
+import model.TryLoginCmd;
 import model.commands.NavigateCmd;
+import model.handlers.FieldObserver;
 import view.components.ForgotPassword;
 import view.components.Label;
 import view.Margin;
@@ -96,12 +100,30 @@ public class Home implements Page {
             bottom.add(Box.createHorizontalGlue());
             JButton forgotPasswordBttn = ForgotPassword.getButton(frame);
             bottom.add(Margin.horizontal(forgotPasswordBttn, FORGOTPASSWORDMARGIN));
-            JTextField username = new FixedJTextField(USERNAMEFIELDWIDTH, "Nome de usuário");
-            bottom.add(username);
+            JTextField emailField = new FixedJTextField(USERNAMEFIELDWIDTH, "Email");
+            JTextField passwordField = new FixedJTextField(PASSWORDFIELDWIDTH, "Senha");
+            JButton enter = new JButton("Entrar");
+            enter.setForeground(LABELCOLOR);
+            enter.setOpaque(false);
+            enter.setBorderPainted(false);
+            List<JTextField> loginFields = new ArrayList<>();
+            loginFields.add(emailField);
+            loginFields.add(passwordField);
+            // vamos observar os campos Email e Senha
+            // temos acesso à eles quando botão Entrar for pressionado
+            // o Obsever a seguir é um handler do botão Entrar
+            FieldObserver observer = new FieldObserver(loginFields, f -> {
+                String email = f.get(0).getText();
+                String password = f.get(1).getText();
+                // quando o botão Entrar for pressionado, tentamos fazer login
+                app.invoke(new TryLoginCmd(email, password));
+            });
+            enter.addActionListener(observer);
+            bottom.add(emailField);
             bottom.add(Margin.rigidHorizontal(INPUTFIELDSMARGINBETWEEN));
-            bottom.add(new FixedJTextField(PASSWORDFIELDWIDTH, "Senha"));
+            bottom.add(passwordField);
             bottom.add(Margin.rigidHorizontal(ENTERLEFTMARGIN));
-            bottom.add(new Label("Entrar", LABELCOLOR));
+            bottom.add(enter);
             bottom.add(Margin.rigidHorizontal(ENTERRIGHTMARGIN));
             bottom.setMaximumSize(new Dimension(Integer.MAX_VALUE, height / 2 - 2 * HEADERBOTTOMMARGIN));
         }
