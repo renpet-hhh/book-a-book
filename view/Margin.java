@@ -53,4 +53,17 @@ public class Margin {
     public static Component rigidVertical(int height) {
         return Box.createRigidArea(new Dimension(1, height));
     }
+
+    public static Box glueRight(JComponent c) {
+        Box b = Box.createHorizontalBox();
+        b.add(c);
+        b.add(Box.createHorizontalGlue());
+        return b;
+    }
+    public static Box glueLeft(JComponent c) {
+        Box b = Box.createHorizontalBox();
+        b.add(Box.createHorizontalGlue());
+        b.add(c);
+        return b;
+    }
 }

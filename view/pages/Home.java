@@ -67,6 +67,7 @@ public class Home implements Page {
     final static int SPACEBETWEENABOUTANDHELP = 5;
     final static int RIGHTMARGINHELP = 25;
     final static int LEFTMARGINHEADERTOP = 15;
+    final static int LEFTMARGINHEADERBOTTOM = 15;
 
     final static Color LEFTRIGHTCOLOR = new Color(225, 225, 225);
     final static Color LOGOCOLOR = new Color(187, 187, 187);
@@ -87,7 +88,7 @@ public class Home implements Page {
         return wrapper;
     }
 
-    public static JComponent headerRight(JFrame frame, boolean isHomePage) {
+    public static JComponent headerRight(JFrame frame, boolean isHomePage, String username) {
         App app = App.get();
         int height = LOGOHEIGHT + 2 * LOGOMARGIN;
         Box component = Box.createVerticalBox();
@@ -119,12 +120,14 @@ public class Home implements Page {
             bottom.add(Box.createHorizontalGlue());
             JButton forgotPasswordBttn = ForgotPassword.getButton(frame);
             bottom.add(Margin.horizontal(forgotPasswordBttn, FORGOTPASSWORDMARGIN));
-            JTextField emailField = new FixedJTextField(USERNAMEFIELDWIDTH, "Email");
-            JTextField passwordField = new FixedJTextField(PASSWORDFIELDWIDTH, "Senha");
+            // o texto padrão desses campos está assim só por enquanto, para facilitar os testes
+            JTextField emailField = new FixedJTextField(USERNAMEFIELDWIDTH, "example@gmail.com");
+            JTextField passwordField = new FixedJTextField(PASSWORDFIELDWIDTH, "aaaaaa");
             JButton enter = new JButton("Entrar");
             enter.setForeground(LABELCOLOR);
-            enter.setOpaque(false);
             enter.setBorderPainted(false);
+            enter.setBackground(HEADERRIGHTCOLOR);
+            enter.setCursor(new Cursor(Cursor.HAND_CURSOR));
             List<JTextField> loginFields = new ArrayList<>();
             loginFields.add(emailField);
             loginFields.add(passwordField);
@@ -145,6 +148,13 @@ public class Home implements Page {
             bottom.add(enter);
             bottom.add(Margin.rigidHorizontal(ENTERRIGHTMARGIN));
             bottom.setMaximumSize(new Dimension(Integer.MAX_VALUE, height / 2 - 2 * HEADERBOTTOMMARGIN));
+        } else {
+            if (username.length() > 0) {
+                Label welcomeLabel = new Label("Bem vindo, " + username, LABELCOLOR);
+                bottom.add(Margin.rigidHorizontal(LEFTMARGINHEADERBOTTOM));
+                bottom.add(welcomeLabel);
+                bottom.add(Box.createHorizontalGlue());
+            }
         }
         component.add(Margin.vertical(top, HEADERTOPMARGIN));
         component.add(Margin.vertical(bottom, HEADERBOTTOMMARGIN));
@@ -154,10 +164,10 @@ public class Home implements Page {
     }
 
 
-    public static JComponent header(JFrame frame, boolean isHomePage) {
+    public static JComponent header(JFrame frame, boolean isHomePage, String username) {
         Box component = Box.createHorizontalBox();
         JComponent left = Home.headerLeft();
-        JComponent right = Home.headerRight(frame, isHomePage);
+        JComponent right = Home.headerRight(frame, isHomePage, username);
         component.add(left);
         component.add(right);
         component.setMinimumSize(new Dimension(left.getWidth(), 0));
@@ -218,7 +228,7 @@ public class Home implements Page {
     public void paint(JFrame frame) {
         BoxLayout bLayout = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS);
         frame.setLayout(bLayout);
-        JComponent header = Home.header(frame, true);
+        JComponent header = Home.header(frame, true, "");
         JComponent foot = Home.foot();
         JComponent mainWrapper = Home.mainWrapper();
         frame.add(header);

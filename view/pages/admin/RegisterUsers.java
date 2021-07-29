@@ -7,9 +7,8 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import model.App;
-import model.commands.RegisterUserCmd;
 import model.handlers.FieldObserver;
+import model.handlers.RegisterUserObserver;
 import view.Page;
 import view.components.AdminMenu;
 import view.pages.pagestemplate.SearchContentTemplate;
@@ -32,16 +31,11 @@ public class RegisterUsers implements Page {
         SearchContentTemplate template = new SearchContentTemplate(labelsText, buttonsText, null, false);
         JComponent content = template.build();
         List<JTextField> fields = template.getTextFields();
-        // O observer a seguir irá ter acesso aos campos "E-mail" e "Senha"
-        FieldObserver registerObserver = new FieldObserver(fields, f -> {
-            String username = f.get(4).getText();
-            String password = f.get(6).getText();
-            // o botão Cadastrar foi pressionado! vamos tentar cadastrar o usuário
-            // mensagens de erro e confirmação são de responsabilidade do próprio comando abaixo
-            App.get().invoke(new RegisterUserCmd(username, password));
-        });
+        // O observer a seguir irá ter acesso a todos os campos
+        FieldObserver registerObserver = new RegisterUserObserver(fields);
         FieldObserver cancelObserver = new FieldObserver(fields, f -> {
             for (JTextField field : f) {
+                // limpa todos os campos
                 field.setText("");
             }
         });

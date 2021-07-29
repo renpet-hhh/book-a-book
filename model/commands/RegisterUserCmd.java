@@ -7,19 +7,20 @@ import model.Command;
 import model.Crypto;
 import model.Login;
 import model.User;
+import model.UserData;
 
 public class RegisterUserCmd implements Command {
 
     private User user;
 
-    public RegisterUserCmd(String username, String password) {
-        User user = new User(username, Crypto.crypt(password));
+    public RegisterUserCmd(UserData data, String password) {
+        User user = new User(data, Crypto.crypt(password));
         this.user = user;
     }
 
     @Override
     public String log() {
-        return "RegisterUserCmd: " + this.user.getName();
+        return "RegisterUserCmd: " + this.user.getData().email;
     }
 
     @Override

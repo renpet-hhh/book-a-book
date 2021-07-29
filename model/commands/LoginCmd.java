@@ -5,24 +5,25 @@ import java.util.Arrays;
 import model.App;
 import model.Command;
 import model.Login;
+import model.User;
 import view.pages.admin.SearchBooks;
 import view.pages.user.Profile;
 
 public class LoginCmd implements Command {
 
-    private String username;
+    private User user;
     private boolean isAdmin;
 
-    public LoginCmd(String username, boolean isAdmin) {
-        this.username = username;
-        this.isAdmin = isAdmin;
+    public LoginCmd(User user) {
+        this.user = user;
+        this.isAdmin = user.getPrivilege() == 2;
     }
 
     @Override
     public void execute() {
         App app = App.get();
         Login login = app.getLogin();
-        login.setUsername(this.username);
+        login.setUser(this.user);
         login.setIsLoggedIn(true);
         login.setIsAdmin(this.isAdmin);
         if (!this.isAdmin) {
@@ -34,7 +35,7 @@ public class LoginCmd implements Command {
 
     @Override
     public String log() {
-        Object data[] = new Object[] {this.username, this.isAdmin};
+        Object data[] = new Object[] {this.user.getData().email, this.isAdmin};
         return Arrays.toString(data);
     }
 }

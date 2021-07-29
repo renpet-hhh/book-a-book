@@ -26,7 +26,7 @@ public class About implements Page {
         BoxLayout bLayout = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS);
         frame.setLayout(bLayout);
         JComponent component = Box.createVerticalBox();
-        component.add(Home.header(frame, false));
+        component.add(Home.header(frame, false, ""));
         JComponent wrap1 = Box.createHorizontalBox();
         wrap1.add(Margin.rigidHorizontal(70));
         wrap1.add(About.mainContent());

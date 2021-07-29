@@ -34,6 +34,7 @@ public class FieldObserver implements ActionListener {
         this.fields = fields;
         this.handler = handler;
     }
+    protected void setHandler(Consumer<List<JTextField>> handler) { this.handler = handler; }
 
     @Override
     public void actionPerformed(ActionEvent e) {

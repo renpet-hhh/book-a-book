@@ -1,6 +1,8 @@
 package model;
 
 import java.awt.Dimension;
+import java.time.LocalDate;
+
 import javax.swing.JFrame;
 
 import helpers.Logger;
@@ -41,11 +43,22 @@ public class App {
 
     /* Ponto de partida da Interface Gráfica */
     public static void main(String args[]) {
+        App app = App.get();
         GUI gui = new GUI();
-        App.get().gui = gui;
+        app.gui = gui;
+        UserData data = new UserData();
+        data.address = "Endereço mockup";
+        data.birthdate = LocalDate.of(1999, 12, 31);
+        data.contact = "(88) 99999-9999";
+        data.document = "Documento mockup";
+        data.email = "example@gmail.com";
+        data.name = "Nome mockup";
+        String passwordMockup = "aaaaaa";
+        String encrypted = Crypto.crypt(passwordMockup);
+        app.getLogin().addUser(new User(data, encrypted));
         gui.navigate(new Home()); // começamos na página inicial
-        App.get().getFrame().setSize(new Dimension(1200, 700));
-        App.get().getFrame().revalidate();
+        app.getFrame().setSize(new Dimension(1200, 700));
+        app.getFrame().revalidate();
     }
 
     
