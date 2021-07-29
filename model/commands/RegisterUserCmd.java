@@ -2,6 +2,7 @@ package model.commands;
 
 import javax.swing.JOptionPane;
 
+import model.Admin;
 import model.App;
 import model.Command;
 import model.Crypto;
@@ -13,8 +14,13 @@ public class RegisterUserCmd implements Command {
 
     private User user;
 
-    public RegisterUserCmd(UserData data, String password) {
-        User user = new User(data, Crypto.crypt(password));
+    public RegisterUserCmd(UserData data, String password, boolean isAdmin) {
+        User user;
+        if (isAdmin) {
+            user = new User(data, Crypto.crypt(password));
+        } {
+            user = new Admin(data, Crypto.crypt(password));
+        }
         this.user = user;
     }
 

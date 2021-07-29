@@ -46,6 +46,7 @@ public class App {
         App app = App.get();
         GUI gui = new GUI();
         app.gui = gui;
+        // USUÁRIO FALSO
         UserData data = new UserData();
         data.address = "Endereço mockup";
         data.birthdate = LocalDate.of(1999, 12, 31);
@@ -56,6 +57,17 @@ public class App {
         String passwordMockup = "aaaaaa";
         String encrypted = Crypto.crypt(passwordMockup);
         app.getLogin().addUser(new User(data, encrypted));
+        // ADMIN FALSO
+        UserData d = new UserData();
+        d.address = "Endereço mockup";
+        d.birthdate = LocalDate.of(1999, 12, 31);
+        d.contact = "(88) 99999-9999";
+        d.document = "Documento mockup";
+        d.email = "admin@gmail.com";
+        d.name = "Admin mockup";
+        String passwordMockup1 = "bbbbbb";
+        String encrypted1 = Crypto.crypt(passwordMockup1);
+        app.getLogin().addUser(new Admin(d, encrypted1));
         gui.navigate(new Home()); // começamos na página inicial
         app.getFrame().setSize(new Dimension(1200, 700));
         app.getFrame().revalidate();

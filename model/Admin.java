@@ -1,0 +1,15 @@
+package model;
+
+public class Admin extends User {
+
+    public Admin(UserData data, String encryptedPassword) {
+        super(data, encryptedPassword);
+    }
+
+    @Override
+    public int getPrivilege() {
+        return 2;
+    }
+    
+    
+}

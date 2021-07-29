@@ -14,7 +14,7 @@ import model.UserData;
 import model.commands.DisplayPopupCmd;
 import model.commands.RegisterUserCmd;
 
-public class RegisterUserObserver extends FieldObserver {
+public class RegisterObserver extends FieldObserver {
 
     /** Define as restrições para que um cadastro de usuário seja aceito.
      * 
@@ -32,12 +32,14 @@ public class RegisterUserObserver extends FieldObserver {
      * 7 - Confirmação de senha 
      */
 
-    public RegisterUserObserver(List<JTextField> fields) {
+    private boolean isAdmin;
+    public RegisterObserver(List<JTextField> fields, boolean isAdmin) {
         super(fields, null);
-        this.setHandler(RegisterUserObserver.h);
+        this.isAdmin = isAdmin;
+        this.setHandler(this.h);
     }
 
-    private static Consumer<List<JTextField>> h = new Consumer<List<JTextField>>() {
+    private Consumer<List<JTextField>> h = new Consumer<List<JTextField>>() {
         @Override
         public void accept(List<JTextField> f) {
             App app = App.get();
@@ -82,7 +84,7 @@ public class RegisterUserObserver extends FieldObserver {
             data.birthdate = ld;
             // o botão Cadastrar foi pressionado! vamos tentar cadastrar o usuário
             // mensagens de erro e confirmação são de responsabilidade do próprio comando abaixo
-            app.invoke(new RegisterUserCmd(data, password));
+            app.invoke(new RegisterUserCmd(data, password, RegisterObserver.this.isAdmin));
         }
     };
 

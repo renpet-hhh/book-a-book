@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 
 import model.handlers.FieldObserver;
-import model.handlers.RegisterUserObserver;
+import model.handlers.RegisterObserver;
 import view.Page;
 import view.components.AdminMenu;
 import view.pages.pagestemplate.SearchContentTemplate;
@@ -32,7 +32,7 @@ public class RegisterUsers implements Page {
         JComponent content = template.build();
         List<JTextField> fields = template.getTextFields();
         // O observer a seguir irá ter acesso a todos os campos
-        FieldObserver registerObserver = new RegisterUserObserver(fields);
+        FieldObserver registerObserver = new RegisterObserver(fields, false);
         FieldObserver cancelObserver = new FieldObserver(fields, f -> {
             for (JTextField field : f) {
                 // limpa todos os campos

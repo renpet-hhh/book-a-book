@@ -56,9 +56,9 @@ public class Login {
             app.invoke(displayErr);
             return;
         }
-        User user = validate(username, password);
-        if (user != null) {
-            Command loginCmd = new LoginCmd(user);
+        User u = validate(username, password);
+        if (u != null) {
+            Command loginCmd = new LoginCmd(u);
             app.invoke(loginCmd);
             return;
         }

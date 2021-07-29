@@ -16,11 +16,13 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 
 import model.App;
+import model.commands.LoginCmd;
 import model.commands.NavigateCmd;
 import model.commands.TryLoginCmd;
 import model.handlers.FieldObserver;
 import view.components.ForgotPassword;
 import view.components.Label;
+import view.components.base.MenuFactory;
 import view.Margin;
 import view.Page;
 import view.components.fixed.FixedJTextField;
@@ -68,6 +70,7 @@ public class Home implements Page {
     final static int RIGHTMARGINHELP = 25;
     final static int LEFTMARGINHEADERTOP = 15;
     final static int LEFTMARGINHEADERBOTTOM = 15;
+    final static int RIGHTMARGINHEADERBOTTOM = 15;
 
     final static Color LEFTRIGHTCOLOR = new Color(225, 225, 225);
     final static Color LOGOCOLOR = new Color(187, 187, 187);
@@ -151,9 +154,12 @@ public class Home implements Page {
         } else {
             if (username.length() > 0) {
                 Label welcomeLabel = new Label("Bem vindo, " + username, LABELCOLOR);
+                JButton logoutBttn = MenuFactory.exitButton();
                 bottom.add(Margin.rigidHorizontal(LEFTMARGINHEADERBOTTOM));
                 bottom.add(welcomeLabel);
                 bottom.add(Box.createHorizontalGlue());
+                bottom.add(logoutBttn);
+                bottom.add(Margin.rigidHorizontal(RIGHTMARGINHEADERBOTTOM));
             }
         }
         component.add(Margin.vertical(top, HEADERTOPMARGIN));
@@ -183,7 +189,7 @@ public class Home implements Page {
         JButton enterAsGuestBttn = new JButton("Acessar a biblioteca sem conta");
         /* o botão deve levar até Pesquisa para Guest, mas enquanto não temos sistema de login implementado,
         vou fazer com que o botão para uma página de Admin */
-        enterAsGuestBttn.addActionListener(e -> App.get().invoke(new NavigateCmd(new SearchBooks())));
+        enterAsGuestBttn.addActionListener(e -> App.get().invoke(new LoginCmd()));
         component.add(Margin.rigidVertical(20));
         component.add(mainText);
         component.add(Margin.rigidVertical(20));

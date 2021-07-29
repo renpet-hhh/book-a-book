@@ -1,8 +1,14 @@
 package view.pages.admin;
 
+import java.util.List;
+
+import java.awt.event.ActionListener;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 
+import model.handlers.FieldObserver;
+import model.handlers.RegisterObserver;
 import view.Page;
 import view.components.AdminMenu;
 import view.pages.pagestemplate.SearchContentTemplate;
@@ -22,7 +28,19 @@ public class RegisterAdmins implements Page {
             "Contato:", "Senha:", "Confirmar senha:"
         };
         String[] buttonsText = new String[] {"Cancelar", "Cadastrar"};
-        JComponent content = SearchContentTemplate.build(labelsText, buttonsText, false);
+        SearchContentTemplate template = new SearchContentTemplate(labelsText, buttonsText, null, false);
+        JComponent content = template.build();
+        List<JTextField> fields = template.getTextFields();
+        // O observer a seguir irá ter acesso a todos os campos
+        FieldObserver registerObserver = new RegisterObserver(fields, true);
+        FieldObserver cancelObserver = new FieldObserver(fields, f -> {
+            for (JTextField field : f) {
+                // limpa todos os campos
+                field.setText("");
+            }
+        });
+        ActionListener[] handlers = new ActionListener[] {cancelObserver, registerObserver};
+        template.setHandlers(handlers);
         String path = "Administração >> Cadastro de Admins";
         LayoutTemplate.build(frame, menubar, content, path);
     }
