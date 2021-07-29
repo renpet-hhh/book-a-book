@@ -2,7 +2,9 @@ package model;
 
 public class User {
 
-    private String name, encryptedPassword;
+    /** Representa um usuário */
+
+    private String name, encryptedPassword; // não armazenamos a senha, apenas sua versão criptografada
 
     public String getName() { return this.name; }
     /* Indica se a senha encriptografada passada como argumento é igual à senha encriptografada desse usuário */
@@ -14,7 +16,11 @@ public class User {
         this.name = name;
         this.encryptedPassword = encryptedPassword;
     }
-    /* Retorna o nível de privilégio desse usuário */
+    /** Retorna o nível de privilégio desse usuário.
+     * 
+     * 1 - Usuário comum
+     * 2 - Administrador
+     */
     public int getPrivilege() {
         return 1;
     }

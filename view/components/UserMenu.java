@@ -12,6 +12,8 @@ import view.components.base.MenuFactory;
 
 public class UserMenu extends JMenuBar {
 
+    /** Define como construir o menu de um usuário (User) */
+
     private JButton pesquisa() {
         JButton button = MenuFactory.createButton("Pesquisa Bibliográfica");
         return button;

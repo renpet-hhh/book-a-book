@@ -16,8 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 
 import model.App;
-import model.TryLoginCmd;
 import model.commands.NavigateCmd;
+import model.commands.TryLoginCmd;
 import model.handlers.FieldObserver;
 import view.components.ForgotPassword;
 import view.components.Label;
@@ -27,6 +27,25 @@ import view.components.fixed.FixedJTextField;
 import view.pages.admin.SearchBooks;
 
 public class Home implements Page {
+    
+    /** Desenha a página inicial da aplicação.
+     * 
+     * "header" é a parte de cima da página e inclui "headerLeft" e "headerRight"
+     * 
+     * "headerLeft" é onde está a logo da UFC
+     * 
+     * "headerRight" é a parte do header que não é a logo da UFC, e portanto inclui
+     * uma parte "top" e uma parte "bottom". Em "top" há os botões "Sobre" e "Ajuda",
+     * colocados bem à direita por meio de cola (glue, veja BoxLayout). Em "bottom"
+     * há os campos "Email" e "Senha", além do botão "Entrar".
+     * 
+     * "mainContent" é o conteúdo central da página, que contém a descrição da aplicação e 
+     * o botão de "Acessar como convidado".
+     * 
+     * "mainWrapper" serve para aplicar espaçamentos em mainContent
+     * 
+     * "foot" é a barra no final da página que possui "Termos de Serviço" e "Política de Privacidade".
+     */
 
     public final static String TITLE = "Página Inicial";
     @Override

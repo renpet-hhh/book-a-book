@@ -25,6 +25,9 @@ import view.pages.admin.Settings;
 
 public class AdminMenu extends JMenuBar {
 
+    /** Define como construir o menu de administrador. */
+
+    /** Retorna o menu de pesquisa */
     private JMenu pesquisa() {
         App app = App.get();
         JMenuItem livros = MenuFactory.createMenuItem("Livros", e -> app.invoke(new NavigateCmd(new SearchBooks())));

@@ -12,6 +12,8 @@ import view.components.base.MenuFactory;
 
 public class GuestMenu extends JMenuBar {
 
+    /** Define como construir o menu de um convidado (Guest) */
+
     private JButton pesquisa() {
         JButton button = MenuFactory.createButton("Pesquisa Bibliográfica");
         return button;

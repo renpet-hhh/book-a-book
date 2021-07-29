@@ -17,6 +17,15 @@ import view.Margin;
 
 public abstract class MenuFactory {
 
+    /** Define como construir vários itens relacionados a uma barra de menu
+     * (botões, labels, menuItems...).
+     * 
+     * Além disso, aplica um espaçamento padrão dado uma barra de menu (JMenuBar)
+     * via o método wrap.
+     * 
+     * Alguns botões padrões já são implementados aqui, como "Sair" e "Ajuda".
+     */
+
     private final static int WRAPPERTOPMARGIN = 30;
     public final static int WRAPPERHORIZONTALMARGIN = 60;
 

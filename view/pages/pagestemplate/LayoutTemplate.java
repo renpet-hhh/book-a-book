@@ -14,7 +14,7 @@ public class LayoutTemplate {
     /** Template para construção do layout padrão:
      * 
      * O layout padrão é basicamente a barra de menu seguida do caminho (exemplo: Pesquisa >> Usuários),
-     * seguido do conteúdo, seguido de um barra final (foot) com informações de Termos de Serviço por exemplo.
+     * seguido do conteúdo (parte principal e central de uma página), seguido de um barra final (foot) com informações de Termos de Serviço por exemplo.
      */
 
     final static int BOTTOMMARGINMAINWRAPPER = 80;

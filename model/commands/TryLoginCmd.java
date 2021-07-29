@@ -1,4 +1,8 @@
-package model;
+package model.commands;
+
+import model.App;
+import model.Command;
+import model.Login;
 
 public class TryLoginCmd implements Command {
 

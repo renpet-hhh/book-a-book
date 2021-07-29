@@ -8,6 +8,10 @@ import view.components.layout.PackLayout;
 
 public class LabeledTextField extends JComponent {
 
+    /** Define um componente que é um label seguido de um campo de texto,
+     * com espaçamento padrão. Esse componente segue um fluxo horizontal (PackLayout.X_AXIS).
+     */
+
     final static int SPACEBETWEENLABELANDTEXT = 10;
     final static int DEFAULTMINFIELDWIDTH = 100;
     final static int DEFAULTMAXFIELDWIDTH = 120;
