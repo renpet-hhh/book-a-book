@@ -26,7 +26,6 @@ import view.components.base.MenuFactory;
 import view.Margin;
 import view.Page;
 import view.components.fixed.FixedJTextField;
-import view.pages.admin.SearchBooks;
 
 public class Home implements Page {
     

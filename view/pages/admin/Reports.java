@@ -1,6 +1,8 @@
 package view.pages.admin;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -9,6 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import model.handlers.ClearObserver;
 import view.Margin;
 import view.Page;
 import view.components.AdminMenu;
@@ -31,6 +34,8 @@ public class Reports implements Page {
     final static int SPACEBETWEENBUTTONS = 70;
     final static int LEFTRIGHTMAINCONTENTMARGIN = MenuFactory.WRAPPERHORIZONTALMARGIN;
 
+    private List<JComponent> components = new ArrayList<>();
+
     @Override
     public void paint(JFrame frame) {
         JComponent menubar = AdminMenu.withWrapper();
@@ -48,6 +53,7 @@ public class Reports implements Page {
         chooser.addItem("Usuários cadastrados");
         chooser.addItem("Usuários com atraso");
         chooser.setMaximumSize(new Dimension(CHOOSERMAXWIDTH, CHOOSERMAXHEIGHT));
+        this.components.add(chooser);
         return chooser;
     }
 
@@ -62,12 +68,16 @@ public class Reports implements Page {
         component.add(fieldUntil);
         component.add(Margin.rigidHorizontal(DATERANGEHORIZONTALGAP));
         component.add(fullReportCheckbox);
+        this.components.add(fieldFrom.getTextField());
+        this.components.add(fieldUntil.getTextField());
+        this.components.add(fullReportCheckbox);
         return component;
     }
 
     private JComponent buttons() {
         JComponent component = Box.createHorizontalBox();
         JButton cancel = new JButton("Cancelar");
+        cancel.addActionListener(new ClearObserver<>(this.components));
         JButton generate = new JButton("Gerar");
         component.add(Box.createHorizontalGlue());
         component.add(cancel);

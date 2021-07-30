@@ -7,7 +7,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import model.handlers.FieldObserver;
+import model.handlers.ClearObserver;
 import model.handlers.RegisterObserver;
 import view.Page;
 import view.components.AdminMenu;
@@ -32,13 +32,8 @@ public class RegisterAdmins implements Page {
         JComponent content = template.build();
         List<JTextField> fields = template.getTextFields();
         // O observer a seguir irá ter acesso a todos os campos
-        FieldObserver registerObserver = new RegisterObserver(fields, true);
-        FieldObserver cancelObserver = new FieldObserver(fields, f -> {
-            for (JTextField field : f) {
-                // limpa todos os campos
-                field.setText("");
-            }
-        });
+        ActionListener registerObserver = new RegisterObserver(fields, true);
+        ActionListener cancelObserver = new ClearObserver<JTextField>(fields);
         ActionListener[] handlers = new ActionListener[] {cancelObserver, registerObserver};
         template.setHandlers(handlers);
         String path = "Administração >> Cadastro de Admins";

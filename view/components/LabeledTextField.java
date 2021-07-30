@@ -1,6 +1,7 @@
 package view.components;
 
 import javax.swing.JComponent;
+import javax.swing.JTextField;
 
 import view.Margin;
 import view.components.fixed.LimitedJTextField;
@@ -16,6 +17,8 @@ public class LabeledTextField extends JComponent {
     final static int DEFAULTMINFIELDWIDTH = 100;
     final static int DEFAULTMAXFIELDWIDTH = 120;
 
+    private JTextField textField;
+
     public LabeledTextField(String text) {
         PackLayout layout = new PackLayout(this, PackLayout.X_AXIS);
         this.setLayout(layout);
@@ -24,6 +27,11 @@ public class LabeledTextField extends JComponent {
         this.add(label);
         this.add(Margin.rigidHorizontal(SPACEBETWEENLABELANDTEXT));
         this.add(field);
+        this.textField = field;
+    }
+
+    public JTextField getTextField() {
+        return this.textField;
     }
     
 }

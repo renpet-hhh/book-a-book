@@ -3,6 +3,9 @@ package view.pages.admin;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import java.awt.event.ActionListener;
+
+import model.handlers.ClearObserver;
 import view.Page;
 import view.components.AdminMenu;
 import view.pages.pagestemplate.SearchContentTemplate;
@@ -22,7 +25,11 @@ public class RegisterBooks implements Page {
             "Edição:", "Ano de publicação:", "Local de publicação:", "Exemplares:", "ISBN:"
         };
         String[] buttonsText = new String[] {"Cancelar", "Cadastrar"};
-        JComponent content = SearchContentTemplate.build(labelsText, buttonsText, false);
+        SearchContentTemplate template = new SearchContentTemplate(labelsText, buttonsText, null, false);
+        JComponent content = template.build();
+        ActionListener cancelObserver = new ClearObserver<>(template.getClearableFields());
+        ActionListener[] handlers = new ActionListener[] {cancelObserver, null};
+        template.setHandlers(handlers);
         String path = "Catalogação";
         LayoutTemplate.build(frame, menubar, content, path);
     }

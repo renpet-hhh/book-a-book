@@ -1,11 +1,13 @@
 package view.pages.admin;
 import java.awt.Color;
 
+import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import model.handlers.ClearObserver;
 import view.Margin;
 import view.Page;
 import view.components.AdminMenu;
@@ -35,9 +37,13 @@ public class EmprestimosEDevolucoes implements Page {
             "Cód. do Livro:", "Matrícula Usuário:"
         };
         String[] topButtonText = new String[] {"Buscar"};
-        JComponent searchContent = SearchContentTemplate.build(labelsText, topButtonText, false, false);
+        SearchContentTemplate inputTemplate = new SearchContentTemplate(labelsText, topButtonText, null, false, -1, false);
+        JComponent searchContent = inputTemplate.build();
         String[] bottomButtonsText = new String[] {"Cancelar", "Emprestar/Devolver"};
-        JComponent buttons = SearchContentTemplate.build(new String[0], bottomButtonsText, false, false);
+        ActionListener cancelObserver = new ClearObserver<>(inputTemplate.getClearableFields());
+        ActionListener[] handlers = new ActionListener[] {cancelObserver, null};
+        SearchContentTemplate buttonsTemplate = new SearchContentTemplate(new String[0], bottomButtonsText, handlers, false);
+        JComponent buttons = buttonsTemplate.build();
         frame.add(menubar);
         frame.add(LayoutTemplate.pathComponent("Circulação >> Empréstimos e Devoluções"));
         frame.add(searchContent);

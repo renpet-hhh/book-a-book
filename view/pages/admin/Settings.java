@@ -1,8 +1,10 @@
 package view.pages.admin;
 
+import java.awt.event.ActionListener;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import model.handlers.ClearObserver;
 import view.Page;
 import view.components.AdminMenu;
 import view.pages.pagestemplate.SearchContentTemplate;
@@ -23,7 +25,11 @@ public class Settings implements Page {
             "Alterar valor da multa:"
         };
         String[] buttonsText = new String[] {"Cancelar", "Salvar"};
-        JComponent content = SearchContentTemplate.build(labelsText, buttonsText, false);
+        SearchContentTemplate template = new SearchContentTemplate(labelsText, buttonsText, false, true);
+        JComponent content = template.build();
+        ActionListener cancelObserver = new ClearObserver<>(template.getClearableFields());
+        ActionListener[] handlers = new ActionListener[] {cancelObserver, null};
+        template.setHandlers(handlers);
         String path = "Administração >> Configurações";
         LayoutTemplate.build(frame, menubar, content, path);
     }

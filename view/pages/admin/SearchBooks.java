@@ -3,6 +3,9 @@ package view.pages.admin;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import java.awt.event.ActionListener;
+
+import model.handlers.ClearObserver;
 import view.Page;
 import view.components.AdminMenu;
 import view.pages.pagestemplate.SearchContentTemplate;
@@ -19,7 +22,11 @@ public class SearchBooks implements Page {
         JComponent menubar = AdminMenu.withWrapper();
         String[] labelsText = new String[] {"Título:", "Autor:"};
         String[] buttonsText = new String[] {"Cancelar", "Buscar"};
-        JComponent content = SearchContentTemplate.build(labelsText, buttonsText, true);
+        SearchContentTemplate template = new SearchContentTemplate(labelsText, buttonsText, null, true);
+        JComponent content = template.build();
+        ActionListener cancelObserver = new ClearObserver<>(template.getClearableFields());
+        ActionListener[] handlers = new ActionListener[] {cancelObserver, null};
+        template.setHandlers(handlers);
         String path = "Pesquisa >> Livros";
         LayoutTemplate.build(frame, menubar, content, path);
     }

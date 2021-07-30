@@ -50,12 +50,22 @@ public class SearchContentTemplate {
     private boolean useGlue;
     private JButton[] buttons;
     private List<JTextField> textFields;
+    private List<JCheckBox> checkComponents;
 
     public JButton[] getButtons() { return this.buttons; }
     public List<JTextField> getTextFields() { return this.textFields; }
+    /** Retorna todos os campos que podem ser limpados (checkboxes e textFields) */
+    public List<JComponent> getClearableFields() {
+        List<JComponent> list = new ArrayList<>(this.textFields);
+        list.addAll(this.checkComponents);
+        return list;
+    }
 
     public SearchContentTemplate(String[] labelsText, String[] buttonsText, ActionListener[] handlers, boolean checked) {
         this(labelsText, buttonsText, handlers, checked, LEFTRIGHTMARGINWRAPPER, true);
+    }
+    public SearchContentTemplate(String[] labelsText, String[] buttonsText, boolean checked, boolean useGlue) {
+        this(labelsText, buttonsText, null, checked, LEFTRIGHTMARGINWRAPPER, useGlue);
     }
 
     public SearchContentTemplate(String[] labelsText, String[] buttonsText, ActionListener[] handlers, boolean checked, int horizontalMargin, boolean useGlue) {
@@ -63,10 +73,11 @@ public class SearchContentTemplate {
         this.buttonsText = buttonsText;
         this.handlers = handlers;
         this.checked = checked;
-        this.horizontalMargin = horizontalMargin;
+        this.horizontalMargin = horizontalMargin == -1 ? LEFTRIGHTMARGINWRAPPER : horizontalMargin;
         this.useGlue = useGlue;
         this.buttons = new JButton[buttonsText == null ? 0 : buttonsText.length];
         this.textFields = new ArrayList<>();
+        this.checkComponents = new ArrayList<>();
     }
     public void setHandlers(ActionListener[] handlers) {
         this.handlers = handlers;
@@ -93,6 +104,7 @@ public class SearchContentTemplate {
                 // caller quer o checkbox! vamos adicioná-lo
                 JCheckBox check = new JCheckBox();
                 check.setOpaque(false);
+                this.checkComponents.add(check);
                 line.add(check);
                 line.add(Margin.rigidHorizontal(SPACEBETWEENCHECKANDLABEL));
             }
