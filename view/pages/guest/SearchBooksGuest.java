@@ -1,8 +1,10 @@
 package view.pages.guest;
 
+import java.awt.event.ActionListener;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import model.handlers.ClearObserver;
 import view.Page;
 import view.components.GuestMenu;
 import view.pages.pagestemplate.SearchContentTemplate;
@@ -19,7 +21,11 @@ public class SearchBooksGuest implements Page {
         JComponent menubar = GuestMenu.withWrapper();
         String[] labelsText = new String[] {"Título:", "Autor:"};
         String[] buttonsText = new String[] {"Cancelar", "Buscar"};
-        JComponent content = SearchContentTemplate.build(labelsText, buttonsText, true);
+        SearchContentTemplate template = new SearchContentTemplate(labelsText, buttonsText, true, true);
+        JComponent content = template.build();
+        ActionListener cancelObserver = new ClearObserver<>(template.getClearableFields());
+        ActionListener[] handlers = new ActionListener[] {cancelObserver, null};
+        template.setHandlers(handlers);
         String path = "Pesquisa >> Livros";
         LayoutTemplate.build(frame, menubar, content, path);
     }
