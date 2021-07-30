@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.Dimension;
 
 import javax.swing.Box;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -14,6 +13,7 @@ import javax.swing.JMenuItem;
 import model.App;
 import model.commands.LogoutCmd;
 import view.Margin;
+import view.components.Button;
 
 public abstract class MenuFactory {
 
@@ -72,28 +72,21 @@ public abstract class MenuFactory {
         return MenuFactory.createMenuItem(text, null);
     }
 
-    public static JButton createButton(String text, ActionListener handler) {
-        JButton button = new JButton(text);
-        button.setOpaque(true);
-        button.setBackground(MENUCOLOR);
-        button.setForeground(LABELCOLOR);
-        button.setBorderPainted(false);
-        if (handler != null) {
-            button.addActionListener(handler);
-        }
+    public static Button createButton(String text, ActionListener handler) {
+        Button button = new Button(text, handler, LABELCOLOR, MENUCOLOR);
         return button;
     }
-    public static JButton createButton(String text) {
+    public static Button createButton(String text) {
         return MenuFactory.createButton(text, null);
     }
 
-    public static JButton exitButton() {
-        JButton button = MenuFactory.createButton("Sair", e -> App.get().invoke(new LogoutCmd()));
+    public static Button exitButton() {
+        Button button = MenuFactory.createButton("Sair", e -> App.get().invoke(new LogoutCmd()));
         return button;
     }
 
-    public static JButton helpButton() {
-        JButton button = MenuFactory.createButton("Ajuda");
+    public static Button helpButton() {
+        Button button = MenuFactory.createButton("Ajuda");
         return button;
     }
     

@@ -1,8 +1,7 @@
 package view.components;
 
-import java.awt.Cursor;
+import java.awt.event.ActionListener;
 import javax.swing.Box;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -20,13 +19,9 @@ public class ForgotPassword {
     final static int MAXFIELDWIDTH = 300;
     final static int DIALOGMARGIN = 20;
 
-    public static JButton getButton(JFrame frame) {
-        JButton forgotPasswordBttn = new JButton("Esqueceu a senha?");
-        forgotPasswordBttn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        forgotPasswordBttn.setBorderPainted(false);
-        forgotPasswordBttn.setBackground(Home.HEADERRIGHTCOLOR);
-        forgotPasswordBttn.setForeground(Home.FORGOTPASSWORDCOLOR);
-        forgotPasswordBttn.addActionListener(e -> ForgotPassword.show(frame));
+    public static Button getButton(JFrame frame) {
+        ActionListener handler = e -> ForgotPassword.show(frame);
+        Button forgotPasswordBttn = new Button("Esqueceu a senha?", handler, Home.FORGOTPASSWORDCOLOR, Home.HEADERRIGHTCOLOR);
         return forgotPasswordBttn;
     }
 
@@ -34,7 +29,7 @@ public class ForgotPassword {
         String title = "Esqueceu a senha?";
         String message = "Digite um email no campo abaixo para receber instruções sobre mudança de senha";
         LimitedJTextField field = new LimitedJTextField(MINFIELDWIDTH, MAXFIELDWIDTH);
-        JButton send = new JButton("Enviar");
+        Button send = new Button("Enviar");
         JDialog dialog = new JDialog(frame, title);
         Label label = new Label(message);
         JComponent wrapper = Box.createVerticalBox();

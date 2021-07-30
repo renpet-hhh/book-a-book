@@ -1,7 +1,7 @@
 package view.pages;
 
+import java.awt.event.ActionListener;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,6 @@ import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
@@ -20,6 +19,7 @@ import model.commands.LoginCmd;
 import model.commands.NavigateCmd;
 import model.commands.TryLoginCmd;
 import model.handlers.FieldObserver;
+import view.components.Button;
 import view.components.ForgotPassword;
 import view.components.Label;
 import view.components.base.MenuFactory;
@@ -83,8 +83,8 @@ public class Home implements Page {
         Image image = originalImg.getImage(); // transform it 
         Image newimg = image.getScaledInstance(-1, LOGOHEIGHT,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
         ImageIcon img = new ImageIcon(newimg);  // transform it back
-        Label jlabel = new Label(img);
-        Box wrapper = Margin.vertical(Margin.horizontal(jlabel, LOGOMARGIN), LOGOMARGIN);
+        Label label = new Label(img);
+        Box wrapper = Margin.vertical(Margin.horizontal(label, LOGOMARGIN), LOGOMARGIN);
         wrapper.setOpaque(true);
         wrapper.setBackground(LOGOCOLOR);
         return wrapper;
@@ -96,21 +96,13 @@ public class Home implements Page {
         Box component = Box.createVerticalBox();
         Box top = Box.createHorizontalBox();
         if (!isHomePage) {
-            JButton homeButton = new JButton("Início");
-            homeButton.setForeground(LABELCOLOR);
-            homeButton.setBackground(HEADERRIGHTCOLOR);
-            homeButton.setBorderPainted(false);
-            homeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            homeButton.addActionListener(e -> app.invoke(new NavigateCmd(new Home())));
+            ActionListener homeHandler = e -> app.invoke(new NavigateCmd(new Home()));
+            Button homeButton = new Button("Início", homeHandler, LABELCOLOR, HEADERRIGHTCOLOR);
             top.add(Margin.rigidHorizontal(LEFTMARGINHEADERTOP));
             top.add(homeButton);
         }
-        JButton aboutButton = new JButton("Sobre");
-        aboutButton.setForeground(LABELCOLOR);
-        aboutButton.setBackground(HEADERRIGHTCOLOR);
-        aboutButton.setBorderPainted(false);
-        aboutButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        aboutButton.addActionListener(e -> app.invoke(new NavigateCmd(new About())));
+        ActionListener aboutHandler = e -> app.invoke(new NavigateCmd(new About()));
+        Button aboutButton = new Button("Sobre", aboutHandler, LABELCOLOR, HEADERRIGHTCOLOR);
         top.add(Box.createHorizontalGlue());
         top.add(aboutButton);
         top.add(Margin.rigidHorizontal(SPACEBETWEENABOUTANDHELP));
@@ -120,16 +112,12 @@ public class Home implements Page {
         Box bottom = Box.createHorizontalBox();
         if (isHomePage) {
             bottom.add(Box.createHorizontalGlue());
-            JButton forgotPasswordBttn = ForgotPassword.getButton(frame);
+            Button forgotPasswordBttn = ForgotPassword.getButton(frame);
             bottom.add(Margin.horizontal(forgotPasswordBttn, FORGOTPASSWORDMARGIN));
             // o texto padrão desses campos está assim só por enquanto, para facilitar os testes
             JTextField emailField = new FixedJTextField(USERNAMEFIELDWIDTH, "example@gmail.com");
             JTextField passwordField = new FixedJTextField(PASSWORDFIELDWIDTH, "aaaaaa");
-            JButton enter = new JButton("Entrar");
-            enter.setForeground(LABELCOLOR);
-            enter.setBorderPainted(false);
-            enter.setBackground(HEADERRIGHTCOLOR);
-            enter.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            Button enter = new Button("Entrar", null, LABELCOLOR, HEADERRIGHTCOLOR);
             List<JTextField> loginFields = new ArrayList<>();
             loginFields.add(emailField);
             loginFields.add(passwordField);
@@ -153,7 +141,7 @@ public class Home implements Page {
         } else {
             if (username.length() > 0) {
                 Label welcomeLabel = new Label("Bem vindo, " + username, LABELCOLOR);
-                JButton logoutBttn = MenuFactory.exitButton();
+                Button logoutBttn = MenuFactory.exitButton();
                 bottom.add(Margin.rigidHorizontal(LEFTMARGINHEADERBOTTOM));
                 bottom.add(welcomeLabel);
                 bottom.add(Box.createHorizontalGlue());
@@ -185,10 +173,8 @@ public class Home implements Page {
     public static JComponent mainContent() {
         JComponent component = Box.createVerticalBox();
         Label mainText = new Label("Olá olá lorem ipsum pssum lorem ");
-        JButton enterAsGuestBttn = new JButton("Acessar a biblioteca sem conta");
-        /* o botão deve levar até Pesquisa para Guest, mas enquanto não temos sistema de login implementado,
-        vou fazer com que o botão para uma página de Admin */
-        enterAsGuestBttn.addActionListener(e -> App.get().invoke(new LoginCmd()));
+        ActionListener enterAsGuestHandler = e -> App.get().invoke(new LoginCmd());
+        Button enterAsGuestBttn = new Button("Acessar a biblioteca sem conta", enterAsGuestHandler);
         component.add(Margin.rigidVertical(20));
         component.add(mainText);
         component.add(Margin.rigidVertical(20));

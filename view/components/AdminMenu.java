@@ -4,7 +4,6 @@ import java.awt.Dimension;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -45,9 +44,9 @@ public class AdminMenu extends JMenuBar {
         return menu;
     }
 
-    private JButton catalogacao() {
+    private Button catalogacao() {
         App app = App.get();
-        JButton menu = MenuFactory.createButton("Catalogação", e -> app.invoke(new NavigateCmd(new RegisterBooks())));
+        Button menu = MenuFactory.createButton("Catalogação", e -> app.invoke(new NavigateCmd(new RegisterBooks())));
         return menu;
     }
 
@@ -60,13 +59,13 @@ public class AdminMenu extends JMenuBar {
         return menu;
     }
 
-    private JButton ajuda() {
-        JButton button = MenuFactory.helpButton();
+    private Button ajuda() {
+        Button button = MenuFactory.helpButton();
         return button;
     }
 
-    private JButton sair() {
-        JButton button = MenuFactory.exitButton();
+    private Button sair() {
+        Button button = MenuFactory.exitButton();
         return button;
     }
 
@@ -75,10 +74,10 @@ public class AdminMenu extends JMenuBar {
         this.setLayout(bLayout);
         JMenu pesquisaMenu = this.pesquisa();
         JMenu circulacaoMenu = this.circulacao();
-        JButton catalogMenu = this.catalogacao();
+        Button catalogMenu = this.catalogacao();
         JMenu adminMenu = this.administracao();
-        JButton helpBttn = this.ajuda();
-        JButton exitBttn = this.sair();
+        Button helpBttn = this.ajuda();
+        Button exitBttn = this.sair();
         this.add(pesquisaMenu);
         this.add(circulacaoMenu);
         this.add(catalogMenu);

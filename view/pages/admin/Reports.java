@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -15,6 +14,7 @@ import model.handlers.ClearObserver;
 import view.Margin;
 import view.Page;
 import view.components.AdminMenu;
+import view.components.Button;
 import view.components.LabeledTextField;
 import view.components.base.MenuFactory;
 import view.pages.pagestemplate.SearchContentTemplate;
@@ -76,9 +76,8 @@ public class Reports implements Page {
 
     private JComponent buttons() {
         JComponent component = Box.createHorizontalBox();
-        JButton cancel = new JButton("Cancelar");
-        cancel.addActionListener(new ClearObserver<>(this.components));
-        JButton generate = new JButton("Gerar");
+        Button cancel = new Button("Cancelar", new ClearObserver<>(this.components));
+        Button generate = new Button("Gerar");
         component.add(Box.createHorizontalGlue());
         component.add(cancel);
         component.add(Margin.rigidHorizontal(SPACEBETWEENBUTTONS));

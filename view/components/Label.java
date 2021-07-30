@@ -9,14 +9,19 @@ public class Label extends JLabel {
     
     /** Classe customizada para facilitar a construção de Labels de uso comum na aplicação */
 
-    public Label(String text) {
-        super(text);
-    }
     public Label(ImageIcon imageIcon) {
         super(imageIcon);
     }
-    public Label(String text, Color color) { // pinta conforme a cor no argumento
+    public Label(String text) {
+        this(text, null);
+    }
+    public Label(String text, Color foreground) { // pinta conforme a cor no argumento
+        this(text, foreground, null);
+    }
+    public Label(String text, Color foreground, Color background) { // pinta conforme a cor no argumento
         super(text);
-        this.setForeground(color);
+        if (foreground != null) this.setForeground(foreground);
+        if (background != null) this.setForeground(background);
+        this.setOpaque(background != null);
     }
 }

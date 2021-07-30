@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.Color;
 import javax.swing.Box;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import view.components.Button;
 import view.components.Label;
 import view.components.base.MenuFactory;
 import view.Margin;
@@ -48,11 +48,11 @@ public class SearchContentTemplate {
     private boolean checked;
     private int horizontalMargin;
     private boolean useGlue;
-    private JButton[] buttons;
+    private Button[] buttons;
     private List<JTextField> textFields;
     private List<JCheckBox> checkComponents;
 
-    public JButton[] getButtons() { return this.buttons; }
+    public Button[] getButtons() { return this.buttons; }
     public List<JTextField> getTextFields() { return this.textFields; }
     /** Retorna todos os campos que podem ser limpados (checkboxes e textFields) */
     public List<JComponent> getClearableFields() {
@@ -75,7 +75,7 @@ public class SearchContentTemplate {
         this.checked = checked;
         this.horizontalMargin = horizontalMargin == -1 ? LEFTRIGHTMARGINWRAPPER : horizontalMargin;
         this.useGlue = useGlue;
-        this.buttons = new JButton[buttonsText == null ? 0 : buttonsText.length];
+        this.buttons = new Button[buttonsText == null ? 0 : buttonsText.length];
         this.textFields = new ArrayList<>();
         this.checkComponents = new ArrayList<>();
     }
@@ -161,7 +161,7 @@ public class SearchContentTemplate {
         Box buttonsComponent = Box.createHorizontalBox(); // botões na horizontal
         buttonsComponent.add(Box.createHorizontalGlue()); // vamos colocar cola no início e no fim para centralizar os botões
         for (int i = 0; i < buttonsText.length; i++) {
-            JButton bttn = new JButton(buttonsText[i]);
+            Button bttn = new Button(buttonsText[i]);
             this.buttons[i] = bttn;
             if (handlers != null) {
                 ActionListener handler = handlers[i];

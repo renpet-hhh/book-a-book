@@ -4,7 +4,6 @@ import java.awt.Dimension;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JMenuBar;
 
@@ -14,27 +13,27 @@ public class GuestMenu extends JMenuBar {
 
     /** Define como construir o menu de um convidado (Guest) */
 
-    private JButton pesquisa() {
-        JButton button = MenuFactory.createButton("Pesquisa Bibliográfica");
+    private Button pesquisa() {
+        Button button = MenuFactory.createButton("Pesquisa Bibliográfica");
         return button;
     }
 
-    private JButton ajuda() {
-        JButton button = MenuFactory.helpButton();
+    private Button ajuda() {
+        Button button = MenuFactory.helpButton();
         return button;
     }
 
-    private JButton sair() {
-        JButton button = MenuFactory.exitButton();
+    private Button sair() {
+        Button button = MenuFactory.exitButton();
         return button;
     }
 
     public GuestMenu() {
         BoxLayout bLayout = new BoxLayout(this, BoxLayout.X_AXIS);
         this.setLayout(bLayout);
-        JButton searchBttn = this.pesquisa();
-        JButton helpBttn = this.ajuda();
-        JButton exitBttn = this.sair();
+        Button searchBttn = this.pesquisa();
+        Button helpBttn = this.ajuda();
+        Button exitBttn = this.sair();
         this.add(searchBttn);
         this.add(helpBttn);
         this.add(Box.createHorizontalGlue());
