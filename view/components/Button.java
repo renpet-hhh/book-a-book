@@ -3,6 +3,7 @@ package view.components;
 import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Font;
 
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -27,8 +28,13 @@ public class Button extends JButton {
     }
 
     public Button(String text, Action action, Color foreground, Color background) {
+        this(text, (Action)null, foreground, background, null);
+    }
+
+    public Button(String text, Action action, Color foreground, Color background, Font font) {
         this(text, (ActionListener)null, foreground, background);
         if (action != null) this.setAction(action);
+        if (font != null) this.setFont(font);
     }
 
 

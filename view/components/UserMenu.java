@@ -1,5 +1,6 @@
 package view.components;
 
+import java.awt.event.ActionListener;
 import java.awt.Dimension;
 
 import javax.swing.Box;
@@ -7,7 +8,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JMenuBar;
 
+import model.App;
+import model.commands.NavigateCmd;
 import view.components.base.MenuFactory;
+import view.pages.user.Profile;
 
 public class UserMenu extends JMenuBar {
 
@@ -19,7 +23,9 @@ public class UserMenu extends JMenuBar {
     }
 
     private Button perfil() {
-        Button button = MenuFactory.createButton("Perfil");
+        App app = App.get();
+        ActionListener handler = e -> app.invoke(new NavigateCmd(new Profile()));
+        Button button = MenuFactory.createButton("Perfil", handler);
         return button;
     }
 

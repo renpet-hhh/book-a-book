@@ -45,6 +45,8 @@ public class PackLayout extends BoxLayout {
         return dim;
     }
 
+    
+
     public static JComponent createHorizontalBox() {
         JComponent box = new JPanel();
         PackLayout layout = new PackLayout(box, PackLayout.X_AXIS);

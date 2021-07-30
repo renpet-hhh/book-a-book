@@ -26,6 +26,8 @@ import view.components.base.MenuFactory;
 import view.Margin;
 import view.Page;
 import view.components.fixed.FixedJTextField;
+import view.pages.user.Profile;
+import view.pages.user.SearchBooksUser;
 
 public class Home implements Page {
     
@@ -65,7 +67,7 @@ public class Home implements Page {
     final static int FOOTMARGIN = 10;
     final static int FOOTSPACEBETWEEN = 20;
     final static int MAINCONTENTLEFTRIGHTWIDTH = 191;
-    final static int SPACEBETWEENABOUTANDHELP = 5;
+    final static int SPACEBETWEENTOPHEADERBUTTONS = 5;
     final static int RIGHTMARGINHELP = 25;
     final static int LEFTMARGINHEADERTOP = 15;
     final static int LEFTMARGINHEADERBOTTOM = 15;
@@ -84,12 +86,27 @@ public class Home implements Page {
         Image newimg = image.getScaledInstance(-1, LOGOHEIGHT,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
         ImageIcon img = new ImageIcon(newimg);  // transform it back
         Label label = new Label(img);
-        Box wrapper = Margin.vertical(Margin.horizontal(label, LOGOMARGIN), LOGOMARGIN);
+        Box wrapper = Box.createVerticalBox();
+        wrapper.add(Box.createVerticalGlue());
+        wrapper.add(Margin.rigidVertical(LOGOMARGIN));
+        wrapper.add(Margin.horizontal(label, LOGOMARGIN));
+        wrapper.add(Margin.rigidVertical(LOGOMARGIN));
+        wrapper.add(Box.createVerticalGlue());
         wrapper.setOpaque(true);
         wrapper.setBackground(LOGOCOLOR);
         return wrapper;
     }
+    public static int getHeaderLeftWidth() {
+        return headerLeft().getWidth();
+    }
 
+    /**
+     * Constrói o header direito.
+     * 
+     * - Para construir o header direito da página inicial, especifique isHomePage == true e username == ""
+     * - Para construir o header direito da página de um user, especifique isHomePage == false e username do user
+     * - Para construir o header direito da página de um guest, especifique isHomePage == false e username == ""
+     */
     public static JComponent headerRight(JFrame frame, boolean isHomePage, String username) {
         App app = App.get();
         int height = LOGOHEIGHT + 2 * LOGOMARGIN;
@@ -104,8 +121,14 @@ public class Home implements Page {
         ActionListener aboutHandler = e -> app.invoke(new NavigateCmd(new About()));
         Button aboutButton = new Button("Sobre", aboutHandler, LABELCOLOR, HEADERRIGHTCOLOR);
         top.add(Box.createHorizontalGlue());
+        if (!isHomePage && username.length() > 0) {
+            ActionListener libraryHandler = e -> app.invoke(new NavigateCmd(new SearchBooksUser()));
+            Button libraryButton = new Button("Acessar a Biblioteca", libraryHandler, LABELCOLOR, HEADERRIGHTCOLOR);
+            top.add(libraryButton);
+            top.add(Margin.rigidHorizontal(SPACEBETWEENTOPHEADERBUTTONS));
+        }
         top.add(aboutButton);
-        top.add(Margin.rigidHorizontal(SPACEBETWEENABOUTANDHELP));
+        top.add(Margin.rigidHorizontal(SPACEBETWEENTOPHEADERBUTTONS));
         top.add(new Label("Ajuda", LABELCOLOR));
         top.add(Margin.rigidHorizontal(RIGHTMARGINHELP));
         top.setMaximumSize(new Dimension(Integer.MAX_VALUE, height / 2 - 2 * HEADERTOPMARGIN));
@@ -140,7 +163,7 @@ public class Home implements Page {
             bottom.setMaximumSize(new Dimension(Integer.MAX_VALUE, height / 2 - 2 * HEADERBOTTOMMARGIN));
         } else {
             if (username.length() > 0) {
-                Label welcomeLabel = new Label("Bem vindo, " + username, LABELCOLOR);
+                Label welcomeLabel = new Label("Bem vindo, " + username, Profile.HEADERWELCOMECOLOR, null, Profile.WELCOMEFONT);
                 Button logoutBttn = MenuFactory.exitButton();
                 bottom.add(Margin.rigidHorizontal(LEFTMARGINHEADERBOTTOM));
                 bottom.add(welcomeLabel);
@@ -157,6 +180,13 @@ public class Home implements Page {
     }
 
 
+    /**
+     * Constrói o header.
+     * 
+     * - Para construir o header direito da página inicial, especifique isHomePage == true e username == ""
+     * - Para construir o header direito da página de um user, especifique isHomePage == false e username do user
+     * - Para construir o header direito da página de um guest, especifique isHomePage == false e username == ""
+     */
     public static JComponent header(JFrame frame, boolean isHomePage, String username) {
         Box component = Box.createHorizontalBox();
         JComponent left = Home.headerLeft();

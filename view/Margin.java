@@ -66,4 +66,12 @@ public class Margin {
         b.add(c);
         return b;
     }
+
+    public static Box glueHorizontal(JComponent c) {
+        Box b = Box.createHorizontalBox();
+        b.add(Box.createHorizontalGlue());
+        b.add(c);
+        b.add(Box.createHorizontalGlue());
+        return b;
+    }
 }
