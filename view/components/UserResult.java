@@ -1,17 +1,20 @@
 package view.components;
 
 import java.awt.event.ActionListener;
+import java.time.format.DateTimeFormatter;
 import java.awt.Color;
 
 import javax.swing.Box;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 
+import model.App;
 import model.User;
 import model.UserData;
 import view.Margin;
 import view.components.layout.PackLayout;
 import view.components.layout.StretchLayout;
-import view.pages.admin.SearchUsersResult;
 
 public class UserResult extends JComponent {
 
@@ -34,6 +37,12 @@ public class UserResult extends JComponent {
     final static Color BUTTONBGGRAY = new Color(181, 181, 181);
     final static Color BUTTONLABELCOLOR = new Color(0, 0, 0);
     final static Color LEFTBACKGROUNDCOLOR = new Color(255, 255, 255);
+
+    /* Constantes para o POPUP */
+    final static int TOPMARGIN = 40;
+    final static int BOTTOMMARGIN = 40;
+    final static int LEFTMARGIN = 30;
+    final static int RIGHTMARGIN = 30;
 
     public UserResult(User user) {
         PackLayout layout = new PackLayout(this, PackLayout.X_AXIS);
@@ -77,7 +86,7 @@ public class UserResult extends JComponent {
     private JComponent right(User user) {
         JComponent component = StretchLayout.createVerticalBox();
         ActionListener viewHandler = e -> {
-            SearchUsersResult.popupUserData(user);
+            this.popupUserData(user);
         };
         Button view = new Button("Abrir registro", viewHandler, BUTTONLABELCOLOR, BUTTONBGGRAY);
         Button edit = new Button("Editar", null, BUTTONLABELCOLOR, BUTTONBGGRAY);
@@ -94,4 +103,36 @@ public class UserResult extends JComponent {
         return wrapper;
     }
 
+    public void popupUserData(User user) {
+        this.popupUserData(App.get().getFrame(), user);
+    }
+    public void popupUserData(JFrame frame, User user) {
+        UserData data = user.getData();
+        JComponent component = Box.createVerticalBox();
+        Label name = new Label("Nome: " + data.name);
+        Label birth = new Label("Data de nascimento: " + data.birthdate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        Label address = new Label("Endereço: "+ data.address);
+        Label email = new Label("Email: " + data.email);
+        Label contact = new Label("Contato: " + data.contact);
+        Label status = new Label("Situação: OK");
+        component.add(Margin.rigidVertical(TOPMARGIN));
+        component.add(name);
+        component.add(birth);
+        component.add(address);
+        component.add(email);
+        component.add(contact);
+        component.add(Margin.rigidVertical(3));
+        component.add(status);
+        component.add(Margin.rigidVertical(3));
+        component.add(Margin.rigidVertical(BOTTOMMARGIN));
+        JComponent wrapper = Box.createHorizontalBox();
+        wrapper.add(Margin.rigidHorizontal(LEFTMARGIN));
+        wrapper.add(component);
+        wrapper.add(Margin.rigidHorizontal(RIGHTMARGIN));
+        JDialog dialog = new JDialog(frame);
+        dialog.add(wrapper);
+        dialog.pack();
+        dialog.setLocationRelativeTo(frame);
+        dialog.setVisible(true);
+    }
 }

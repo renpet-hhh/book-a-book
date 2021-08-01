@@ -1,7 +1,6 @@
 package view.pages.admin;
 
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -10,16 +9,16 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
 import model.App;
-import model.User;
+import model.Book;
 import view.Margin;
 import view.Page;
 import view.components.AdminMenu;
+import view.components.BookResult;
 import view.components.Label;
-import view.components.UserResult;
 import view.components.base.MenuFactory;
 import view.pages.pagestemplate.LayoutTemplate;
 
-public class SearchUsersResult implements Page {
+public class SearchBooksResult implements Page {
 
     /** Responsável pela página que exibe os resultados da pesquisa de usuários.
      * 
@@ -27,43 +26,38 @@ public class SearchUsersResult implements Page {
      * um popup exibindo os dados associados a um usuário.
      */
 
-    public final static String TITLE = "Pesquisa >> Usuários >> Resultado";
+    public final static String TITLE = "Pesquisa >> Livros >> Resultado";
     @Override
     public String getTitle() { return TITLE; }
 
     final static int SPACEBETWEENRESULTS = 10;
-    /* Constantes para o POPUP */
-    final static int TOPMARGIN = 40;
-    final static int BOTTOMMARGIN = 40;
-    final static int LEFTMARGIN = 30;
-    final static int RIGHTMARGIN = 30;
 
-    private String nameFilter, matriculaFilter;
-    public SearchUsersResult(String nameFilter, String matriculaFilter) {
-        this.nameFilter = nameFilter;
-        this.matriculaFilter = matriculaFilter;
+    private String titleFilter, authorFilter;
+    public SearchBooksResult(String titleFilter, String authorFilter) {
+        this.titleFilter = titleFilter;
+        this.authorFilter = authorFilter;
     }
     
     @Override
     public void paint(JFrame frame) {
         JComponent menubar = AdminMenu.withWrapper();
-        String path = "Pesquisa >> Usuários >> Resultado";
+        String path = "Pesquisa >> Livro >> Resultado";
         JComponent content = Margin.horizontal(this.mainContent(), MenuFactory.WRAPPERHORIZONTALMARGIN);
         LayoutTemplate.build(frame, menubar, content, path);
     }
 
     private JComponent mainContent() {
-        Collection<User> users = App.get().getLogin().getFilteredUsers(this.nameFilter, this.matriculaFilter);
+        List<Book> books = App.get().getLibrary().getFilteredBooks(this.titleFilter, this.authorFilter);
         JComponent component = Box.createVerticalBox();
-        Iterator<User> it = users.iterator();
-        if (users.size() == 0) {
+        int length = books.size();
+        if (length == 0) {
             // não há usuários!
-            return new Label("Nenhum usuário encontrado");
+            return new Label("Nenhum livro encontrado");
         }
-        component.add(new UserResult(it.next()));
-        while (it.hasNext()) {
+        component.add(new BookResult(books.get(0)));
+        for (int i = 1; i < length; i++) {
             component.add(Margin.rigidVertical(SPACEBETWEENRESULTS));
-            component.add(new UserResult(it.next()));
+            component.add(new BookResult(books.get(i)));
         }
         JScrollPane scrollPane = new JScrollPane(component, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);

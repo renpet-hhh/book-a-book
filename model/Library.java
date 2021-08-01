@@ -1,7 +1,9 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,5 +47,33 @@ public class Library {
             this.books.put(title, set);
         }
         return set.add(book);
+    }
+    /** Retorna uma coleção de livros que satisfazem os filtros.
+     * Um filtro nulo é satisfeito por qualquer livro.
+     * 
+     * O filtro titleFilter só é satisfeito caso o nome do livro contenha
+     * titleFilter (ou seja, titleFilter é substring do nome do usuário).
+     * 
+     * O filtro authorFilter é definido da mesma forma.
+     */
+    public List<Book> getFilteredBooks(String titleFilter, String authorFilter) {
+        List<Book> b = new ArrayList<>();
+        for (Set<Book> bookset : this.books.values()) {
+            for (Book book : bookset) {
+                List<String> authorNames = book.getAuthors();
+                boolean satisfiesTitleFilter = titleFilter == null || book.getTitle().contains(titleFilter);
+                boolean satisfiesAuthorFilter = false;
+                for (String authorName: authorNames) {
+                    if (authorFilter == null || authorName.contains(authorFilter)) {
+                        satisfiesAuthorFilter = true;
+                        break;
+                    }
+                }
+                if (satisfiesTitleFilter && satisfiesAuthorFilter) {
+                    b.addAll(bookset);
+                }
+            }
+        }
+        return b;
     }
 }

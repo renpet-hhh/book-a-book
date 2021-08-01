@@ -2,6 +2,8 @@ package model;
 
 import java.awt.Dimension;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 
@@ -46,6 +48,7 @@ public class App {
         App app = App.get();
         GUI gui = new GUI();
         app.gui = gui;
+        // Cadastramos algumas coisas falsas para fins de teste
         // USUÁRIO FALSO
         UserData data = new UserData();
         data.address = "Endereço mockup";
@@ -68,6 +71,14 @@ public class App {
         String passwordMockup1 = "bbbbbb";
         String encrypted1 = Crypto.crypt(passwordMockup1);
         app.getLogin().addUser(new Admin(d, encrypted1));
+        // LIVRO FALSO
+        List<String> authors = new ArrayList<>();
+        authors.add("Nome falso 1");
+        authors.add("Nome falso 2");
+        authors.add("Nome falso 3");
+        Book book = new Book("Título falso", "Subtítulo falso", "Edição falsa", "21313132-123", "Local falso", authors, 1997, 100);
+        app.getLibrary().addBook(book);
+
         gui.navigate(new Home()); // começamos na página inicial
         app.getFrame().setSize(new Dimension(1200, 700));
         app.getFrame().revalidate();

@@ -32,7 +32,7 @@ public class RegisterBookHandler implements ActionListener {
         String edition = this.fields.get(5).getText();
         String publishmentYear = this.fields.get(6).getText();
         String whereWasPublished = this.fields.get(7).getText();
-        String availableNum = this.fields.get(8).getText();
+        String totalNum = this.fields.get(8).getText();
         String isbn = this.fields.get(9).getText();
         /* Obrigatoriedade dos campos */
         if (title.length() == 0) {
@@ -43,7 +43,7 @@ public class RegisterBookHandler implements ActionListener {
             app.invoke(new DisplayPopupCmd("Campo Autor 1 é obrigatório", JOptionPane.ERROR_MESSAGE));
             return;
         }
-        if (availableNum.length() == 0) {
+        if (totalNum.length() == 0) {
             app.invoke(new DisplayPopupCmd("Campo Exemplares é obrigatório", JOptionPane.ERROR_MESSAGE));
             return;
         }
@@ -60,12 +60,12 @@ public class RegisterBookHandler implements ActionListener {
             app.invoke(new DisplayPopupCmd("Ano de publicação deve ser um número não negativo. Recebido: " + publishmentYear, JOptionPane.ERROR_MESSAGE));
             return;
         }
-        int availableNumInt;
+        int totalNumInt;
         try {
-            availableNumInt = Integer.parseInt(availableNum);
-            if (availableNumInt < 0) { throw new NumberFormatException(); }
+            totalNumInt = Integer.parseInt(totalNum);
+            if (totalNumInt < 0) { throw new NumberFormatException(); }
         } catch (NumberFormatException e) {
-            app.invoke(new DisplayPopupCmd("Número de examplares deve ser um número não negativo. Recebido: " + availableNum, JOptionPane.ERROR_MESSAGE));
+            app.invoke(new DisplayPopupCmd("Número de examplares deve ser um número não negativo. Recebido: " + totalNum, JOptionPane.ERROR_MESSAGE));
             return;
         }
         /* criamos a lista de autores */
@@ -74,8 +74,7 @@ public class RegisterBookHandler implements ActionListener {
         authors.add(author2);
         authors.add(author3);
         /* livro criado */
-        Book book = new Book(title, subtitle, edition, isbn, whereWasPublished, authors, publishmentYearInt);
-        book.setHowManyTotal(availableNumInt);
+        Book book = new Book(title, subtitle, edition, isbn, whereWasPublished, authors, publishmentYearInt, totalNumInt);
         app.invoke(new RegisterBookCmd(book));
     }
 

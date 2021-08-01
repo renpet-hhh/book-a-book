@@ -8,23 +8,26 @@ public class Book {
     private int yearOfPublishment;
     private int howManyTotal = 0, howManyAvailable = 0;
 
-    public Book(String title, String subtitle, String edition, String isbn, String whereWasPublished, List<String> authors, int yearOfPublishment) {
+    public Book(String title, String subtitle, String edition, String isbn, String whereWasPublished, List<String> authors, int yearOfPublishment, int total) {
         this.title = title;
         this.subtitle = subtitle;
         this.edition = edition;
         this.isbn = isbn;
+        this.whereWasPublished = whereWasPublished;
         this.authors = authors;
         this.yearOfPublishment = yearOfPublishment;
+        this.setHowManyTotal(total);
+        this.setHowManyAvailable(total);
     }
 
     /** Getters */
-    public String getTitle() { return title; }
-    public String getSubtitle() { return subtitle; }
-    public String getEdition() { return edition; }
-    public List<String> getAuthors() { return authors; }
-    public String getIsbn() { return isbn; }
-    public String getWhereWasPublished() { return whereWasPublished; }
-    public int getYearOfPublishment() { return yearOfPublishment; }
+    public String getTitle() { return this.title; }
+    public String getSubtitle() { return this.subtitle; }
+    public String getEdition() { return this.edition; }
+    public List<String> getAuthors() { return this.authors; }
+    public String getIsbn() { return this.isbn; }
+    public String getWhereWasPublished() { return this.whereWasPublished; }
+    public int getYearOfPublishment() { return this.yearOfPublishment; }
 
     public int getHowManyTotal() { return this.howManyTotal; }
     public void setHowManyTotal(int howMany) { this.howManyTotal = howMany; }
