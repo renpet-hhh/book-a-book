@@ -20,10 +20,12 @@ public class SearchBooksHandler implements ActionListener {
 
     private List<JTextField> fields;
     private List<JCheckBox> checks;
-    public SearchBooksHandler(List<JTextField> fields, List<JCheckBox> checks) {
+    private int privilege;
+    public SearchBooksHandler(List<JTextField> fields, List<JCheckBox> checks, int privilege) {
         /** lerá esses campos quando o usuário clicar no botão Buscar */
         this.fields = fields;
         this.checks = checks;
+        this.privilege = privilege;
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -36,7 +38,7 @@ public class SearchBooksHandler implements ActionListener {
         }
         // vamos à pagina de busca
         // a página receberá os parâmetros de filtro como argumento
-        App.get().invoke(new NavigateCmd(new SearchBooksResult(titleFilter, authorFilter)));
+        App.get().invoke(new NavigateCmd(new SearchBooksResult(titleFilter, authorFilter, this.privilege)));
     }
 
 

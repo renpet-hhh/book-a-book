@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 
 import java.awt.event.ActionListener;
 
+import model.User;
 import model.handlers.ClearHandler;
 import model.handlers.SearchBooksHandler;
 import view.Page;
@@ -26,7 +27,7 @@ public class SearchBooks implements Page {
         SearchContentTemplate template = new SearchContentTemplate(labelsText, buttonsText, null, true);
         JComponent content = template.build();
         ActionListener cancelHandler = new ClearHandler<>(template.getClearableFields());
-        ActionListener searchHandler = new SearchBooksHandler(template.getTextFields(), template.getCheckBoxs());
+        ActionListener searchHandler = new SearchBooksHandler(template.getTextFields(), template.getCheckBoxs(), User.ADMINPRIVILEGE);
         ActionListener[] handlers = new ActionListener[] {cancelHandler, searchHandler};
         template.setHandlers(handlers);
         String path = "Pesquisa >> Livros";

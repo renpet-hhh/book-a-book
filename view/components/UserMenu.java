@@ -12,13 +12,16 @@ import model.App;
 import model.commands.NavigateCmd;
 import view.components.base.MenuFactory;
 import view.pages.user.Profile;
+import view.pages.user.SearchBooksUser;
 
 public class UserMenu extends JMenuBar {
 
     /** Define como construir o menu de um usuário (User) */
 
     private Button pesquisa() {
-        Button button = MenuFactory.createButton("Pesquisa Bibliográfica");
+        App app = App.get();
+        ActionListener handler = e -> app.invoke(new NavigateCmd(new SearchBooksUser()));
+        Button button = MenuFactory.createButton("Pesquisa Bibliográfica", handler);
         return button;
     }
 

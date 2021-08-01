@@ -8,7 +8,7 @@ public class Admin extends User {
 
     @Override
     public int getPrivilege() {
-        return 2;
+        return User.ADMINPRIVILEGE;
     }
     
     

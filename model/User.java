@@ -22,7 +22,10 @@ public class User {
      * 1 - Usuário comum
      * 2 - Administrador
      */
+    public final static int GUESTPRIVILEGE = 0;
+    public final static int USERPRIVILEGE = 1;
+    public final static int ADMINPRIVILEGE = 2;
     public int getPrivilege() {
-        return 1;
+        return User.USERPRIVILEGE;
     }
 }

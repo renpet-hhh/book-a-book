@@ -1,5 +1,6 @@
 package view.components;
 
+import java.awt.event.ActionListener;
 import java.awt.Dimension;
 
 import javax.swing.Box;
@@ -7,14 +8,19 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JMenuBar;
 
+import model.App;
+import model.commands.NavigateCmd;
 import view.components.base.MenuFactory;
+import view.pages.guest.SearchBooksGuest;
 
 public class GuestMenu extends JMenuBar {
 
     /** Define como construir o menu de um convidado (Guest) */
 
     private Button pesquisa() {
-        Button button = MenuFactory.createButton("Pesquisa Bibliográfica");
+        App app = App.get();
+        ActionListener handler = e -> app.invoke(new NavigateCmd(new SearchBooksGuest()));
+        Button button = MenuFactory.createButton("Pesquisa Bibliográfica", handler);
         return button;
     }
 
