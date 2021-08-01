@@ -18,7 +18,6 @@ import model.Book;
 import model.RefreshableBU;
 import model.User;
 import model.UserData;
-import model.handlers.ClearHandler;
 import model.handlers.RefreshUHandler;
 import view.Margin;
 import view.Page;
@@ -82,7 +81,7 @@ public class Reservations implements Page, RefreshableBU {
         searchTemplate.setHandlers(searchHandlers);
         /* Bottom */
         String[] bottomButtonsText = new String[] {"Cancelar", "Emprestar"};
-        ActionListener cancelHandler = new ClearHandler<>(searchTemplate.getClearableFields());
+        ActionListener cancelHandler = e -> this.refresh(null, null);
         ActionListener[] handlers = new ActionListener[] {cancelHandler, null};
         SearchContentTemplate buttonsTemplate = new SearchContentTemplate(new String[0], bottomButtonsText, handlers, false, -1, true);
         JComponent buttons = buttonsTemplate.build();
