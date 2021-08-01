@@ -25,11 +25,14 @@ public class Login {
     public void setIsAdmin(boolean isAdmin) { this.isAdmin = isAdmin; }
 
     /* Base de dados */
-    private Map<String, User> users = new HashMap<String, User>();
+    private Map<Integer, User> users = new HashMap<Integer, User>();
     /** Retorna todos os usuários. */
     public Collection<User> getUsers() {
         return this.users.values();
     }
+    private int matriculaCounter = 0;
+    public int getMatricula() { return this.matriculaCounter; }
+    public void incrementMatricula() { this.matriculaCounter += 1; }
     /** Retorna uma coleção de usuários que satisfazem os filtros.
      * Um filtro nulo é satisfeito por qualquer usuário.
      * 
@@ -42,19 +45,27 @@ public class Login {
         List<User> c = new ArrayList<>(this.users.values());
         c.removeIf(user -> {
             UserData data = user.getData();
-            return !((nameFilter == null || data.name.contains(nameFilter)) &&
-                (matriculaFilter == null || data.document.contains(matriculaFilter)));
+            // temos que reduzir o escopo de matriculaFilter para poder atribuir null no catch
+            String matrFilter = matriculaFilter;
+            int matriculaFilterInt = -1;
+            try {
+                matriculaFilterInt = Integer.parseInt(matrFilter);
+            } catch (NumberFormatException e) { matrFilter = null; }
+            return !((nameFilter == null || data.getName().contains(nameFilter)) &&
+                (matrFilter == null || data.getMatricula() == matriculaFilterInt));
                 // adicionar matrícula depois!
         });
         return c;
     }
     
     public void addUser(User user) {
-        String email = user.getData().email;
-        if (users.containsKey(email)) {
+        int matricula = this.getMatricula();
+        user.getData().setMatricula(matricula);
+        this.incrementMatricula();
+        if (users.containsKey(matricula)) {
             throw new RuntimeException("Usuário já está cadastrado");
         }
-        users.put(email, user);
+        users.put(matricula, user);
     }
 
     /* Funções para salvar e carregar a base de dados */
@@ -67,36 +78,27 @@ public class Login {
 
 
     /** Retorna um usuário, se a senha está correta */
-    private User validate(String email, String password) {
-        User u = this.users.getOrDefault(email, null);
+    private User validate(int matricula, String password) {
+        User u = this.users.getOrDefault(matricula, null);
         if (u == null) return null;
         if (!u.comparePassword(password)) return null;
         return u;
     }
 
-    public void login(String username, String password) {
+    public void tryLogin(int matricula, String password) {
         App app = App.get();
         if (this.isLoggedIn) {
             Command displayErr = new DisplayPopupCmd("Usuário já está logado");
             app.invoke(displayErr);
             return;
         }
-        User u = validate(username, password);
+        User u = this.validate(matricula, password);
         if (u != null) {
             Command loginCmd = new LoginCmd(u);
             app.invoke(loginCmd);
             return;
         }
-        app.invoke(new DisplayPopupCmd("Email e/ou senha incorretos"));
-    }
-
-    public void logout() {
-        if (!this.isLoggedIn) {
-            return;
-        }
-        this.user = null;
-        this.isLoggedIn = false;
-        this.isAdmin = false;
+        app.invoke(new DisplayPopupCmd("Matrícula e/ou senha incorretos"));
     }
 
 }

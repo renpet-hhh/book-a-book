@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 
 import model.App;
+import model.commands.DisplayPopupCmd;
 import model.commands.LoginCmd;
 import model.commands.NavigateCmd;
 import model.commands.TryLoginCmd;
@@ -138,7 +139,7 @@ public class Home implements Page {
             Button forgotPasswordBttn = ForgotPassword.getButton(frame);
             bottom.add(Margin.horizontal(forgotPasswordBttn, FORGOTPASSWORDMARGIN));
             // o texto padrão desses campos está assim só por enquanto, para facilitar os testes
-            JTextField emailField = new FixedJTextField(USERNAMEFIELDWIDTH, "example@gmail.com");
+            JTextField emailField = new FixedJTextField(USERNAMEFIELDWIDTH, "0");
             JTextField passwordField = new FixedJTextField(PASSWORDFIELDWIDTH, "aaaaaa");
             Button enter = new Button("Entrar", null, LABELCOLOR, HEADERRIGHTCOLOR);
             List<JTextField> loginFields = new ArrayList<>();
@@ -148,10 +149,17 @@ public class Home implements Page {
             // temos acesso à eles quando botão Entrar for pressionado
             // o Obsever a seguir é um handler do botão Entrar
             FieldHandler observer = new FieldHandler(loginFields, f -> {
-                String email = f.get(0).getText();
+                String matricula = f.get(0).getText();
                 String password = f.get(1).getText();
+                int matriculaInt = -1;
+                try {
+                    matriculaInt = Integer.parseInt(matricula);
+                } catch (NumberFormatException e) {
+                    app.invoke(new DisplayPopupCmd("Matrícula deve ser um número. Recebido: " + matricula));
+                    return;
+                };
                 // quando o botão Entrar for pressionado, tentamos fazer login
-                app.invoke(new TryLoginCmd(email, password));
+                app.invoke(new TryLoginCmd(matriculaInt, password));
             });
             enter.addActionListener(observer);
             bottom.add(emailField);

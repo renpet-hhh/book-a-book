@@ -26,7 +26,7 @@ public class RegisterUserCmd implements Command {
 
     @Override
     public String log() {
-        return "RegisterUserCmd: " + this.user.getData().email;
+        return "RegisterUserCmd: " + this.user.getData().getEmail();
     }
 
     @Override

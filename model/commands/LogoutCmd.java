@@ -13,7 +13,12 @@ public class LogoutCmd implements Command {
     public void execute() {
         App app = App.get();
         Login login = app.getLogin();
-        login.logout();
+        if (!login.isLoggedIn()) {
+            return;
+        }
+        login.setUser(null);
+        login.setIsLoggedIn(false);
+        login.setIsAdmin(false);
         app.invoke(new NavigateCmd(new Home()));
     }
     

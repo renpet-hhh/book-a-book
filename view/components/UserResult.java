@@ -57,7 +57,7 @@ public class UserResult extends JComponent {
     private JComponent left(User user) {
         UserData data = user.getData();
         JComponent component = PackLayout.createVerticalBox();
-        Label name = new Label("Nome: " + data.name);
+        Label name = new Label("Nome: " + data.getName());
         Label status = new Label("Situação: OK");
         Label rent = new Label("Livros emprestados: 0");
         Label reserved = new Label("Livros reservados: 0");
@@ -109,14 +109,16 @@ public class UserResult extends JComponent {
     public void popupUserData(JFrame frame, User user) {
         UserData data = user.getData();
         JComponent component = Box.createVerticalBox();
-        Label name = new Label("Nome: " + data.name);
-        Label birth = new Label("Data de nascimento: " + data.birthdate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        Label address = new Label("Endereço: "+ data.address);
-        Label email = new Label("Email: " + data.email);
-        Label contact = new Label("Contato: " + data.contact);
+        Label name = new Label("Nome: " + data.getName());
+        Label matricula = new Label("Matrícula: " + data.getMatricula());
+        Label birth = new Label("Data de nascimento: " + data.getBirthdate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        Label address = new Label("Endereço: "+ data.getAddress());
+        Label email = new Label("Email: " + data.getEmail());
+        Label contact = new Label("Contato: " + data.getContact());
         Label status = new Label("Situação: OK");
         component.add(Margin.rigidVertical(TOPMARGIN));
         component.add(name);
+        component.add(matricula);
         component.add(birth);
         component.add(address);
         component.add(email);

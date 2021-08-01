@@ -37,14 +37,13 @@ public class LoginCmd implements Command {
         } else if (this.userCode == 2) {
             app.invoke(new NavigateCmd(new SearchBooks()));
         } else {
-            // enquanto ainda não implementamos a página do Guest
             app.invoke(new NavigateCmd(new SearchBooksGuest()));
         }
     }
 
     @Override
     public String log() {
-        String email = this.user == null ? "" : this.user.getData().email;
+        String email = this.user == null ? "" : this.user.getData().getEmail();
         Object data[] = new Object[] {email, this.userCode};
         return Arrays.toString(data);
     }

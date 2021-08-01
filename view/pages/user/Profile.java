@@ -55,7 +55,7 @@ public class Profile implements Page {
         App app = App.get();
         User user = app.getLogin().getUser();
         UserData data = user.getData();
-        JComponent menubar = Home.header(frame, false, data.name);
+        JComponent menubar = Home.header(frame, false, data.getName());
         // Página incompleta por enquanto!
         JComponent content = this.mainWrapper();
         frame.add(menubar);
@@ -69,8 +69,8 @@ public class Profile implements Page {
         UserData data = user.getData();
         JComponent content = Box.createVerticalBox();
         JComponent profileData = Margin.glueRight(new Label("Dados pessoais", null, null, CONTENTTITLEFONT));
-        JComponent emailLabel = Margin.glueRight(new Label("Email: " + data.email));
-        JComponent contactLabel = Margin.glueRight(new Label("Contato: " + data.contact));
+        JComponent emailLabel = Margin.glueRight(new Label("Email: " + data.getEmail()));
+        JComponent contactLabel = Margin.glueRight(new Label("Contato: " + data.getContact()));
         profileData.setBackground(Color.blue);
         content.add(Margin.rigidVertical(CONTENTTOPMARGIN));
         content.add(profileData);

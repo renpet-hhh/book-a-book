@@ -6,23 +6,24 @@ import model.Login;
 
 public class TryLoginCmd implements Command {
 
-    private String email, password;
+    private int matricula;
+    private String password;
 
-    public TryLoginCmd(String email, String password) {
-        this.email = email;
+    public TryLoginCmd(int matricula, String password) {
+        this.matricula = matricula;
         this.password = password;
     }
 
     @Override
     public String log() {
-        return "TryLoginCmd: " + this.email;
+        return "TryLoginCmd: " + this.matricula;
     }
 
     @Override
     public void execute() {
         App app = App.get();
         Login login = app.getLogin();
-        login.login(this.email, this.password);
+        login.tryLogin(this.matricula, this.password);
     }
     
 }

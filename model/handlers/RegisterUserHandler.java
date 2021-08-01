@@ -67,21 +67,15 @@ public class RegisterUserHandler extends FieldHandler {
                 app.invoke(new DisplayPopupCmd("Senhas diferentes", JOptionPane.ERROR_MESSAGE));
                 return;
             }
-            UserData data = new UserData();
-            data.name = username;
-            data.document = document;
-            data.address = address;
-            data.email = email;
-            data.contact = contact;
+            LocalDate birthdate;
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate ld;
             try {
-                ld = LocalDate.parse(birthdateStr, formatter);
+                birthdate = LocalDate.parse(birthdateStr, formatter);
             } catch (DateTimeParseException e) {
                 app.invoke(new DisplayPopupCmd("Data deve estar no formato dd/MM/yyyy", JOptionPane.ERROR_MESSAGE));
                 return;
             }
-            data.birthdate = ld;
+            UserData data = new UserData(username, address, contact, email, document, birthdate);
             // o botão Cadastrar foi pressionado! vamos tentar cadastrar o usuário
             // mensagens de erro e confirmação são de responsabilidade do próprio comando abaixo
             app.invoke(new RegisterUserCmd(data, password, RegisterUserHandler.this.isAdmin));

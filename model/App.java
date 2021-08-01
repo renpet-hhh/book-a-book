@@ -50,24 +50,12 @@ public class App {
         app.gui = gui;
         // Cadastramos algumas coisas falsas para fins de teste
         // USUÁRIO FALSO
-        UserData data = new UserData();
-        data.address = "Endereço mockup";
-        data.birthdate = LocalDate.of(1999, 12, 31);
-        data.contact = "(88) 99999-9999";
-        data.document = "Documento mockup";
-        data.email = "example@gmail.com";
-        data.name = "Nome mockup";
+        UserData data = new UserData("Nome mockup", "Endereço mockup", "(88) 99999-9999", "example@gmail.com", "Documento mockup", LocalDate.of(1999, 12, 31));
         String passwordMockup = "aaaaaa";
         String encrypted = Crypto.crypt(passwordMockup);
         app.getLogin().addUser(new User(data, encrypted));
         // ADMIN FALSO
-        UserData d = new UserData();
-        d.address = "Endereço mockup";
-        d.birthdate = LocalDate.of(1999, 12, 31);
-        d.contact = "(88) 99999-9999";
-        d.document = "Documento mockup";
-        d.email = "admin@gmail.com";
-        d.name = "Admin mockup";
+        UserData d = new UserData("Admin mockup", "Endereço mockup", "(88) 99992-9999", "admin@gmail.com", "Documento mockup", LocalDate.of(2000, 12, 31));
         String passwordMockup1 = "bbbbbb";
         String encrypted1 = Crypto.crypt(passwordMockup1);
         app.getLogin().addUser(new Admin(d, encrypted1));
