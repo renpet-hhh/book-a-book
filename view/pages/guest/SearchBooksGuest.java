@@ -4,7 +4,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-import model.handlers.ClearObserver;
+import model.handlers.ClearHandler;
 import view.Page;
 import view.components.GuestMenu;
 import view.pages.pagestemplate.SearchContentTemplate;
@@ -23,7 +23,7 @@ public class SearchBooksGuest implements Page {
         String[] buttonsText = new String[] {"Cancelar", "Buscar"};
         SearchContentTemplate template = new SearchContentTemplate(labelsText, buttonsText, true, true);
         JComponent content = template.build();
-        ActionListener cancelObserver = new ClearObserver<>(template.getClearableFields());
+        ActionListener cancelObserver = new ClearHandler<>(template.getClearableFields());
         ActionListener[] handlers = new ActionListener[] {cancelObserver, null};
         template.setHandlers(handlers);
         String path = "Pesquisa >> Livros";

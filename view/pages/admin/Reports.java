@@ -10,7 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-import model.handlers.ClearObserver;
+import model.handlers.ClearHandler;
 import view.Margin;
 import view.Page;
 import view.components.AdminMenu;
@@ -76,7 +76,7 @@ public class Reports implements Page {
 
     private JComponent buttons() {
         JComponent component = Box.createHorizontalBox();
-        Button cancel = new Button("Cancelar", new ClearObserver<>(this.components));
+        Button cancel = new Button("Cancelar", new ClearHandler<>(this.components));
         Button generate = new Button("Gerar");
         component.add(Box.createHorizontalGlue());
         component.add(cancel);

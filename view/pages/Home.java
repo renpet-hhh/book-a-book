@@ -18,7 +18,7 @@ import model.App;
 import model.commands.LoginCmd;
 import model.commands.NavigateCmd;
 import model.commands.TryLoginCmd;
-import model.handlers.FieldObserver;
+import model.handlers.FieldHandler;
 import view.components.Button;
 import view.components.ForgotPassword;
 import view.components.Label;
@@ -147,7 +147,7 @@ public class Home implements Page {
             // vamos observar os campos Email e Senha
             // temos acesso à eles quando botão Entrar for pressionado
             // o Obsever a seguir é um handler do botão Entrar
-            FieldObserver observer = new FieldObserver(loginFields, f -> {
+            FieldHandler observer = new FieldHandler(loginFields, f -> {
                 String email = f.get(0).getText();
                 String password = f.get(1).getText();
                 // quando o botão Entrar for pressionado, tentamos fazer login

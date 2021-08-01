@@ -7,7 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-import model.handlers.ClearObserver;
+import model.handlers.ClearHandler;
 import view.Margin;
 import view.Page;
 import view.components.AdminMenu;
@@ -40,7 +40,7 @@ public class Reservations implements Page {
         SearchContentTemplate searchTemplate = new SearchContentTemplate(labelsText, topButtonText, false, false);
         JComponent searchContent = searchTemplate.build();
         String[] bottomButtonsText = new String[] {"Cancelar", "Emprestar"};
-        ActionListener cancelObserver = new ClearObserver<>(searchTemplate.getClearableFields());
+        ActionListener cancelObserver = new ClearHandler<>(searchTemplate.getClearableFields());
         ActionListener[] handlers = new ActionListener[] {cancelObserver, null};
         SearchContentTemplate buttonsTemplate = new SearchContentTemplate(new String[0], bottomButtonsText, handlers, false, -1, true);
         JComponent buttons = buttonsTemplate.build();

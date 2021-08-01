@@ -7,7 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-import model.handlers.ClearObserver;
+import model.handlers.ClearHandler;
 import view.Margin;
 import view.Page;
 import view.components.AdminMenu;
@@ -40,7 +40,7 @@ public class EmprestimosEDevolucoes implements Page {
         SearchContentTemplate inputTemplate = new SearchContentTemplate(labelsText, topButtonText, null, false, -1, false);
         JComponent searchContent = inputTemplate.build();
         String[] bottomButtonsText = new String[] {"Cancelar", "Emprestar/Devolver"};
-        ActionListener cancelObserver = new ClearObserver<>(inputTemplate.getClearableFields());
+        ActionListener cancelObserver = new ClearHandler<>(inputTemplate.getClearableFields());
         ActionListener[] handlers = new ActionListener[] {cancelObserver, null};
         SearchContentTemplate buttonsTemplate = new SearchContentTemplate(new String[0], bottomButtonsText, handlers, false);
         JComponent buttons = buttonsTemplate.build();

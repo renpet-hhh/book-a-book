@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 
 import javax.swing.JTextField;
 
-public class FieldObserver implements ActionListener {
+public class FieldHandler implements ActionListener {
 
     /** Tem acesso a campos de texto e permite ler o conteúdo deles
      * no momento em que um evento foi acionado.
@@ -30,7 +30,7 @@ public class FieldObserver implements ActionListener {
 
     private List<JTextField> fields;
     private Consumer<List<JTextField>> handler;
-    public FieldObserver(List<JTextField> fields, Consumer<List<JTextField>> handler) {
+    public FieldHandler(List<JTextField> fields, Consumer<List<JTextField>> handler) {
         this.fields = fields;
         this.handler = handler;
     }

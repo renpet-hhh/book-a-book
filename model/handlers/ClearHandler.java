@@ -11,10 +11,10 @@ import javax.swing.JComponent;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class ClearObserver<T extends JComponent> implements ActionListener {
+public class ClearHandler<T extends JComponent> implements ActionListener {
 
     private List<T> components;
-    public ClearObserver(List<T> components) {
+    public ClearHandler(List<T> components) {
         this.components = components;
     }
 

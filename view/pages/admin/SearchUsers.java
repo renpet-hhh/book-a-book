@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 
 import java.awt.event.ActionListener;
 
-import model.handlers.ClearObserver;
+import model.handlers.ClearHandler;
 import model.handlers.SearchUsersHandler;
 import view.Page;
 import view.components.AdminMenu;
@@ -25,7 +25,7 @@ public class SearchUsers implements Page {
         String[] buttonsText = new String[] {"Cancelar", "Buscar"};
         SearchContentTemplate template = new SearchContentTemplate(labelsText, buttonsText, null, true);
         JComponent content = template.build();
-        ActionListener cancelObserver = new ClearObserver<>(template.getClearableFields());
+        ActionListener cancelObserver = new ClearHandler<>(template.getClearableFields());
         ActionListener searchHandler = new SearchUsersHandler(template.getTextFields(), template.getCheckBoxs());
         ActionListener[] handlers = new ActionListener[] {cancelObserver, searchHandler};
         template.setHandlers(handlers);
