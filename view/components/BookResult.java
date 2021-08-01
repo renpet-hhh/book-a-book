@@ -5,6 +5,8 @@ import java.util.List;
 import java.awt.Color;
 
 import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -43,14 +45,31 @@ public class BookResult extends JComponent {
     final static int LEFTMARGIN = 30;
     final static int RIGHTMARGIN = 30;
 
+    private JCheckBox checkbox = null;
+
     public BookResult(Book book) {
-        PackLayout layout = new PackLayout(this, PackLayout.X_AXIS);
-        this.setLayout(layout);
-        JComponent left = this.left(book);
-        JComponent right = this.right(book);
-        this.add(left);
-        this.add(right);
+        this(book, true, false, null);
     }
+    public BookResult(Book book, boolean editable, boolean selectable) {
+        this(book, editable, selectable, null);
+    }
+    public BookResult(Book book, boolean editable, boolean selectable, ActionListener checkboxHandler) {
+        BoxLayout layout = new BoxLayout(this, BoxLayout.X_AXIS);
+        this.setLayout(layout);
+        if (selectable) {
+            this.checkbox = new JCheckBox();
+            if (checkboxHandler != null) this.checkbox.addActionListener(checkboxHandler);
+            this.add(this.checkbox);
+        }
+        JComponent bookRegister = StretchLayout.createHorizontalBox();
+        JComponent left = this.left(book);
+        JComponent right = this.right(book, editable);
+        bookRegister.add(left);
+        bookRegister.add(right);
+        this.add(bookRegister);
+    }
+
+    public JCheckBox getCheckBox() { return this.checkbox; }
 
 
     private JComponent left(Book book) {
@@ -76,7 +95,7 @@ public class BookResult extends JComponent {
         return wrapper;
     }
 
-    private JComponent right(Book book) {
+    private JComponent right(Book book, boolean editable) {
         JComponent component = StretchLayout.createVerticalBox();
         ActionListener viewHandler = e -> {
             this.popupBookData(book);
@@ -85,12 +104,16 @@ public class BookResult extends JComponent {
         Button edit = new Button("Editar", null, BUTTONLABELCOLOR, BUTTONBGGRAY);
         component.add(Margin.rigidVertical(BUTTONSVERTICALMARGIN));
         component.add(view);
-        component.add(Margin.rigidVertical(SPACEBETWEENBUTTONS));
-        component.add(edit);
+        if (editable) {
+            component.add(Margin.rigidVertical(SPACEBETWEENBUTTONS));
+            component.add(edit);
+        } else {
+            component.add(Margin.rigidVertical(0));
+        }
         component.add(Margin.rigidVertical(BUTTONSVERTICALMARGIN));
         component.setOpaque(true);
         component.setBackground(WRAPPERBUTTONSGRAY);
-        JComponent wrapper = Margin.horizontal(component, BUTTONSHORIZONTALMARGIN);
+        JComponent wrapper = Margin.horizontal(Margin.glueVertical(component), BUTTONSHORIZONTALMARGIN);
         wrapper.setOpaque(true);
         wrapper.setBackground(WRAPPERBUTTONSGRAY);
         return wrapper;

@@ -64,8 +64,11 @@ public class App {
         authors.add("Nome falso 1");
         authors.add("Nome falso 2");
         authors.add("Nome falso 3");
-        Book book = new Book("Título falso", "Subtítulo falso", "Edição falsa", "21313132-123", "Local falso", authors, 1997, 100);
-        app.getLibrary().addBook(book);
+        for (int i = 0; i < 10; i++) {
+            Book book = new Book("Título falso" + i, "Subtítulo falso", "Edição falsa", "21313132-123" + i, "Local falso", authors, 1997, 100);
+            app.getLibrary().addBook(book);
+            data.reserve(book);
+        }
 
         gui.navigate(new Home()); // começamos na página inicial
         app.getFrame().setSize(new Dimension(1200, 700));

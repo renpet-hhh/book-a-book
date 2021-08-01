@@ -4,17 +4,21 @@ import java.util.Arrays;
 
 import model.Book;
 import model.Command;
+import model.User;
 
 public class ReserveBookCmd implements Command {
 
     Book book;
-    public ReserveBookCmd(Book book) {
+    User user;
+    public ReserveBookCmd(Book book, User user) {
         this.book = book;
+        this.user = user;
     }
 
     @Override
     public void execute() {
         this.book.setHowManyAvailable(this.book.getHowManyAvailable() - 1);
+        this.user.getData().reserve(this.book);
     }
 
     @Override

@@ -74,4 +74,25 @@ public class Margin {
         b.add(Box.createHorizontalGlue());
         return b;
     }
+
+    public static Box glueBottom(JComponent c) {
+        Box b = Box.createVerticalBox();
+        b.add(c);
+        b.add(Box.createVerticalGlue());
+        return b;
+    }
+    public static Box glueTop(JComponent c) {
+        Box b = Box.createVerticalBox();
+        b.add(Box.createVerticalGlue());
+        b.add(c);
+        return b;
+    }
+
+    public static Box glueVertical(JComponent c) {
+        Box b = Box.createVerticalBox();
+        b.add(Box.createVerticalGlue());
+        b.add(c);
+        b.add(Box.createVerticalGlue());
+        return b;
+    }
 }

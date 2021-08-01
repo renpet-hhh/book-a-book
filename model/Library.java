@@ -39,8 +39,8 @@ public class Library {
         return this.booksByISBN.get(isbn);
     }
 
-    public void reserveBook(Book book) {
-        Command reserveCmd = new ReserveBookCmd(book);
+    public void reserveBook(Book book, User user) {
+        Command reserveCmd = new ReserveBookCmd(book, user);
         App.get().invoke(reserveCmd);
     }
     /** Adiciona um livro à biblioteca e retorna false se o set não foi alterado. */
