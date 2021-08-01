@@ -32,9 +32,9 @@ public class RegisterAdmins implements Page {
         JComponent content = template.build();
         List<JTextField> fields = template.getTextFields();
         // O observer a seguir irá ter acesso a todos os campos
-        ActionListener registerObserver = new RegisterUserHandler(fields, true);
-        ActionListener cancelObserver = new ClearHandler<JTextField>(fields);
-        ActionListener[] handlers = new ActionListener[] {cancelObserver, registerObserver};
+        ActionListener registerHandler = new RegisterUserHandler(fields, true);
+        ActionListener cancelHandler = new ClearHandler<JTextField>(fields);
+        ActionListener[] handlers = new ActionListener[] {cancelHandler, registerHandler};
         template.setHandlers(handlers);
         String path = "Administração >> Cadastro de Admins";
         LayoutTemplate.build(frame, menubar, content, path);

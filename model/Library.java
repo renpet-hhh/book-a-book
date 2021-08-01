@@ -36,4 +36,14 @@ public class Library {
         Command reserveCmd = new ReserveBookCmd(book);
         App.get().invoke(reserveCmd);
     }
+    /** Adiciona um livro à biblioteca e retorna false se o set não foi alterado. */
+    public boolean addBook(Book book) {
+        String title = book.getTitle();
+        Set<Book> set = this.books.get(title);
+        if (set == null) {
+            set = new HashSet<>();
+            this.books.put(title, set);
+        }
+        return set.add(book);
+    }
 }

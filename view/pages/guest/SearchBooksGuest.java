@@ -23,8 +23,8 @@ public class SearchBooksGuest implements Page {
         String[] buttonsText = new String[] {"Cancelar", "Buscar"};
         SearchContentTemplate template = new SearchContentTemplate(labelsText, buttonsText, true, true);
         JComponent content = template.build();
-        ActionListener cancelObserver = new ClearHandler<>(template.getClearableFields());
-        ActionListener[] handlers = new ActionListener[] {cancelObserver, null};
+        ActionListener cancelHandler = new ClearHandler<>(template.getClearableFields());
+        ActionListener[] handlers = new ActionListener[] {cancelHandler, null};
         template.setHandlers(handlers);
         String path = "Pesquisa >> Livros";
         LayoutTemplate.build(frame, menubar, content, path);

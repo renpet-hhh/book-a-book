@@ -40,8 +40,8 @@ public class EmprestimosEDevolucoes implements Page {
         SearchContentTemplate inputTemplate = new SearchContentTemplate(labelsText, topButtonText, null, false, -1, false);
         JComponent searchContent = inputTemplate.build();
         String[] bottomButtonsText = new String[] {"Cancelar", "Emprestar/Devolver"};
-        ActionListener cancelObserver = new ClearHandler<>(inputTemplate.getClearableFields());
-        ActionListener[] handlers = new ActionListener[] {cancelObserver, null};
+        ActionListener cancelHandler = new ClearHandler<>(inputTemplate.getClearableFields());
+        ActionListener[] handlers = new ActionListener[] {cancelHandler, null};
         SearchContentTemplate buttonsTemplate = new SearchContentTemplate(new String[0], bottomButtonsText, handlers, false);
         JComponent buttons = buttonsTemplate.build();
         frame.add(menubar);

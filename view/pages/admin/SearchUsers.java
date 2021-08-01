@@ -25,9 +25,9 @@ public class SearchUsers implements Page {
         String[] buttonsText = new String[] {"Cancelar", "Buscar"};
         SearchContentTemplate template = new SearchContentTemplate(labelsText, buttonsText, null, true);
         JComponent content = template.build();
-        ActionListener cancelObserver = new ClearHandler<>(template.getClearableFields());
+        ActionListener cancelHandler = new ClearHandler<>(template.getClearableFields());
         ActionListener searchHandler = new SearchUsersHandler(template.getTextFields(), template.getCheckBoxs());
-        ActionListener[] handlers = new ActionListener[] {cancelObserver, searchHandler};
+        ActionListener[] handlers = new ActionListener[] {cancelHandler, searchHandler};
         template.setHandlers(handlers);
         String path = "Pesquisa >> Usuários";
         LayoutTemplate.build(frame, menubar, content, path);

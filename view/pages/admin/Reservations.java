@@ -40,8 +40,8 @@ public class Reservations implements Page {
         SearchContentTemplate searchTemplate = new SearchContentTemplate(labelsText, topButtonText, false, false);
         JComponent searchContent = searchTemplate.build();
         String[] bottomButtonsText = new String[] {"Cancelar", "Emprestar"};
-        ActionListener cancelObserver = new ClearHandler<>(searchTemplate.getClearableFields());
-        ActionListener[] handlers = new ActionListener[] {cancelObserver, null};
+        ActionListener cancelHandler = new ClearHandler<>(searchTemplate.getClearableFields());
+        ActionListener[] handlers = new ActionListener[] {cancelHandler, null};
         SearchContentTemplate buttonsTemplate = new SearchContentTemplate(new String[0], bottomButtonsText, handlers, false, -1, true);
         JComponent buttons = buttonsTemplate.build();
         frame.add(menubar);

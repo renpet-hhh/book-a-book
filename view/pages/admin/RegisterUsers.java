@@ -32,9 +32,9 @@ public class RegisterUsers implements Page {
         JComponent content = template.build();
         List<JTextField> fields = template.getTextFields();
         // O observer a seguir irá ter acesso a todos os campos
-        ActionListener registerObserver = new RegisterUserHandler(fields, false);
-        ActionListener cancelObserver = new ClearHandler<JTextField>(fields);
-        ActionListener[] handlers = new ActionListener[] {cancelObserver, registerObserver};
+        ActionListener registerHandler = new RegisterUserHandler(fields, false);
+        ActionListener cancelHandler = new ClearHandler<JTextField>(fields);
+        ActionListener[] handlers = new ActionListener[] {cancelHandler, registerHandler};
         template.setHandlers(handlers);
         String path = "Circulação >> Cadastro de Usuários";
         LayoutTemplate.build(frame, menubar, content, path);

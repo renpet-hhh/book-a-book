@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import java.awt.event.ActionListener;
 
 import model.handlers.ClearHandler;
+import model.handlers.RegisterBookHandler;
 import view.Page;
 import view.components.AdminMenu;
 import view.pages.pagestemplate.SearchContentTemplate;
@@ -27,8 +28,9 @@ public class RegisterBooks implements Page {
         String[] buttonsText = new String[] {"Cancelar", "Cadastrar"};
         SearchContentTemplate template = new SearchContentTemplate(labelsText, buttonsText, null, false);
         JComponent content = template.build();
-        ActionListener cancelObserver = new ClearHandler<>(template.getClearableFields());
-        ActionListener[] handlers = new ActionListener[] {cancelObserver, null};
+        ActionListener cancelHandler = new ClearHandler<>(template.getClearableFields());
+        ActionListener registerBookHandler = new RegisterBookHandler(template.getTextFields());
+        ActionListener[] handlers = new ActionListener[] {cancelHandler, registerBookHandler};
         template.setHandlers(handlers);
         String path = "Catalogação";
         LayoutTemplate.build(frame, menubar, content, path);
