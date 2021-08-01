@@ -13,10 +13,12 @@ public class Library {
 
     private Map<String, Set<Book>> books;
     private Map<String, Set<Author>> authors;
+    private Map<String, Book> booksByISBN;
 
     public Library() {
         this.books = new HashMap<String, Set<Book>>();
         this.authors = new HashMap<String, Set<Author>>();
+        this.booksByISBN = new HashMap<String, Book>();
     }
     /* Por enquanto, otimizado para encontrar por Título e por Nome de Autor, mas pode ser alterado */
     public Set<Book> findByTitle(String title) {
@@ -33,6 +35,9 @@ public class Library {
         }
         return books;
     }
+    public Book findByISBN(String isbn) {
+        return this.booksByISBN.get(isbn);
+    }
 
     public void reserveBook(Book book) {
         Command reserveCmd = new ReserveBookCmd(book);
@@ -41,6 +46,7 @@ public class Library {
     /** Adiciona um livro à biblioteca e retorna false se o set não foi alterado. */
     public boolean addBook(Book book) {
         String title = book.getTitle();
+        this.booksByISBN.put(book.getIsbn(), book);
         Set<Book> set = this.books.get(title);
         if (set == null) {
             set = new HashSet<>();

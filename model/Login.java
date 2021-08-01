@@ -30,6 +30,7 @@ public class Login {
     public Collection<User> getUsers() {
         return this.users.values();
     }
+    public User getUser(int matricula) { return this.users.get(matricula); }
     private int matriculaCounter = 0;
     public int getMatricula() { return this.matriculaCounter; }
     public void incrementMatricula() { this.matriculaCounter += 1; }
