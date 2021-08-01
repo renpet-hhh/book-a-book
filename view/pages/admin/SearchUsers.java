@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import java.awt.event.ActionListener;
 
 import model.handlers.ClearObserver;
+import model.handlers.SearchUsersHandler;
 import view.Page;
 import view.components.AdminMenu;
 import view.pages.pagestemplate.SearchContentTemplate;
@@ -25,7 +26,8 @@ public class SearchUsers implements Page {
         SearchContentTemplate template = new SearchContentTemplate(labelsText, buttonsText, null, true);
         JComponent content = template.build();
         ActionListener cancelObserver = new ClearObserver<>(template.getClearableFields());
-        ActionListener[] handlers = new ActionListener[] {cancelObserver, null};
+        ActionListener searchHandler = new SearchUsersHandler(template.getTextFields(), template.getCheckBoxs());
+        ActionListener[] handlers = new ActionListener[] {cancelObserver, searchHandler};
         template.setHandlers(handlers);
         String path = "Pesquisa >> Usuários";
         LayoutTemplate.build(frame, menubar, content, path);

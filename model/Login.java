@@ -1,6 +1,9 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import model.commands.DisplayPopupCmd;
@@ -23,6 +26,28 @@ public class Login {
 
     /* Base de dados */
     private Map<String, User> users = new HashMap<String, User>();
+    /** Retorna todos os usuários. */
+    public Collection<User> getUsers() {
+        return this.users.values();
+    }
+    /** Retorna uma coleção de usuários que satisfazem os filtros.
+     * Um filtro nulo é satisfeito por qualquer usuário.
+     * 
+     * O filtro nameFilter só é satisfeita caso o nome do usuário contenha
+     * nameFilter (ou seja, nameFilter é substring do nome do usuário).
+     * 
+     * O filtro matriculaFilter é definido da mesma forma.
+     */
+    public Collection<User> getFilteredUsers(String nameFilter, String matriculaFilter) {
+        List<User> c = new ArrayList<>(this.users.values());
+        c.removeIf(user -> {
+            UserData data = user.getData();
+            return !((nameFilter == null || data.name.contains(nameFilter)) &&
+                (matriculaFilter == null || data.document.contains(matriculaFilter)));
+                // adicionar matrícula depois!
+        });
+        return c;
+    }
     
     public void addUser(User user) {
         String email = user.getData().email;

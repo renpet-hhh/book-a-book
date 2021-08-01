@@ -5,6 +5,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 public class StretchLayout extends BoxLayout {
 
@@ -54,6 +56,19 @@ public class StretchLayout extends BoxLayout {
             }
         }
         return new Dimension(width, height);
+    }
+
+    public static JComponent createVerticalBox() {
+        JComponent box = new JPanel();
+        StretchLayout layout = new StretchLayout(box, StretchLayout.Y_AXIS);
+        box.setLayout(layout);
+        return box;
+    }
+    public static JComponent createHorizontalBox() {
+        JComponent box = new JPanel();
+        StretchLayout layout = new StretchLayout(box, StretchLayout.X_AXIS);
+        box.setLayout(layout);
+        return box;
     }
 
 }

@@ -54,6 +54,7 @@ public class SearchContentTemplate {
 
     public Button[] getButtons() { return this.buttons; }
     public List<JTextField> getTextFields() { return this.textFields; }
+    public List<JCheckBox> getCheckBoxs() { return this.checkComponents; }
     /** Retorna todos os campos que podem ser limpados (checkboxes e textFields) */
     public List<JComponent> getClearableFields() {
         List<JComponent> list = new ArrayList<>(this.textFields);
