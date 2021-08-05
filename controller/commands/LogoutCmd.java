@@ -1,9 +1,9 @@
-package model.commands;
+package controller.commands;
 
 import java.util.Arrays;
 
-import model.App;
-import model.Command;
+import framework.App;
+import framework.Command;
 import model.Login;
 import view.pages.Home;
 
@@ -19,7 +19,7 @@ public class LogoutCmd implements Command {
         login.setUser(null);
         login.setIsLoggedIn(false);
         login.setIsAdmin(false);
-        app.invoke(new NavigateCmd(new Home()));
+        app.control().invoke(new NavigateCmd(new Home()));
     }
     
     @Override

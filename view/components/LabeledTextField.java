@@ -3,7 +3,7 @@ package view.components;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 
-import view.Margin;
+import helpers.Margin;
 import view.components.fixed.LimitedJTextField;
 import view.components.layout.PackLayout;
 

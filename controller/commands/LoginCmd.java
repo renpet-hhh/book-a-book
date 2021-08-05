@@ -1,9 +1,9 @@
-package model.commands;
+package controller.commands;
 
 import java.util.Arrays;
 
-import model.App;
-import model.Command;
+import framework.App;
+import framework.Command;
 import model.Login;
 import model.User;
 import view.pages.admin.SearchBooks;
@@ -33,11 +33,11 @@ public class LoginCmd implements Command {
         login.setIsLoggedIn(true);
         login.setIsAdmin(isAdmin);
         if (this.userCode == 1) {
-            app.invoke(new NavigateCmd(new Profile()));
+            app.control().invoke(new NavigateCmd(new Profile()));
         } else if (this.userCode == 2) {
-            app.invoke(new NavigateCmd(new SearchBooks()));
+            app.control().invoke(new NavigateCmd(new SearchBooks()));
         } else {
-            app.invoke(new NavigateCmd(new SearchBooksGuest()));
+            app.control().invoke(new NavigateCmd(new SearchBooksGuest()));
         }
     }
 

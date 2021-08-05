@@ -1,10 +1,10 @@
-package model.commands;
+package controller.commands;
 
 import javax.swing.JOptionPane;
 
-import model.App;
+import framework.App;
+import framework.Command;
 import model.Book;
-import model.Command;
 
 public class RegisterBookCmd implements Command {
 
@@ -23,10 +23,10 @@ public class RegisterBookCmd implements Command {
         App app = App.get();
         boolean changedLibrary = app.getLibrary().addBook(book);
         if (!changedLibrary) {
-            app.invoke(new DisplayPopupCmd("Livro já está catalogado", JOptionPane.ERROR_MESSAGE));
+            app.control().invoke(new DisplayPopupCmd("Livro já está catalogado", JOptionPane.ERROR_MESSAGE));
             return;
         }
-        app.invoke(new DisplayPopupCmd("Livro catalogado com sucesso."));
+        app.control().invoke(new DisplayPopupCmd("Livro catalogado com sucesso."));
     }
     
 }

@@ -5,9 +5,10 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import model.User;
-import model.handlers.ClearHandler;
-import model.handlers.SearchBooksHandler;
-import view.Page;
+import controller.handlers.ClearHandler;
+import controller.handlers.SearchBooksHandler;
+import framework.App;
+import framework.Page;
 import view.components.GuestMenu;
 import view.pages.pagestemplate.SearchContentTemplate;
 import view.pages.pagestemplate.LayoutTemplate;
@@ -19,8 +20,8 @@ public class SearchBooksGuest implements Page {
     public String getTitle() { return TITLE; }
 
     @Override
-    public void paint(JFrame frame) {
-        JComponent menubar = GuestMenu.withWrapper();
+    public void paint(App app, JFrame frame) {
+        JComponent menubar = GuestMenu.withWrapper(app);
         String[] labelsText = new String[] {"Título:", "Autor:"};
         String[] buttonsText = new String[] {"Cancelar", "Buscar"};
         SearchContentTemplate template = new SearchContentTemplate(labelsText, buttonsText, true, true);

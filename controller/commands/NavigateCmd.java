@@ -1,9 +1,9 @@
-package model.commands;
+package controller.commands;
 
-import model.App;
-import model.Command;
+import framework.App;
+import framework.Command;
+import framework.Page;
 import model.Login;
-import view.Page;
 import view.pages.Home;
 import view.pages.user.Profile;
 

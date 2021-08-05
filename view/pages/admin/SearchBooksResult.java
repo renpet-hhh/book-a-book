@@ -8,10 +8,10 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
-import model.App;
+import framework.App;
+import framework.Page;
+import helpers.Margin;
 import model.Book;
-import view.Margin;
-import view.Page;
 import view.components.AdminMenu;
 import view.components.BookResult;
 import view.components.GuestMenu;
@@ -43,25 +43,25 @@ public class SearchBooksResult implements Page {
     }
     
     @Override
-    public void paint(JFrame frame) {
-        JComponent menubar = this.privilege == 2 ? AdminMenu.withWrapper() : this.privilege == 1 ? UserMenu.withWrapper() : GuestMenu.withWrapper();
+    public void paint(App app, JFrame frame) {
+        JComponent menubar = this.privilege == 2 ? AdminMenu.withWrapper(app) : this.privilege == 1 ? UserMenu.withWrapper(app) : GuestMenu.withWrapper(app);
         String path = "Pesquisa >> Livro >> Resultado";
-        JComponent content = Margin.horizontal(this.mainContent(), MenuFactory.WRAPPERHORIZONTALMARGIN);
+        JComponent content = Margin.horizontal(this.mainContent(app), MenuFactory.WRAPPERHORIZONTALMARGIN);
         LayoutTemplate.build(frame, menubar, content, path);
     }
 
-    private JComponent mainContent() {
-        List<Book> books = App.get().getLibrary().getFilteredBooks(this.titleFilter, this.authorFilter);
+    private JComponent mainContent(App app) {
+        List<Book> books = app.getLibrary().getFilteredBooks(this.titleFilter, this.authorFilter);
         JComponent component = Box.createVerticalBox();
         int length = books.size();
         if (length == 0) {
             // não há usuários!
             return new Label("Nenhum livro encontrado");
         }
-        component.add(new BookResult(books.get(0), this.privilege == 2, false));
+        component.add(new BookResult(app, books.get(0), this.privilege == 2, false));
         for (int i = 1; i < length; i++) {
             component.add(Margin.rigidVertical(SPACEBETWEENRESULTS));
-            component.add(new BookResult(books.get(i), this.privilege == 2, false));
+            component.add(new BookResult(app, books.get(i), this.privilege == 2, false));
         }
         JScrollPane scrollPane = new JScrollPane(component, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);

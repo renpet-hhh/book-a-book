@@ -5,9 +5,10 @@ import javax.swing.JFrame;
 
 import java.awt.event.ActionListener;
 
-import model.handlers.ClearHandler;
-import model.handlers.SearchUsersHandler;
-import view.Page;
+import controller.handlers.ClearHandler;
+import controller.handlers.SearchUsersHandler;
+import framework.App;
+import framework.Page;
 import view.components.AdminMenu;
 import view.pages.pagestemplate.SearchContentTemplate;
 import view.pages.pagestemplate.LayoutTemplate;
@@ -19,8 +20,8 @@ public class SearchUsers implements Page {
     public String getTitle() { return TITLE; }
     
     @Override
-    public void paint(JFrame frame) {
-        JComponent menubar = AdminMenu.withWrapper();
+    public void paint(App app, JFrame frame) {
+        JComponent menubar = AdminMenu.withWrapper(app);
         String[] labelsText = new String[] {"Nome:", "Cód. Matrícula:"};
         String[] buttonsText = new String[] {"Cancelar", "Buscar"};
         SearchContentTemplate template = new SearchContentTemplate(labelsText, buttonsText, null, true);

@@ -10,10 +10,10 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import helpers.Margin;
 import view.components.Button;
 import view.components.Label;
 import view.components.base.MenuFactory;
-import view.Margin;
 import view.components.fixed.LimitedJTextField;
 import view.components.layout.PackLayout;
 

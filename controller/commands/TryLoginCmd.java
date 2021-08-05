@@ -1,7 +1,7 @@
-package model.commands;
+package controller.commands;
 
-import model.App;
-import model.Command;
+import framework.App;
+import framework.Command;
 import model.Login;
 
 public class TryLoginCmd implements Command {

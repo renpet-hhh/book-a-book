@@ -5,8 +5,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-import view.Margin;
-import view.Page;
+import framework.App;
+import framework.Page;
+import helpers.Margin;
 import view.components.Label;
 
 public class About implements Page {
@@ -22,11 +23,11 @@ public class About implements Page {
     final static int BOTTOMMARGINCONTENT = 20;
     
     @Override
-    public void paint(JFrame frame) {
+    public void paint(App app, JFrame frame) {
         BoxLayout bLayout = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS);
         frame.setLayout(bLayout);
         JComponent component = Box.createVerticalBox();
-        component.add(Home.header(frame, false, ""));
+        component.add(Home.header(app, frame, false, ""));
         JComponent wrap1 = Box.createHorizontalBox();
         wrap1.add(Margin.rigidHorizontal(70));
         wrap1.add(About.mainContent());

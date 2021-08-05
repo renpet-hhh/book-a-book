@@ -8,8 +8,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JMenuBar;
 
-import model.App;
-import model.commands.NavigateCmd;
+import framework.App;
+import controller.commands.NavigateCmd;
 import view.components.base.MenuFactory;
 import view.pages.guest.SearchBooksGuest;
 
@@ -17,9 +17,8 @@ public class GuestMenu extends JMenuBar {
 
     /** Define como construir o menu de um convidado (Guest) */
 
-    private Button pesquisa() {
-        App app = App.get();
-        ActionListener handler = e -> app.invoke(new NavigateCmd(new SearchBooksGuest()));
+    private Button pesquisa(App app) {
+        ActionListener handler = e -> app.control().invoke(new NavigateCmd(new SearchBooksGuest()));
         Button button = MenuFactory.createButton("Pesquisa Bibliográfica", handler);
         return button;
     }
@@ -29,17 +28,17 @@ public class GuestMenu extends JMenuBar {
         return button;
     }
 
-    private Button sair() {
-        Button button = MenuFactory.exitButton();
+    private Button sair(App app) {
+        Button button = MenuFactory.exitButton(app);
         return button;
     }
 
-    public GuestMenu() {
+    public GuestMenu(App app) {
         BoxLayout bLayout = new BoxLayout(this, BoxLayout.X_AXIS);
         this.setLayout(bLayout);
-        Button searchBttn = this.pesquisa();
+        Button searchBttn = this.pesquisa(app);
         Button helpBttn = this.ajuda();
-        Button exitBttn = this.sair();
+        Button exitBttn = this.sair(app);
         this.add(searchBttn);
         this.add(helpBttn);
         this.add(Box.createHorizontalGlue());
@@ -52,7 +51,7 @@ public class GuestMenu extends JMenuBar {
         return new Dimension(Integer.MAX_VALUE, this.getPreferredSize().height);
     }
 
-    public static JComponent withWrapper() {
-        return MenuFactory.wrap(new GuestMenu());
+    public static JComponent withWrapper(App app) {
+        return MenuFactory.wrap(new GuestMenu(app));
     }
 }

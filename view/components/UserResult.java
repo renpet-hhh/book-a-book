@@ -9,10 +9,10 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
-import model.App;
+import framework.App;
+import helpers.Margin;
 import model.User;
 import model.UserData;
-import view.Margin;
 import view.components.layout.PackLayout;
 import view.components.layout.StretchLayout;
 
@@ -44,11 +44,11 @@ public class UserResult extends JComponent {
     final static int LEFTMARGIN = 30;
     final static int RIGHTMARGIN = 30;
 
-    public UserResult(User user) {
+    public UserResult(App app, User user) {
         PackLayout layout = new PackLayout(this, PackLayout.X_AXIS);
         this.setLayout(layout);
         JComponent left = this.left(user);
-        JComponent right = this.right(user);
+        JComponent right = this.right(app, user);
         this.add(left);
         this.add(right);
     }
@@ -83,10 +83,10 @@ public class UserResult extends JComponent {
         return wrapper;
     }
 
-    private JComponent right(User user) {
+    private JComponent right(App app, User user) {
         JComponent component = StretchLayout.createVerticalBox();
         ActionListener viewHandler = e -> {
-            this.popupUserData(user);
+            this.popupUserData(app, user);
         };
         Button view = new Button("Abrir registro", viewHandler, BUTTONLABELCOLOR, BUTTONBGGRAY);
         Button edit = new Button("Editar", null, BUTTONLABELCOLOR, BUTTONBGGRAY);
@@ -103,8 +103,8 @@ public class UserResult extends JComponent {
         return wrapper;
     }
 
-    public void popupUserData(User user) {
-        this.popupUserData(App.get().getFrame(), user);
+    public void popupUserData(App app, User user) {
+        this.popupUserData(app.getFrame(), user);
     }
     public void popupUserData(JFrame frame, User user) {
         UserData data = user.getData();

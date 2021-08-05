@@ -9,8 +9,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import model.App;
-import model.commands.NavigateCmd;
+import framework.App;
+import controller.commands.NavigateCmd;
 import view.components.base.MenuFactory;
 import view.pages.admin.EmprestimosEDevolucoes;
 import view.pages.admin.RegisterAdmins;
@@ -27,34 +27,30 @@ public class AdminMenu extends JMenuBar {
     /** Define como construir o menu de administrador. */
 
     /** Retorna o menu de pesquisa */
-    private JMenu pesquisa() {
-        App app = App.get();
-        JMenuItem livros = MenuFactory.createMenuItem("Livros", e -> app.invoke(new NavigateCmd(new SearchBooks())));
-        JMenuItem usuarios = MenuFactory.createMenuItem("Usuários", e -> app.invoke(new NavigateCmd(new SearchUsers())));
+    private JMenu pesquisa(App app) {
+        JMenuItem livros = MenuFactory.createMenuItem("Livros", e -> app.control().invoke(new NavigateCmd(new SearchBooks())));
+        JMenuItem usuarios = MenuFactory.createMenuItem("Usuários", e -> app.control().invoke(new NavigateCmd(new SearchUsers())));
         JMenu menu = MenuFactory.createMenu("Pesquisa", livros, usuarios);
         return menu;
     }
 
-    private JMenu circulacao() {
-        App app = App.get();
-        JMenuItem cadastro = MenuFactory.createMenuItem("Cadastro de Usuários", e -> app.invoke(new NavigateCmd(new RegisterUsers())));
-        JMenuItem emprestimos = MenuFactory.createMenuItem("Empréstimos e Devoluções", e -> app.invoke(new NavigateCmd(new EmprestimosEDevolucoes())));
-        JMenuItem reservas = MenuFactory.createMenuItem("Reservas", e -> app.invoke(new NavigateCmd(new Reservations())));
+    private JMenu circulacao(App app) {
+        JMenuItem cadastro = MenuFactory.createMenuItem("Cadastro de Usuários", e -> app.control().invoke(new NavigateCmd(new RegisterUsers())));
+        JMenuItem emprestimos = MenuFactory.createMenuItem("Empréstimos e Devoluções", e -> app.control().invoke(new NavigateCmd(new EmprestimosEDevolucoes())));
+        JMenuItem reservas = MenuFactory.createMenuItem("Reservas", e -> app.control().invoke(new NavigateCmd(new Reservations())));
         JMenu menu = MenuFactory.createMenu("Circulação", cadastro, emprestimos, reservas);
         return menu;
     }
 
-    private Button catalogacao() {
-        App app = App.get();
-        Button menu = MenuFactory.createButton("Catalogação", e -> app.invoke(new NavigateCmd(new RegisterBooks())));
+    private Button catalogacao(App app) {
+        Button menu = MenuFactory.createButton("Catalogação", e -> app.control().invoke(new NavigateCmd(new RegisterBooks())));
         return menu;
     }
 
-    private JMenu administracao() {
-        App app = App.get();
-        JMenuItem relatorios = MenuFactory.createMenuItem("Relatórios", e -> app.invoke(new NavigateCmd(new Reports())));
-        JMenuItem configs = MenuFactory.createMenuItem("Configurações", e -> app.invoke(new NavigateCmd(new Settings())));
-        JMenuItem cadastroDeAdmins = MenuFactory.createMenuItem("Cadastro de Admins", e -> app.invoke(new NavigateCmd(new RegisterAdmins())));
+    private JMenu administracao(App app) {
+        JMenuItem relatorios = MenuFactory.createMenuItem("Relatórios", e -> app.control().invoke(new NavigateCmd(new Reports())));
+        JMenuItem configs = MenuFactory.createMenuItem("Configurações", e -> app.control().invoke(new NavigateCmd(new Settings())));
+        JMenuItem cadastroDeAdmins = MenuFactory.createMenuItem("Cadastro de Admins", e -> app.control().invoke(new NavigateCmd(new RegisterAdmins())));
         JMenu menu = MenuFactory.createMenu("Administração", relatorios, configs, cadastroDeAdmins);
         return menu;
     }
@@ -64,20 +60,20 @@ public class AdminMenu extends JMenuBar {
         return button;
     }
 
-    private Button sair() {
-        Button button = MenuFactory.exitButton();
+    private Button sair(App app) {
+        Button button = MenuFactory.exitButton(app);
         return button;
     }
 
-    public AdminMenu() {
+    public AdminMenu(App app) {
         BoxLayout bLayout = new BoxLayout(this, BoxLayout.X_AXIS);
         this.setLayout(bLayout);
-        JMenu pesquisaMenu = this.pesquisa();
-        JMenu circulacaoMenu = this.circulacao();
-        Button catalogMenu = this.catalogacao();
-        JMenu adminMenu = this.administracao();
+        JMenu pesquisaMenu = this.pesquisa(app);
+        JMenu circulacaoMenu = this.circulacao(app);
+        Button catalogMenu = this.catalogacao(app);
+        JMenu adminMenu = this.administracao(app);
         Button helpBttn = this.ajuda();
-        Button exitBttn = this.sair();
+        Button exitBttn = this.sair(app);
         this.add(pesquisaMenu);
         this.add(circulacaoMenu);
         this.add(catalogMenu);
@@ -93,7 +89,7 @@ public class AdminMenu extends JMenuBar {
         return new Dimension(Integer.MAX_VALUE, this.getPreferredSize().height);
     }
 
-    public static JComponent withWrapper() {
-        return MenuFactory.wrap(new AdminMenu());
+    public static JComponent withWrapper(App app) {
+        return MenuFactory.wrap(new AdminMenu(app));
     }
 }

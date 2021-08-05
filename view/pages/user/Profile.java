@@ -12,11 +12,11 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import model.App;
+import framework.App;
+import framework.Page;
+import helpers.Margin;
 import model.User;
 import model.UserData;
-import view.Margin;
-import view.Page;
 import view.components.Button;
 import view.components.Label;
 import view.components.layout.StretchLayout;
@@ -51,20 +51,18 @@ public class Profile implements Page {
     final static Border PROFILEMENUBUTTONBORDER = BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(225, 225, 225), 1), BorderFactory.createEmptyBorder(PROFILEBUTTONVERTICALMARGIN, PROFILEBUTTONHORIZONTALMARGIN, PROFILEBUTTONVERTICALMARGIN, PROFILEBUTTONHORIZONTALMARGIN));
 
     @Override
-    public void paint(JFrame frame) {
-        App app = App.get();
+    public void paint(App app, JFrame frame) {
         User user = app.getLogin().getUser();
         UserData data = user.getData();
-        JComponent menubar = Home.header(frame, false, data.getName());
+        JComponent menubar = Home.header(app, frame, false, data.getName());
         // Página incompleta por enquanto!
-        JComponent content = this.mainWrapper();
+        JComponent content = this.mainWrapper(app);
         frame.add(menubar);
         frame.add(content);
         frame.add(Home.foot());
     }
 
-    public JComponent mainContent() {
-        App app = App.get();
+    public JComponent mainContent(App app) {
         User user = app.getLogin().getUser();
         UserData data = user.getData();
         JComponent content = Box.createVerticalBox();
@@ -85,10 +83,10 @@ public class Profile implements Page {
         return wrapper;
     }
     
-    public JComponent mainWrapper() {
+    public JComponent mainWrapper(App app) {
         JComponent wrapper = Box.createHorizontalBox();
         wrapper.add(this.leftMenu());
-        wrapper.add(this.mainContent());
+        wrapper.add(this.mainContent(app));
         return wrapper;
     }
 

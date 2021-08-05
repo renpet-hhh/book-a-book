@@ -3,7 +3,7 @@ package helpers;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Command;
+import framework.Command;
 
 public class Logger {
     List<String> commandHistory;

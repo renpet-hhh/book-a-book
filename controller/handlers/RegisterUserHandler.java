@@ -1,4 +1,4 @@
-package model.handlers;
+package controller.handlers;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -9,10 +9,10 @@ import java.util.function.Consumer;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import model.App;
+import framework.App;
 import model.UserData;
-import model.commands.DisplayPopupCmd;
-import model.commands.RegisterUserCmd;
+import controller.commands.DisplayPopupCmd;
+import controller.commands.RegisterUserCmd;
 
 public class RegisterUserHandler extends FieldHandler {
 
@@ -45,7 +45,7 @@ public class RegisterUserHandler extends FieldHandler {
             App app = App.get();
             String username = f.get(0).getText();
             if (username.length() == 0) {
-                app.invoke(new DisplayPopupCmd("Campo de nome é obrigatório", JOptionPane.ERROR_MESSAGE));
+                app.control().invoke(new DisplayPopupCmd("Campo de nome é obrigatório", JOptionPane.ERROR_MESSAGE));
                 return;
             }
             String birthdateStr = f.get(1).getText();
@@ -53,18 +53,18 @@ public class RegisterUserHandler extends FieldHandler {
             String address = f.get(3).getText();
             String email = f.get(4).getText();
             if (email.length() == 0) {
-                app.invoke(new DisplayPopupCmd("Campo de email é obrigatório", JOptionPane.ERROR_MESSAGE));
+                app.control().invoke(new DisplayPopupCmd("Campo de email é obrigatório", JOptionPane.ERROR_MESSAGE));
                 return;
             }
             String contact = f.get(5).getText();
             String password = f.get(6).getText();
             if (password.length() < 6) {
-                app.invoke(new DisplayPopupCmd("Senha deve ter no mínimo 6 caracteres", JOptionPane.ERROR_MESSAGE));
+                app.control().invoke(new DisplayPopupCmd("Senha deve ter no mínimo 6 caracteres", JOptionPane.ERROR_MESSAGE));
                 return;
             }
             String confirmPassword = f.get(7).getText();
             if (!password.equals(confirmPassword)) {
-                app.invoke(new DisplayPopupCmd("Senhas diferentes", JOptionPane.ERROR_MESSAGE));
+                app.control().invoke(new DisplayPopupCmd("Senhas diferentes", JOptionPane.ERROR_MESSAGE));
                 return;
             }
             LocalDate birthdate;
@@ -72,13 +72,13 @@ public class RegisterUserHandler extends FieldHandler {
             try {
                 birthdate = LocalDate.parse(birthdateStr, formatter);
             } catch (DateTimeParseException e) {
-                app.invoke(new DisplayPopupCmd("Data deve estar no formato dd/MM/yyyy", JOptionPane.ERROR_MESSAGE));
+                app.control().invoke(new DisplayPopupCmd("Data deve estar no formato dd/MM/yyyy", JOptionPane.ERROR_MESSAGE));
                 return;
             }
             UserData data = new UserData(username, address, contact, email, document, birthdate);
             // o botão Cadastrar foi pressionado! vamos tentar cadastrar o usuário
             // mensagens de erro e confirmação são de responsabilidade do próprio comando abaixo
-            app.invoke(new RegisterUserCmd(data, password, RegisterUserHandler.this.isAdmin));
+            app.control().invoke(new RegisterUserCmd(data, password, RegisterUserHandler.this.isAdmin));
         }
     };
 

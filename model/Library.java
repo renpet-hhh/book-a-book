@@ -7,15 +7,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import model.commands.ReserveBookCmd;
+import framework.App;
+import framework.Command;
+import controller.commands.ReserveBookCmd;
 
 public class Library {
 
     private Map<String, Set<Book>> books;
     private Map<String, Set<Author>> authors;
     private Map<String, Book> booksByISBN;
+    private App app;
 
-    public Library() {
+    public Library(App app) {
+        this.app = app;
         this.books = new HashMap<String, Set<Book>>();
         this.authors = new HashMap<String, Set<Author>>();
         this.booksByISBN = new HashMap<String, Book>();
@@ -41,7 +45,7 @@ public class Library {
 
     public void reserveBook(Book book, User user) {
         Command reserveCmd = new ReserveBookCmd(book, user);
-        App.get().invoke(reserveCmd);
+        this.app.control().invoke(reserveCmd);
     }
     /** Adiciona um livro à biblioteca e retorna false se o set não foi alterado. */
     public boolean addBook(Book book) {

@@ -10,9 +10,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import model.App;
-import model.commands.LogoutCmd;
-import view.Margin;
+import framework.App;
+import helpers.Margin;
+import controller.commands.LogoutCmd;
 import view.components.Button;
 
 public abstract class MenuFactory {
@@ -80,8 +80,8 @@ public abstract class MenuFactory {
         return MenuFactory.createButton(text, null);
     }
 
-    public static Button exitButton() {
-        Button button = MenuFactory.createButton("Sair", e -> App.get().invoke(new LogoutCmd()));
+    public static Button exitButton(App app) {
+        Button button = MenuFactory.createButton("Sair", e -> app.control().invoke(new LogoutCmd()));
         return button;
     }
 

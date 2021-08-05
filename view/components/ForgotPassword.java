@@ -6,7 +6,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
-import view.Margin;
+import helpers.Margin;
 import view.components.fixed.LimitedJTextField;
 import view.pages.Home;
 

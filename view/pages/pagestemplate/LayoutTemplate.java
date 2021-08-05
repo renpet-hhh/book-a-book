@@ -5,9 +5,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import helpers.Margin;
 import view.components.Label;
 import view.components.base.MenuFactory;
-import view.Margin;
 
 public class LayoutTemplate {
 

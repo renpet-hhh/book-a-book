@@ -1,9 +1,9 @@
-package model.commands;
+package controller.commands;
 
 import java.util.Arrays;
 
+import framework.Command;
 import model.Book;
-import model.Command;
 import model.User;
 
 public class ReserveBookCmd implements Command {

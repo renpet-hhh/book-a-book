@@ -1,10 +1,10 @@
-package model.commands;
+package controller.commands;
 
 import javax.swing.JOptionPane;
 
+import framework.App;
+import framework.Command;
 import model.Admin;
-import model.App;
-import model.Command;
 import model.Crypto;
 import model.Login;
 import model.User;
@@ -36,9 +36,9 @@ public class RegisterUserCmd implements Command {
         try {
             login.addUser(this.user);
             String okMessage = "Usuário cadastrado com sucesso";
-            app.invoke(new DisplayPopupCmd(okMessage, JOptionPane.INFORMATION_MESSAGE));
+            app.control().invoke(new DisplayPopupCmd(okMessage, JOptionPane.INFORMATION_MESSAGE));
         } catch (RuntimeException e) {
-            app.invoke(new DisplayPopupCmd(e.getMessage(), JOptionPane.ERROR_MESSAGE));
+            app.control().invoke(new DisplayPopupCmd(e.getMessage(), JOptionPane.ERROR_MESSAGE));
         }
     }
     

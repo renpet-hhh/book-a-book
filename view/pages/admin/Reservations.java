@@ -18,9 +18,10 @@ import model.Book;
 import model.RefreshableBU;
 import model.User;
 import model.UserData;
-import model.handlers.RefreshUHandler;
-import view.Margin;
-import view.Page;
+import controller.handlers.RefreshUHandler;
+import framework.App;
+import framework.Page;
+import helpers.Margin;
 import view.components.AdminMenu;
 import view.components.BookResult;
 import view.components.Label;
@@ -54,7 +55,7 @@ public class Reservations implements Page, RefreshableBU {
     private List<JCheckBox> checkBoxes;
 
     @Override
-    public void paint(JFrame frame) {
+    public void paint(App app, JFrame frame) {
         /* Inicialização */
         this.reservedBooksList = Box.createVerticalBox();
         this.checkBoxes = new ArrayList<>();
@@ -68,7 +69,7 @@ public class Reservations implements Page, RefreshableBU {
         /* Layout */
         BoxLayout bLayout = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS);
         frame.setLayout(bLayout);
-        JComponent menubar = AdminMenu.withWrapper();
+        JComponent menubar = AdminMenu.withWrapper(app);
         /* Top */
         String[] labelsText = new String[] {
             "Matrícula Usuário:"
@@ -81,7 +82,7 @@ public class Reservations implements Page, RefreshableBU {
         searchTemplate.setHandlers(searchHandlers);
         /* Bottom */
         String[] bottomButtonsText = new String[] {"Cancelar", "Emprestar"};
-        ActionListener cancelHandler = e -> this.refresh(null, null);
+        ActionListener cancelHandler = e -> this.refresh(app, null, null);
         ActionListener[] handlers = new ActionListener[] {cancelHandler, null};
         SearchContentTemplate buttonsTemplate = new SearchContentTemplate(new String[0], bottomButtonsText, handlers, false, -1, true);
         JComponent buttons = buttonsTemplate.build();
@@ -91,7 +92,7 @@ public class Reservations implements Page, RefreshableBU {
         frame.add(searchContent);
         frame.add(this.infoComponent);
         frame.add(buttons);
-        this.refresh(null, null);
+        this.refresh(app, null, null);
     }
 
     private void addLabels(JComponent component) {
@@ -124,7 +125,7 @@ public class Reservations implements Page, RefreshableBU {
     }
 
     @Override
-    public void refresh(Book book, User user) {
+    public void refresh(App app, Book book, User user) {
         String userText = "Usuário: ";
         String statusText = "Situação: ";
         String pendingText = "Devoluções pendentes: ";
@@ -135,7 +136,7 @@ public class Reservations implements Page, RefreshableBU {
             UserData data = user.getData();
             userText += data.getName();
             for (Book reservedBook : data.getReservedBooks()) {
-                BookResult bookResult = new BookResult(reservedBook, false, true, checkboxHandler);
+                BookResult bookResult = new BookResult(app, reservedBook, false, true, checkboxHandler);
                 this.checkBoxes.add(bookResult.getCheckBox());
                 this.reservedBooksList.add(bookResult);
                 this.reservedBooksList.add(Margin.rigidVertical(SPACEBETWEENBOOKRESULTS));

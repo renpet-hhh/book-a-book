@@ -7,9 +7,10 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import model.handlers.ClearHandler;
-import model.handlers.RegisterUserHandler;
-import view.Page;
+import controller.handlers.ClearHandler;
+import controller.handlers.RegisterUserHandler;
+import framework.App;
+import framework.Page;
 import view.components.AdminMenu;
 import view.pages.pagestemplate.SearchContentTemplate;
 import view.pages.pagestemplate.LayoutTemplate;
@@ -21,8 +22,8 @@ public class RegisterUsers implements Page {
     public String getTitle() { return TITLE; }
 
     @Override
-    public void paint(JFrame frame) {
-        JComponent menubar = AdminMenu.withWrapper();
+    public void paint(App app, JFrame frame) {
+        JComponent menubar = AdminMenu.withWrapper(app);
         String[] labelsText = new String[] {
             "Nome Completo:", "Data de Nascimento:", "Documento:", "Endereço:", "E-mail:",
             "Contato:", "Senha:", "Confirmar senha:"

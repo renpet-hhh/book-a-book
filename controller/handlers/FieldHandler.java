@@ -1,4 +1,4 @@
-package model.handlers;
+package controller.handlers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

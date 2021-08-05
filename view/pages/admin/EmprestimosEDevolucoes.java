@@ -13,9 +13,10 @@ import model.Book;
 import model.RefreshableBU;
 import model.User;
 import model.UserData;
-import model.handlers.RefreshBUHandler;
-import view.Margin;
-import view.Page;
+import controller.handlers.RefreshBUHandler;
+import framework.App;
+import framework.Page;
+import helpers.Margin;
 import view.components.AdminMenu;
 import view.components.Label;
 import view.components.base.MenuFactory;
@@ -45,10 +46,10 @@ public class EmprestimosEDevolucoes implements Page, RefreshableBU {
 
 
     @Override
-    public void paint(JFrame frame) {
+    public void paint(App app, JFrame frame) {
         BoxLayout bLayout = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS);
         frame.setLayout(bLayout);
-        JComponent menubar = AdminMenu.withWrapper();
+        JComponent menubar = AdminMenu.withWrapper(app);
         /* Top */
         String[] labelsText = new String[] {
             "Cód. do Livro:", "Matrícula Usuário:"
@@ -61,7 +62,7 @@ public class EmprestimosEDevolucoes implements Page, RefreshableBU {
         inputTemplate.setHandlers(searchHandlers);
         /* Bottom */
         String[] bottomButtonsText = new String[] {"Cancelar", "Emprestar/Devolver"};
-        ActionListener cancelHandler = e -> this.refresh(null, null);
+        ActionListener cancelHandler = e -> this.refresh(app, null, null);
         ActionListener[] bottomHandlers = new ActionListener[] {cancelHandler, null};
         SearchContentTemplate buttonsTemplate = new SearchContentTemplate(new String[0], bottomButtonsText, bottomHandlers, false);
         JComponent buttons = buttonsTemplate.build();
@@ -71,7 +72,7 @@ public class EmprestimosEDevolucoes implements Page, RefreshableBU {
         frame.add(searchContent);
         frame.add(this.infoComponent);
         frame.add(buttons);
-        this.refresh(null, null);
+        this.refresh(app, null, null);
     }
 
     private void addLabels(JComponent component) {
@@ -106,7 +107,8 @@ public class EmprestimosEDevolucoes implements Page, RefreshableBU {
         wrapper2.add(Margin.rigidHorizontal(MenuFactory.WRAPPERHORIZONTALMARGIN));
         return wrapper2;
     }
-    public void refresh(Book book, User user) {
+    @Override
+    public void refresh(App app, Book book, User user) {
         String titleText = "Título: ";
         String authorsText = "Autor(es): ";
         String yearText = "Data de Publicação: ";

@@ -1,4 +1,4 @@
-package model.handlers;
+package controller.handlers;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -6,11 +6,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import model.App;
+import framework.App;
 import model.Login;
 import model.RefreshableBU;
 import model.User;
-import model.commands.DisplayPopupCmd;
+import controller.commands.DisplayPopupCmd;
 
 public class RefreshUHandler implements ActionListener {
     
@@ -27,7 +27,7 @@ public class RefreshUHandler implements ActionListener {
         String matricula = this.field.getText();
         /* Obrigatoriedade dos campos */
         if (matricula.length() == 0) {
-            app.invoke(new DisplayPopupCmd("Campo Matrícula Usuário é obrigatório", JOptionPane.ERROR_MESSAGE));
+            app.control().invoke(new DisplayPopupCmd("Campo Matrícula Usuário é obrigatório", JOptionPane.ERROR_MESSAGE));
             return;
         }
         /* Interpretação dos campos */
@@ -36,12 +36,12 @@ public class RefreshUHandler implements ActionListener {
             matriculaInt = Integer.parseInt(matricula);
             if (matriculaInt < 0) { throw new NumberFormatException(); }
         } catch (NumberFormatException e) {
-            app.invoke(new DisplayPopupCmd("Matrícula deve ser um número não negativo. Recebido: " + matricula, JOptionPane.ERROR_MESSAGE));
+            app.control().invoke(new DisplayPopupCmd("Matrícula deve ser um número não negativo. Recebido: " + matricula, JOptionPane.ERROR_MESSAGE));
             return;
         }
         Login login = app.getLogin();
         User user = login.getUser(matriculaInt);
-        this.component.refresh(null, user);
+        this.component.refresh(app, null, user);
     }
 
   

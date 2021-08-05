@@ -11,9 +11,9 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
-import model.App;
+import framework.App;
+import helpers.Margin;
 import model.Book;
-import view.Margin;
 import view.components.layout.PackLayout;
 import view.components.layout.StretchLayout;
 
@@ -47,13 +47,13 @@ public class BookResult extends JComponent {
 
     private JCheckBox checkbox = null;
 
-    public BookResult(Book book) {
-        this(book, true, false, null);
+    public BookResult(App app, Book book) {
+        this(app, book, true, false, null);
     }
-    public BookResult(Book book, boolean editable, boolean selectable) {
-        this(book, editable, selectable, null);
+    public BookResult(App app, Book book, boolean editable, boolean selectable) {
+        this(app, book, editable, selectable, null);
     }
-    public BookResult(Book book, boolean editable, boolean selectable, ActionListener checkboxHandler) {
+    public BookResult(App app, Book book, boolean editable, boolean selectable, ActionListener checkboxHandler) {
         BoxLayout layout = new BoxLayout(this, BoxLayout.X_AXIS);
         this.setLayout(layout);
         if (selectable) {
@@ -63,7 +63,7 @@ public class BookResult extends JComponent {
         }
         JComponent bookRegister = StretchLayout.createHorizontalBox();
         JComponent left = this.left(book);
-        JComponent right = this.right(book, editable);
+        JComponent right = this.right(app, book, editable);
         bookRegister.add(left);
         bookRegister.add(right);
         this.add(bookRegister);
@@ -95,10 +95,10 @@ public class BookResult extends JComponent {
         return wrapper;
     }
 
-    private JComponent right(Book book, boolean editable) {
+    private JComponent right(App app, Book book, boolean editable) {
         JComponent component = StretchLayout.createVerticalBox();
         ActionListener viewHandler = e -> {
-            this.popupBookData(book);
+            this.popupBookData(app, book);
         };
         Button view = new Button("Abrir registro", viewHandler, BUTTONLABELCOLOR, BUTTONBGGRAY);
         Button edit = new Button("Editar", null, BUTTONLABELCOLOR, BUTTONBGGRAY);
@@ -140,8 +140,8 @@ public class BookResult extends JComponent {
         return bottom;
     }
     
-    private void popupBookData(Book book) {
-        this.popupBookData(App.get().getFrame(), book);
+    private void popupBookData(App app, Book book) {
+        this.popupBookData(app.getFrame(), book);
     }
     private void popupBookData(JFrame frame, Book book) {
         String title = book.getTitle();

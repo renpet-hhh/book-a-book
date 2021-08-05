@@ -10,9 +10,10 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-import model.handlers.ClearHandler;
-import view.Margin;
-import view.Page;
+import controller.handlers.ClearHandler;
+import framework.App;
+import framework.Page;
+import helpers.Margin;
 import view.components.AdminMenu;
 import view.components.Button;
 import view.components.LabeledTextField;
@@ -37,8 +38,8 @@ public class Reports implements Page {
     private List<JComponent> components = new ArrayList<>();
 
     @Override
-    public void paint(JFrame frame) {
-        JComponent menubar = AdminMenu.withWrapper();
+    public void paint(App app, JFrame frame) {
+        JComponent menubar = AdminMenu.withWrapper(app);
         String path = "Administração >> Relatórios";
         JComponent content = this.content();
         LayoutTemplate.build(frame, menubar, content, path);

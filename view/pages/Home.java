@@ -14,18 +14,18 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import model.App;
-import model.commands.DisplayPopupCmd;
-import model.commands.LoginCmd;
-import model.commands.NavigateCmd;
-import model.commands.TryLoginCmd;
-import model.handlers.FieldHandler;
+import framework.App;
+import framework.Page;
+import helpers.Margin;
+import controller.commands.DisplayPopupCmd;
+import controller.commands.LoginCmd;
+import controller.commands.NavigateCmd;
+import controller.commands.TryLoginCmd;
+import controller.handlers.FieldHandler;
 import view.components.Button;
 import view.components.ForgotPassword;
 import view.components.Label;
 import view.components.base.MenuFactory;
-import view.Margin;
-import view.Page;
 import view.components.fixed.FixedJTextField;
 import view.pages.user.Profile;
 import view.pages.user.SearchBooksUser;
@@ -108,22 +108,21 @@ public class Home implements Page {
      * - Para construir o header direito da página de um user, especifique isHomePage == false e username do user
      * - Para construir o header direito da página de um guest, especifique isHomePage == false e username == ""
      */
-    public static JComponent headerRight(JFrame frame, boolean isHomePage, String username) {
-        App app = App.get();
+    public static JComponent headerRight(App app, JFrame frame, boolean isHomePage, String username) {
         int height = LOGOHEIGHT + 2 * LOGOMARGIN;
         Box component = Box.createVerticalBox();
         Box top = Box.createHorizontalBox();
         if (!isHomePage) {
-            ActionListener homeHandler = e -> app.invoke(new NavigateCmd(new Home()));
+            ActionListener homeHandler = e -> app.control().invoke(new NavigateCmd(new Home()));
             Button homeButton = new Button("Início", homeHandler, LABELCOLOR, HEADERRIGHTCOLOR);
             top.add(Margin.rigidHorizontal(LEFTMARGINHEADERTOP));
             top.add(homeButton);
         }
-        ActionListener aboutHandler = e -> app.invoke(new NavigateCmd(new About()));
+        ActionListener aboutHandler = e -> app.control().invoke(new NavigateCmd(new About()));
         Button aboutButton = new Button("Sobre", aboutHandler, LABELCOLOR, HEADERRIGHTCOLOR);
         top.add(Box.createHorizontalGlue());
         if (!isHomePage && username.length() > 0) {
-            ActionListener libraryHandler = e -> app.invoke(new NavigateCmd(new SearchBooksUser()));
+            ActionListener libraryHandler = e -> app.control().invoke(new NavigateCmd(new SearchBooksUser()));
             Button libraryButton = new Button("Acessar a Biblioteca", libraryHandler, LABELCOLOR, HEADERRIGHTCOLOR);
             top.add(libraryButton);
             top.add(Margin.rigidHorizontal(SPACEBETWEENTOPHEADERBUTTONS));
@@ -155,11 +154,11 @@ public class Home implements Page {
                 try {
                     matriculaInt = Integer.parseInt(matricula);
                 } catch (NumberFormatException e) {
-                    app.invoke(new DisplayPopupCmd("Matrícula deve ser um número. Recebido: " + matricula));
+                    app.control().invoke(new DisplayPopupCmd("Matrícula deve ser um número. Recebido: " + matricula));
                     return;
                 };
                 // quando o botão Entrar for pressionado, tentamos fazer login
-                app.invoke(new TryLoginCmd(matriculaInt, password));
+                app.control().invoke(new TryLoginCmd(matriculaInt, password));
             });
             enter.addActionListener(observer);
             bottom.add(emailField);
@@ -172,7 +171,7 @@ public class Home implements Page {
         } else {
             if (username.length() > 0) {
                 Label welcomeLabel = new Label("Bem vindo, " + username, Profile.HEADERWELCOMECOLOR, null, Profile.WELCOMEFONT);
-                Button logoutBttn = MenuFactory.exitButton();
+                Button logoutBttn = MenuFactory.exitButton(app);
                 bottom.add(Margin.rigidHorizontal(LEFTMARGINHEADERBOTTOM));
                 bottom.add(welcomeLabel);
                 bottom.add(Box.createHorizontalGlue());
@@ -195,10 +194,10 @@ public class Home implements Page {
      * - Para construir o header direito da página de um user, especifique isHomePage == false e username do user
      * - Para construir o header direito da página de um guest, especifique isHomePage == false e username == ""
      */
-    public static JComponent header(JFrame frame, boolean isHomePage, String username) {
+    public static JComponent header(App app, JFrame frame, boolean isHomePage, String username) {
         Box component = Box.createHorizontalBox();
         JComponent left = Home.headerLeft();
-        JComponent right = Home.headerRight(frame, isHomePage, username);
+        JComponent right = Home.headerRight(app, frame, isHomePage, username);
         component.add(left);
         component.add(right);
         component.setMinimumSize(new Dimension(left.getWidth(), 0));
@@ -208,10 +207,10 @@ public class Home implements Page {
         return component;
     }
 
-    public static JComponent mainContent() {
+    public static JComponent mainContent(App app) {
         JComponent component = Box.createVerticalBox();
         Label mainText = new Label("Olá olá lorem ipsum pssum lorem ");
-        ActionListener enterAsGuestHandler = e -> App.get().invoke(new LoginCmd());
+        ActionListener enterAsGuestHandler = e -> app.control().invoke(new LoginCmd());
         Button enterAsGuestBttn = new Button("Acessar a biblioteca sem conta", enterAsGuestHandler);
         component.add(Margin.rigidVertical(20));
         component.add(mainText);
@@ -221,7 +220,7 @@ public class Home implements Page {
         return component;
     }
 
-    public static JComponent mainWrapper() {
+    public static JComponent mainWrapper(App app) {
         JComponent component = Box.createHorizontalBox();
         Box.Filler left = new Box.Filler(new Dimension(MAINCONTENTLEFTRIGHTWIDTH, 0), new Dimension(MAINCONTENTLEFTRIGHTWIDTH, 0), new Dimension(MAINCONTENTLEFTRIGHTWIDTH, Integer.MAX_VALUE));
         Box.Filler right = new Box.Filler(new Dimension(MAINCONTENTLEFTRIGHTWIDTH, 0), new Dimension(MAINCONTENTLEFTRIGHTWIDTH, 0), new Dimension(MAINCONTENTLEFTRIGHTWIDTH, Integer.MAX_VALUE));
@@ -232,7 +231,7 @@ public class Home implements Page {
         component.add(left);
         component.add(Box.createHorizontalGlue());
         component.add(Margin.rigidHorizontal(15));
-        component.add(Home.mainContent());
+        component.add(Home.mainContent(app));
         component.add(Margin.rigidHorizontal(15));
         component.add(Box.createHorizontalGlue());
         component.add(right);
@@ -254,12 +253,12 @@ public class Home implements Page {
     }
 
     @Override
-    public void paint(JFrame frame) {
+    public void paint(App app, JFrame frame) {
         BoxLayout bLayout = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS);
         frame.setLayout(bLayout);
-        JComponent header = Home.header(frame, true, "");
+        JComponent header = Home.header(app, frame, true, "");
         JComponent foot = Home.foot();
-        JComponent mainWrapper = Home.mainWrapper();
+        JComponent mainWrapper = Home.mainWrapper(app);
         frame.add(header);
         frame.add(mainWrapper);
         frame.add(foot);

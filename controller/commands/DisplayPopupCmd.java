@@ -1,12 +1,12 @@
-package model.commands;
+package controller.commands;
 
 import java.util.Arrays;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import model.App;
-import model.Command;
+import framework.App;
+import framework.Command;
 
 /** Comando concreto.
  * 

@@ -6,10 +6,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.commands.DisplayPopupCmd;
-import model.commands.LoginCmd;
+import framework.App;
+import framework.Command;
+import controller.commands.DisplayPopupCmd;
+import controller.commands.LoginCmd;
 
 public class Login {
+
+    private App app; // conexão com Model
+    public Login(App app) {
+        this.app = app;
+    }
     
     /* Estado de login */
     private User user; // estado inicial
@@ -87,19 +94,18 @@ public class Login {
     }
 
     public void tryLogin(int matricula, String password) {
-        App app = App.get();
         if (this.isLoggedIn) {
             Command displayErr = new DisplayPopupCmd("Usuário já está logado");
-            app.invoke(displayErr);
+            this.app.control().invoke(displayErr);
             return;
         }
         User u = this.validate(matricula, password);
         if (u != null) {
             Command loginCmd = new LoginCmd(u);
-            app.invoke(loginCmd);
+            this.app.control().invoke(loginCmd);
             return;
         }
-        app.invoke(new DisplayPopupCmd("Matrícula e/ou senha incorretos"));
+        this.app.control().invoke(new DisplayPopupCmd("Matrícula e/ou senha incorretos"));
     }
 
 }

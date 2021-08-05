@@ -9,10 +9,10 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
-import model.App;
+import framework.App;
+import framework.Page;
+import helpers.Margin;
 import model.User;
-import view.Margin;
-import view.Page;
 import view.components.AdminMenu;
 import view.components.Label;
 import view.components.UserResult;
@@ -45,25 +45,25 @@ public class SearchUsersResult implements Page {
     }
     
     @Override
-    public void paint(JFrame frame) {
-        JComponent menubar = AdminMenu.withWrapper();
+    public void paint(App app, JFrame frame) {
+        JComponent menubar = AdminMenu.withWrapper(app);
         String path = "Pesquisa >> Usuários >> Resultado";
-        JComponent content = Margin.horizontal(this.mainContent(), MenuFactory.WRAPPERHORIZONTALMARGIN);
+        JComponent content = Margin.horizontal(this.mainContent(app), MenuFactory.WRAPPERHORIZONTALMARGIN);
         LayoutTemplate.build(frame, menubar, content, path);
     }
 
-    private JComponent mainContent() {
-        Collection<User> users = App.get().getLogin().getFilteredUsers(this.nameFilter, this.matriculaFilter);
+    private JComponent mainContent(App app) {
+        Collection<User> users = app.getLogin().getFilteredUsers(this.nameFilter, this.matriculaFilter);
         JComponent component = Box.createVerticalBox();
         Iterator<User> it = users.iterator();
         if (users.size() == 0) {
             // não há usuários!
             return new Label("Nenhum usuário encontrado");
         }
-        component.add(new UserResult(it.next()));
+        component.add(new UserResult(app, it.next()));
         while (it.hasNext()) {
             component.add(Margin.rigidVertical(SPACEBETWEENRESULTS));
-            component.add(new UserResult(it.next()));
+            component.add(new UserResult(app, it.next()));
         }
         JScrollPane scrollPane = new JScrollPane(component, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);

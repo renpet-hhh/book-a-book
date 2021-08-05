@@ -1,4 +1,4 @@
-package model.handlers;
+package controller.handlers;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -8,10 +8,10 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import model.App;
+import framework.App;
 import model.Book;
-import model.commands.DisplayPopupCmd;
-import model.commands.RegisterBookCmd;
+import controller.commands.DisplayPopupCmd;
+import controller.commands.RegisterBookCmd;
 
 public class RegisterBookHandler implements ActionListener {
     
@@ -36,19 +36,19 @@ public class RegisterBookHandler implements ActionListener {
         String isbn = this.fields.get(9).getText();
         /* Obrigatoriedade dos campos */
         if (title.length() == 0) {
-            app.invoke(new DisplayPopupCmd("Campo Título é obrigatório", JOptionPane.ERROR_MESSAGE));
+            app.control().invoke(new DisplayPopupCmd("Campo Título é obrigatório", JOptionPane.ERROR_MESSAGE));
             return;
         }
         if (author1.length() == 0) {
-            app.invoke(new DisplayPopupCmd("Campo Autor 1 é obrigatório", JOptionPane.ERROR_MESSAGE));
+            app.control().invoke(new DisplayPopupCmd("Campo Autor 1 é obrigatório", JOptionPane.ERROR_MESSAGE));
             return;
         }
         if (totalNum.length() == 0) {
-            app.invoke(new DisplayPopupCmd("Campo Exemplares é obrigatório", JOptionPane.ERROR_MESSAGE));
+            app.control().invoke(new DisplayPopupCmd("Campo Exemplares é obrigatório", JOptionPane.ERROR_MESSAGE));
             return;
         }
         if (isbn.length() == 0) {
-            app.invoke(new DisplayPopupCmd("Campo ISBN é obrigatório", JOptionPane.ERROR_MESSAGE));
+            app.control().invoke(new DisplayPopupCmd("Campo ISBN é obrigatório", JOptionPane.ERROR_MESSAGE));
             return;
         }
         /* Interpretação dos campos */
@@ -57,7 +57,7 @@ public class RegisterBookHandler implements ActionListener {
             publishmentYearInt = Integer.parseInt(publishmentYear);
             if (publishmentYearInt < 0) { throw new NumberFormatException(); }
         } catch (NumberFormatException e) {
-            app.invoke(new DisplayPopupCmd("Ano de publicação deve ser um número não negativo. Recebido: " + publishmentYear, JOptionPane.ERROR_MESSAGE));
+            app.control().invoke(new DisplayPopupCmd("Ano de publicação deve ser um número não negativo. Recebido: " + publishmentYear, JOptionPane.ERROR_MESSAGE));
             return;
         }
         int totalNumInt;
@@ -65,7 +65,7 @@ public class RegisterBookHandler implements ActionListener {
             totalNumInt = Integer.parseInt(totalNum);
             if (totalNumInt < 0) { throw new NumberFormatException(); }
         } catch (NumberFormatException e) {
-            app.invoke(new DisplayPopupCmd("Número de examplares deve ser um número não negativo. Recebido: " + totalNum, JOptionPane.ERROR_MESSAGE));
+            app.control().invoke(new DisplayPopupCmd("Número de examplares deve ser um número não negativo. Recebido: " + totalNum, JOptionPane.ERROR_MESSAGE));
             return;
         }
         /* criamos a lista de autores */
@@ -75,7 +75,7 @@ public class RegisterBookHandler implements ActionListener {
         authors.add(author3);
         /* livro criado */
         Book book = new Book(title, subtitle, edition, isbn, whereWasPublished, authors, publishmentYearInt, totalNumInt);
-        app.invoke(new RegisterBookCmd(book));
+        app.control().invoke(new RegisterBookCmd(book));
     }
 
   

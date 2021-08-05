@@ -1,4 +1,4 @@
-package model;
+package framework;
 
 import java.awt.Dimension;
 import java.time.LocalDate;
@@ -8,8 +8,13 @@ import java.util.List;
 import javax.swing.JFrame;
 
 import helpers.Logger;
-import view.GUI;
-import view.Page;
+import model.Admin;
+import model.Book;
+import model.Crypto;
+import model.Library;
+import model.Login;
+import model.User;
+import model.UserData;
 import view.pages.Home;
 
 public class App {
@@ -21,7 +26,7 @@ public class App {
     }
     /* Permite acessar o estado da aplicação */
     /* Estado de login */
-    private final Login login = new Login();
+    private final Login login = new Login(this);
     public Login getLogin() { return this.login; }
     /* Estado da VIEW */
     private GUI gui;
@@ -29,25 +34,19 @@ public class App {
     public Page getCurrentPage() { return this.gui.getCurrentPage(); }
     public JFrame getFrame() { return this.gui.getFrame(); }
     /* Estado da biblioteca */
-    private final Library library = new Library();
+    private final Library library = new Library(this);
     public Library getLibrary() { return this.library; }
 
-    /* Logger */
-    private final Logger logger = new Logger(true);
+    /* Conexão do Model (App) com o Controller */
+    private final Controller controller = new Controller(new Logger(true));
+    public Controller control() { return this.controller; }
     
 
-    /* Design Pattern: Invoker | https://pt.wikipedia.org/wiki/Command */
-    /* Invoca comandos */
-    public void invoke(Command cmd) {
-        logger.log(cmd);
-        cmd.execute();
-    }
 
     /* Ponto de partida da Interface Gráfica */
     public static void main(String args[]) {
-        App app = App.get();
-        GUI gui = new GUI();
-        app.gui = gui;
+        App app = App.get(); // Criação do Model
+
         // Cadastramos algumas coisas falsas para fins de teste
         // USUÁRIO FALSO
         UserData data = new UserData("Nome mockup", "Endereço mockup", "(88) 99999-9999", "example@gmail.com", "Documento mockup", LocalDate.of(1999, 12, 31));
@@ -70,7 +69,8 @@ public class App {
             data.reserve(book);
         }
 
-        gui.navigate(new Home()); // começamos na página inicial
+        GUI gui = new GUI(app, new Home()); // conexão do Model (App) com View
+        app.gui = gui;
         app.getFrame().setSize(new Dimension(1200, 700));
         app.getFrame().revalidate();
     }
