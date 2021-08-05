@@ -1,5 +1,5 @@
-Compilação: `javac -encoding utf8 ./model/App.java`
+Compilação: `javac -encoding utf8 ./framework/App.java`
 
-Execução: `java model/App`
+Execução: `java framework/App`
 
 Limpeza (Windows): `del /S *.class`
