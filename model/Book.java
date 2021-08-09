@@ -2,6 +2,9 @@ package model;
 
 import java.util.List;
 
+import controller.commands.RefreshCmd;
+import framework.App;
+
 public class Book {
     private String title, subtitle, edition, isbn, whereWasPublished;
     private List<String> authors;
@@ -30,9 +33,15 @@ public class Book {
     public int getYearOfPublishment() { return this.yearOfPublishment; }
 
     public int getHowManyTotal() { return this.howManyTotal; }
-    public void setHowManyTotal(int howMany) { this.howManyTotal = howMany; }
+    public void setHowManyTotal(int howMany) {
+        this.howManyTotal = howMany;
+        App.get().control().invoke(new RefreshCmd("BookTotal")); // notificamos as views observadoras
+    }
     public int getHowManyAvailable() { return this.howManyAvailable; }
-    public void setHowManyAvailable(int howMany) { this.howManyAvailable = howMany; }
+    public void setHowManyAvailable(int howMany) {
+        this.howManyAvailable = howMany;
+        App.get().control().invoke(new RefreshCmd("BookAvailable")); // notificamos as views observadoras
+    }
 
     @Override
     public boolean equals(Object obj) {

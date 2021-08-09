@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import controller.commands.RefreshCmd;
+import framework.App;
+
 public class UserData {
     /* Struct de dados. Não define comportamento, então todos os campos são públicos */
     private String name, address, contact, email, document;
@@ -28,8 +31,14 @@ public class UserData {
     public String getEmail() { return email; }
     public int getMatricula() { return matricula; }
     public void setMatricula(int matricula) { this.matricula = matricula; }
-    public void reserve(Book book) { this.reservedBooks.add(book); }
-    public void removeReserved(Book book) { this.reservedBooks.remove(book); }
+    public void reserve(Book book) {
+        this.reservedBooks.add(book);
+        App.get().control().invoke(new RefreshCmd("UserReserveBook", book)); // notifica views observadoras
+    }
+    public void removeReserved(Book book) {
+        this.reservedBooks.remove(book);
+        App.get().control().invoke(new RefreshCmd("UserUnreserveBook", book)); // notifica views observadoras
+    }
     public List<Book> getReservedBooks() { return Collections.unmodifiableList(this.reservedBooks); }
 
     

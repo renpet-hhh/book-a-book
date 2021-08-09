@@ -8,10 +8,8 @@ import java.util.List;
 import java.awt.Dimension;
 
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JTextField;
 
 import framework.App;
@@ -30,7 +28,7 @@ import view.components.fixed.FixedJTextField;
 import view.pages.user.Profile;
 import view.pages.user.SearchBooksUser;
 
-public class Home implements Page {
+public class Home extends Page {
     
     /** Desenha a página inicial da aplicação.
      * 
@@ -108,7 +106,7 @@ public class Home implements Page {
      * - Para construir o header direito da página de um user, especifique isHomePage == false e username do user
      * - Para construir o header direito da página de um guest, especifique isHomePage == false e username == ""
      */
-    public static JComponent headerRight(App app, JFrame frame, boolean isHomePage, String username) {
+    public static JComponent headerRight(App app, JComponent pane, boolean isHomePage, String username) {
         int height = LOGOHEIGHT + 2 * LOGOMARGIN;
         Box component = Box.createVerticalBox();
         Box top = Box.createHorizontalBox();
@@ -135,7 +133,7 @@ public class Home implements Page {
         Box bottom = Box.createHorizontalBox();
         if (isHomePage) {
             bottom.add(Box.createHorizontalGlue());
-            Button forgotPasswordBttn = ForgotPassword.getButton(frame);
+            Button forgotPasswordBttn = ForgotPassword.getButton(pane);
             bottom.add(Margin.horizontal(forgotPasswordBttn, FORGOTPASSWORDMARGIN));
             // o texto padrão desses campos está assim só por enquanto, para facilitar os testes
             JTextField emailField = new FixedJTextField(USERNAMEFIELDWIDTH, "0");
@@ -194,10 +192,10 @@ public class Home implements Page {
      * - Para construir o header direito da página de um user, especifique isHomePage == false e username do user
      * - Para construir o header direito da página de um guest, especifique isHomePage == false e username == ""
      */
-    public static JComponent header(App app, JFrame frame, boolean isHomePage, String username) {
+    public static JComponent header(App app, JComponent pane, boolean isHomePage, String username) {
         Box component = Box.createHorizontalBox();
         JComponent left = Home.headerLeft();
-        JComponent right = Home.headerRight(app, frame, isHomePage, username);
+        JComponent right = Home.headerRight(app, pane, isHomePage, username);
         component.add(left);
         component.add(right);
         component.setMinimumSize(new Dimension(left.getWidth(), 0));
@@ -253,15 +251,15 @@ public class Home implements Page {
     }
 
     @Override
-    public void paint(App app, JFrame frame) {
-        BoxLayout bLayout = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS);
-        frame.setLayout(bLayout);
-        JComponent header = Home.header(app, frame, true, "");
+    public JComponent paint() {
+        JComponent pane = Box.createVerticalBox();
+        JComponent header = Home.header(app, pane, true, "");
         JComponent foot = Home.foot();
         JComponent mainWrapper = Home.mainWrapper(app);
-        frame.add(header);
-        frame.add(mainWrapper);
-        frame.add(foot);
+        pane.add(header);
+        pane.add(mainWrapper);
+        pane.add(foot);
+        return pane;
     }
 
 }

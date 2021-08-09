@@ -1,16 +1,13 @@
 package view.pages;
 
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 
-import framework.App;
 import framework.Page;
 import helpers.Margin;
 import view.components.Label;
 
-public class About implements Page {
+public class About extends Page {
 
     public final static String TITLE = "Sobre";
     @Override
@@ -23,18 +20,18 @@ public class About implements Page {
     final static int BOTTOMMARGINCONTENT = 20;
     
     @Override
-    public void paint(App app, JFrame frame) {
-        BoxLayout bLayout = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS);
-        frame.setLayout(bLayout);
+    public JComponent paint() {
+        JComponent pane = Box.createVerticalBox();
         JComponent component = Box.createVerticalBox();
-        component.add(Home.header(app, frame, false, ""));
+        component.add(Home.header(app, pane, false, ""));
         JComponent wrap1 = Box.createHorizontalBox();
         wrap1.add(Margin.rigidHorizontal(70));
         wrap1.add(About.mainContent());
         wrap1.add(Box.createHorizontalGlue());
         component.add(wrap1);
         component.add(Home.foot());
-        frame.add(component);
+        pane.add(component);
+        return pane;
     }
 
     public static JComponent mainContent() {

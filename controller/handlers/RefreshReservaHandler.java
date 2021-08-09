@@ -8,16 +8,14 @@ import javax.swing.JTextField;
 
 import framework.App;
 import model.Login;
-import model.RefreshableBU;
 import model.User;
 import controller.commands.DisplayPopupCmd;
+import controller.commands.RefreshCmd;
 
-public class RefreshUHandler implements ActionListener {
+public class RefreshReservaHandler implements ActionListener {
     
-    private RefreshableBU component;
     private JTextField field;
-    public RefreshUHandler(RefreshableBU component, JTextField field) {
-        this.component = component;
+    public RefreshReservaHandler(JTextField field) {
         this.field = field;
     }
 
@@ -41,7 +39,7 @@ public class RefreshUHandler implements ActionListener {
         }
         Login login = app.getLogin();
         User user = login.getUser(matriculaInt);
-        this.component.refresh(app, null, user);
+        app.control().invoke(new RefreshCmd("UserShow", user));
     }
 
   

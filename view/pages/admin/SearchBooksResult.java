@@ -5,7 +5,6 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
 import framework.App;
@@ -20,7 +19,7 @@ import view.components.UserMenu;
 import view.components.base.MenuFactory;
 import view.pages.pagestemplate.LayoutTemplate;
 
-public class SearchBooksResult implements Page {
+public class SearchBooksResult extends Page {
 
     /** Responsável pela página que exibe os resultados da pesquisa de usuários.
      * 
@@ -43,11 +42,13 @@ public class SearchBooksResult implements Page {
     }
     
     @Override
-    public void paint(App app, JFrame frame) {
+    public JComponent paint() {
+        JComponent pane = Box.createVerticalBox();
         JComponent menubar = this.privilege == 2 ? AdminMenu.withWrapper(app) : this.privilege == 1 ? UserMenu.withWrapper(app) : GuestMenu.withWrapper(app);
         String path = "Pesquisa >> Livro >> Resultado";
         JComponent content = Margin.horizontal(this.mainContent(app), MenuFactory.WRAPPERHORIZONTALMARGIN);
-        LayoutTemplate.build(frame, menubar, content, path);
+        LayoutTemplate.build(pane, menubar, content, path);
+        return pane;
     }
 
     private JComponent mainContent(App app) {

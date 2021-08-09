@@ -11,16 +11,14 @@ import framework.App;
 import model.Book;
 import model.Library;
 import model.Login;
-import model.RefreshableBU;
 import model.User;
 import controller.commands.DisplayPopupCmd;
+import controller.commands.RefreshCmd;
 
-public class RefreshBUHandler implements ActionListener {
+public class RefreshEmprestimoHandler implements ActionListener {
     
-    private RefreshableBU component;
     private List<JTextField> fields;
-    public RefreshBUHandler(RefreshableBU component, List<JTextField> fields) {
-        this.component = component;
+    public RefreshEmprestimoHandler(List<JTextField> fields) {
         this.fields = fields;
     }
 
@@ -51,7 +49,8 @@ public class RefreshBUHandler implements ActionListener {
         Login login = app.getLogin();
         Book book = lib.findByISBN(isbn);
         User user = login.getUser(matriculaInt);
-        this.component.refresh(app, book, user);
+        app.control().invoke(new RefreshCmd("UserShow", user));
+        app.control().invoke(new RefreshCmd("BookShow", book));
     }
 
   

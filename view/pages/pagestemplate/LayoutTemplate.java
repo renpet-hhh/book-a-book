@@ -1,9 +1,7 @@
 package view.pages.pagestemplate;
 
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 
 import helpers.Margin;
 import view.components.Label;
@@ -31,16 +29,14 @@ public class LayoutTemplate {
         return component;
     }
 
-    public static void build(JFrame frame, JComponent menubar, JComponent content, String path) {
+    public static void build(JComponent pane, JComponent menubar, JComponent content, String path) {
         /** frame é o componente ao qual será construído o template, de acordo com
          * o que foi fornecido comoo argumento (menubar, content, path).
          */
-        BoxLayout bLayout = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS);
-        frame.setLayout(bLayout);
-        frame.add(menubar);
-        frame.add(pathComponent(path));
-        frame.add(content);
-        frame.add(Margin.rigidVertical(BOTTOMMARGINMAINWRAPPER));
+        pane.add(menubar);
+        pane.add(pathComponent(path));
+        pane.add(content);
+        pane.add(Margin.rigidVertical(BOTTOMMARGINMAINWRAPPER));
     }
     
 }

@@ -10,6 +10,7 @@ import framework.App;
 import framework.Command;
 import controller.commands.DisplayPopupCmd;
 import controller.commands.LoginCmd;
+import controller.commands.RefreshCmd;
 
 public class Login {
 
@@ -27,7 +28,11 @@ public class Login {
     public boolean isLoggedIn() { return this.isLoggedIn; }
     public boolean isAdmin() { return this.isAdmin; }
     /* Setters */
-    public void setUser(User user) { this.user = user; }
+    public void setUser(User user) {
+        boolean userChanged = user != this.user;
+        this.user = user;
+        if (userChanged) this.app.control().invoke(new RefreshCmd("LoginUserChanged"));
+    }
     public void setIsLoggedIn(boolean isLoggedIn) { this.isLoggedIn = isLoggedIn; }
     public void setIsAdmin(boolean isAdmin) { this.isAdmin = isAdmin; }
 
@@ -40,7 +45,10 @@ public class Login {
     public User getUser(int matricula) { return this.users.get(matricula); }
     private int matriculaCounter = 0;
     public int getMatricula() { return this.matriculaCounter; }
-    public void incrementMatricula() { this.matriculaCounter += 1; }
+    public void incrementMatricula() {
+        this.matriculaCounter += 1;
+        this.app.control().invoke(new RefreshCmd("LoginIncrementMatricula"));
+    }
     /** Retorna uma coleção de usuários que satisfazem os filtros.
      * Um filtro nulo é satisfeito por qualquer usuário.
      * 
@@ -74,6 +82,7 @@ public class Login {
             throw new RuntimeException("Usuário já está cadastrado");
         }
         users.put(matricula, user);
+        this.app.control().invoke(new RefreshCmd("LoginAddUser", user));
     }
 
     /* Funções para salvar e carregar a base de dados */

@@ -1,15 +1,20 @@
 package framework;
 
-import javax.swing.JFrame;
+public abstract class Page extends View {
 
-public interface Page {
+    protected App app;
+    public Page() {
+        super(null);
+    }
+    public Page(App app) {
+        super(app);
+        this.app = app;
+    }
+    public void init(App app) {
+        this.app = app;
+    }
 
     /** Retorna o título da página */
-    String getTitle();
-    /** Modifica frame, adicionando componentes a ele de forma a construir a página.
-     * 
-     * Pede para a View (Page) ser exibida conforme dados do Model (App)
-     */
-    void paint(App app, JFrame frame);
+    public abstract String getTitle();
     
 }

@@ -6,7 +6,6 @@ import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
@@ -22,7 +21,7 @@ import view.components.Label;
 import view.components.layout.StretchLayout;
 import view.pages.Home;
 
-public class Profile implements Page {
+public class Profile extends Page {
 
     public final static String TITLE = "Perfil";
     @Override
@@ -51,15 +50,17 @@ public class Profile implements Page {
     final static Border PROFILEMENUBUTTONBORDER = BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(225, 225, 225), 1), BorderFactory.createEmptyBorder(PROFILEBUTTONVERTICALMARGIN, PROFILEBUTTONHORIZONTALMARGIN, PROFILEBUTTONVERTICALMARGIN, PROFILEBUTTONHORIZONTALMARGIN));
 
     @Override
-    public void paint(App app, JFrame frame) {
+    public JComponent paint() {
+        JComponent pane = Box.createVerticalBox();
         User user = app.getLogin().getUser();
         UserData data = user.getData();
-        JComponent menubar = Home.header(app, frame, false, data.getName());
+        JComponent menubar = Home.header(app, pane, false, data.getName());
         // Página incompleta por enquanto!
         JComponent content = this.mainWrapper(app);
-        frame.add(menubar);
-        frame.add(content);
-        frame.add(Home.foot());
+        pane.add(menubar);
+        pane.add(content);
+        //pane.add(Home.foot());
+        return pane;
     }
 
     public JComponent mainContent(App app) {

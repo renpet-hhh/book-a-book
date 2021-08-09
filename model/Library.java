@@ -9,6 +9,7 @@ import java.util.Set;
 
 import framework.App;
 import framework.Command;
+import controller.commands.RefreshCmd;
 import controller.commands.ReserveBookCmd;
 
 public class Library {
@@ -56,7 +57,10 @@ public class Library {
             set = new HashSet<>();
             this.books.put(title, set);
         }
-        return set.add(book);
+        boolean b = set.add(book);
+        // notificamos os views que estão observando a mudança de estado "LibraryAddBook"
+        this.app.control().invoke(new RefreshCmd("LibraryAddBook"));
+        return b;
     }
     /** Retorna uma coleção de livros que satisfazem os filtros.
      * Um filtro nulo é satisfeito por qualquer livro.

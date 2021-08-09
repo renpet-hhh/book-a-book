@@ -1,26 +1,26 @@
 package view.pages.admin;
 
+import javax.swing.Box;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 
 import java.awt.event.ActionListener;
 
 import controller.handlers.ClearHandler;
 import controller.handlers.RegisterBookHandler;
-import framework.App;
 import framework.Page;
 import view.components.AdminMenu;
 import view.pages.pagestemplate.SearchContentTemplate;
 import view.pages.pagestemplate.LayoutTemplate;
 
-public class RegisterBooks implements Page {
+public class RegisterBooks extends Page {
     
     public final static String TITLE = "Catalogação";
     @Override
     public String getTitle() { return TITLE; }
 
     @Override
-    public void paint(App app, JFrame frame) {
+    public JComponent paint() {
+        JComponent pane = Box.createVerticalBox();
         JComponent menubar = AdminMenu.withWrapper(app);
         String[] labelsText = new String[] {
             "Título:", "Subtítulo:", "Autor 1:", "Autor 2:", "Autor 3:",
@@ -34,7 +34,8 @@ public class RegisterBooks implements Page {
         ActionListener[] handlers = new ActionListener[] {cancelHandler, registerBookHandler};
         template.setHandlers(handlers);
         String path = "Catalogação";
-        LayoutTemplate.build(frame, menubar, content, path);
+        LayoutTemplate.build(pane, menubar, content, path);
+        return pane;
     }
 
 }

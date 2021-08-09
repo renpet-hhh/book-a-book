@@ -12,6 +12,7 @@ public class Controller {
     /* Design Pattern: Invoker | https://pt.wikipedia.org/wiki/Command */
     /* Invoca comandos */
     public void invoke(Command cmd) {
+        // os comandos são definidos em controller/commands
         this.logger.log(cmd);
         cmd.execute();
     }

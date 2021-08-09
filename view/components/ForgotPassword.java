@@ -6,6 +6,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
+import framework.App;
 import helpers.Margin;
 import view.components.fixed.LimitedJTextField;
 import view.pages.Home;
@@ -19,17 +20,18 @@ public class ForgotPassword {
     final static int MAXFIELDWIDTH = 300;
     final static int DIALOGMARGIN = 20;
 
-    public static Button getButton(JFrame frame) {
-        ActionListener handler = e -> ForgotPassword.show(frame);
+    public static Button getButton(JComponent pane) {
+        ActionListener handler = e -> ForgotPassword.show(pane);
         Button forgotPasswordBttn = new Button("Esqueceu a senha?", handler, Home.FORGOTPASSWORDCOLOR, Home.HEADERRIGHTCOLOR);
         return forgotPasswordBttn;
     }
 
-    public static void show(JFrame frame) {
+    public static void show(JComponent pane) {
         String title = "Esqueceu a senha?";
         String message = "Digite um email no campo abaixo para receber instruções sobre mudança de senha";
         LimitedJTextField field = new LimitedJTextField(MINFIELDWIDTH, MAXFIELDWIDTH);
         Button send = new Button("Enviar");
+        JFrame frame = App.get().getFrame();
         JDialog dialog = new JDialog(frame, title);
         Label label = new Label(message);
         JComponent wrapper = Box.createVerticalBox();

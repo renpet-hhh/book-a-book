@@ -1,24 +1,25 @@
 package view.pages.admin;
 
 import java.awt.event.ActionListener;
+
+import javax.swing.Box;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 
 import controller.handlers.ClearHandler;
-import framework.App;
 import framework.Page;
 import view.components.AdminMenu;
 import view.pages.pagestemplate.SearchContentTemplate;
 import view.pages.pagestemplate.LayoutTemplate;
 
-public class Settings implements Page {
+public class Settings extends Page {
     
     public final static String TITLE = "Configurações";
     @Override
     public String getTitle() { return TITLE; }
 
     @Override
-    public void paint(App app, JFrame frame) {
+    public JComponent paint() {
+        JComponent pane = Box.createVerticalBox();
         JComponent menubar = AdminMenu.withWrapper(app);
         String[] labelsText = new String[] {
             "Alterar tempo de empréstimo:",
@@ -32,7 +33,8 @@ public class Settings implements Page {
         ActionListener[] handlers = new ActionListener[] {cancelHandler, null};
         template.setHandlers(handlers);
         String path = "Administração >> Configurações";
-        LayoutTemplate.build(frame, menubar, content, path);
+        LayoutTemplate.build(pane, menubar, content, path);
+        return pane;
     }
 
 }

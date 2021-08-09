@@ -17,6 +17,7 @@ import model.User;
 import model.UserData;
 import view.pages.Home;
 
+/** Model */
 public class App {
     /* Design Pattern: Singleton */
     public final static App instance = new App();
@@ -40,12 +41,55 @@ public class App {
     /* Conexão do Model (App) com o Controller */
     private final Controller controller = new Controller(new Logger(true));
     public Controller control() { return this.controller; }
-    
 
+
+    /** Informações de exibição controladas pelo modelo.
+     * 
+     * Ao atualizar o estado do modelo, as views que estão observando esse estado
+     * serão notificadas. Uma string de identificação (como "UserShow") é passada
+     * como argumento para que as views possam saber que tipo de alteração de estado ocorreu.
+     * 
+     * Os atributos userShow, bookShow, userListShow e bookListShow
+     * são de propósito geral, e sua semântica depende de cada página.
+     * 
+     * Se uma página precisa de mais atributos (por exemplo, a página exibe mais de 1 lista de usuários),
+     * essas informações adicionais podem ser passadas como argumento, pois o segundo argumento é Object ...args
+     * 
+     */
+    private User userShow; // usuário do qual se está exibindo informação
+    public User getUserShow() { return this.userShow; }
+    public void setUserShow(User user, Object... args) {
+        this.userShow = user;
+        this.getCurrentPage().refresh("UserShow", args);
+    }
+    
+    private Book bookShow; // livro do qual se está exibindo informação
+    public Book getBookShow() { return this.bookShow; }
+    public void setBookShow(Book book, Object... args) {
+        this.bookShow = book;
+        this.getCurrentPage().refresh("BookShow", args);
+    }
+
+    private List<Book> bookListShow; // lista de livros que está sendo exibida na tela
+    public List<Book> getListListShow() { return this.bookListShow; }
+    public void setBookListShow(List<Book> books, Object... args) {
+        this.bookListShow = books;
+        this.getCurrentPage().refresh("BookListShow", args);
+    }
+
+    private List<User> userListShow; // lista de usuários que está sendo exibida na tela
+    public List<User> getUserListShow() { return this.userListShow; }
+    public void setUserListShow(List<User> users, Object... args) {
+        this.userListShow = users;
+        this.getCurrentPage().refresh("UserListShow", args);
+    }
 
     /* Ponto de partida da Interface Gráfica */
     public static void main(String args[]) {
         App app = App.get(); // Criação do Model
+        GUI gui = new GUI(app); // conexão do Model (App) com View
+        app.gui = gui;
+        app.gui.navigate(new Home()); // página inicial
 
         // Cadastramos algumas coisas falsas para fins de teste
         // USUÁRIO FALSO
@@ -69,8 +113,6 @@ public class App {
             data.reserve(book);
         }
 
-        GUI gui = new GUI(app, new Home()); // conexão do Model (App) com View
-        app.gui = gui;
         app.getFrame().setSize(new Dimension(1200, 700));
         app.getFrame().revalidate();
     }

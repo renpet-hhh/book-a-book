@@ -8,10 +8,8 @@ import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 
 import controller.handlers.ClearHandler;
-import framework.App;
 import framework.Page;
 import helpers.Margin;
 import view.components.AdminMenu;
@@ -21,7 +19,7 @@ import view.components.base.MenuFactory;
 import view.pages.pagestemplate.SearchContentTemplate;
 import view.pages.pagestemplate.LayoutTemplate;
 
-public class Reports implements Page {
+public class Reports extends Page {
 
     public final static String TITLE = "Relatórios";
     @Override
@@ -38,11 +36,13 @@ public class Reports implements Page {
     private List<JComponent> components = new ArrayList<>();
 
     @Override
-    public void paint(App app, JFrame frame) {
+    public JComponent paint() {
+        JComponent pane = Box.createVerticalBox();
         JComponent menubar = AdminMenu.withWrapper(app);
         String path = "Administração >> Relatórios";
         JComponent content = this.content();
-        LayoutTemplate.build(frame, menubar, content, path);
+        LayoutTemplate.build(pane, menubar, content, path);
+        return pane;
     }
 
     private JComboBox<String> chooser() {

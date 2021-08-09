@@ -3,18 +3,15 @@ import java.awt.Color;
 
 import java.awt.event.ActionListener;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import model.Book;
-import model.RefreshableBU;
 import model.User;
 import model.UserData;
-import controller.handlers.RefreshBUHandler;
-import framework.App;
+import controller.commands.RefreshCmd;
+import controller.handlers.RefreshEmprestimoHandler;
 import framework.Page;
 import helpers.Margin;
 import view.components.AdminMenu;
@@ -23,7 +20,7 @@ import view.components.base.MenuFactory;
 import view.pages.pagestemplate.SearchContentTemplate;
 import view.pages.pagestemplate.LayoutTemplate;
 
-public class EmprestimosEDevolucoes implements Page, RefreshableBU {
+public class EmprestimosEDevolucoes extends Page {
     
     public final static String TITLE = "Empréstimos e Devoluções";
     @Override
@@ -46,9 +43,8 @@ public class EmprestimosEDevolucoes implements Page, RefreshableBU {
 
 
     @Override
-    public void paint(App app, JFrame frame) {
-        BoxLayout bLayout = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS);
-        frame.setLayout(bLayout);
+    public JComponent paint() {
+        JComponent pane = Box.createVerticalBox();
         JComponent menubar = AdminMenu.withWrapper(app);
         /* Top */
         String[] labelsText = new String[] {
@@ -57,22 +53,27 @@ public class EmprestimosEDevolucoes implements Page, RefreshableBU {
         String[] topButtonText = new String[] {"Buscar"};
         SearchContentTemplate inputTemplate = new SearchContentTemplate(labelsText, topButtonText, null, false, -1, false);
         JComponent searchContent = inputTemplate.build();
-        ActionListener refreshHandler = new RefreshBUHandler(this, inputTemplate.getTextFields());
+        ActionListener refreshHandler = new RefreshEmprestimoHandler(inputTemplate.getTextFields());
         ActionListener[] searchHandlers = new ActionListener[] {refreshHandler};
         inputTemplate.setHandlers(searchHandlers);
         /* Bottom */
         String[] bottomButtonsText = new String[] {"Cancelar", "Emprestar/Devolver"};
-        ActionListener cancelHandler = e -> this.refresh(app, null, null);
+        ActionListener cancelHandler = e -> {
+            this.app.control().invoke(new RefreshCmd("UserShow", (User)null));
+            this.app.control().invoke(new RefreshCmd("BookShow", (Book)null));
+        };
         ActionListener[] bottomHandlers = new ActionListener[] {cancelHandler, null};
         SearchContentTemplate buttonsTemplate = new SearchContentTemplate(new String[0], bottomButtonsText, bottomHandlers, false);
         JComponent buttons = buttonsTemplate.build();
         this.rentButton = buttonsTemplate.getButtons()[1];
-        frame.add(menubar);
-        frame.add(LayoutTemplate.pathComponent("Circulação >> Empréstimos e Devoluções"));
-        frame.add(searchContent);
-        frame.add(this.infoComponent);
-        frame.add(buttons);
-        this.refresh(app, null, null);
+        pane.add(menubar);
+        pane.add(LayoutTemplate.pathComponent("Circulação >> Empréstimos e Devoluções"));
+        pane.add(searchContent);
+        pane.add(this.infoComponent);
+        pane.add(buttons);
+        this.app.control().invoke(new RefreshCmd("UserShow", (User)null));
+        this.app.control().invoke(new RefreshCmd("BookShow", (Book)null));
+        return pane;
     }
 
     private void addLabels(JComponent component) {
@@ -108,32 +109,41 @@ public class EmprestimosEDevolucoes implements Page, RefreshableBU {
         return wrapper2;
     }
     @Override
-    public void refresh(App app, Book book, User user) {
+    public void refresh(String changeID, Object... args) {
         String titleText = "Título: ";
         String authorsText = "Autor(es): ";
         String yearText = "Data de Publicação: ";
         String userText = "Usuário: ";
         String statusText = "Situação:";
-        String pendingText = "Devoluções pendentes:";
-        if (book != null) {
-            titleText += book.getTitle();
-            authorsText += String.join(", ", book.getAuthors());
-            yearText += book.getYearOfPublishment();
-        } else {
-            titleText += "NÃO ENCONTRADO";
+        String pendingText = "Devoluções pendentes: 0";
+        User user = this.app.getUserShow();
+        Book book = this.app.getBookShow();
+        boolean userFound = user != null;
+        boolean bookFound = book != null;
+        if ("UserShow".equals(changeID)) {
+            if (userFound) {
+                UserData data = user.getData();
+                userText += data.getName();
+            } else {
+                userText += "NÃO ENCONTRADO";
+            }
+            this.username.setText(userText);
+            this.status.setText(statusText);
+            this.pending.setText(pendingText);
         }
-        if (user != null) {
-            UserData data = user.getData();
-            userText += data.getName();
-        } else {
-            userText += "NÃO ENCONTRADO";
+        if ("BookShow".equals(changeID)) {
+            if (bookFound) {
+                titleText += book.getTitle();
+                authorsText += String.join(", ", book.getAuthors());
+                yearText += book.getYearOfPublishment();
+            } else {
+                titleText += "NÃO ENCONTRADO";
+            }
+            this.title.setText(titleText);
+            this.authors.setText(authorsText);
+            this.publishmentdate.setText(yearText);
         }
-        this.title.setText(titleText);
-        this.authors.setText(authorsText);
-        this.publishmentdate.setText(yearText);
-        this.username.setText(userText);
-        this.status.setText(statusText);
-        this.pending.setText(pendingText);
-        this.rentButton.setEnabled(book != null && user != null);
+        this.rentButton.setEnabled(userFound && bookFound);
+        super.refresh(changeID, args);
     }
 }
