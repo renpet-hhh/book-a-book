@@ -14,9 +14,20 @@ public class User {
     }
 
     public User(UserData data, String encryptedPassword) {
+        data.owner(this);
         this.data = data;
         this.encryptedPassword = encryptedPassword;
     }
+
+    public String status() {
+        for (Emprestimo e : this.data.getEmprestimos()) {
+            if (e.isExpired()) {
+                return "Empréstimo expirado";
+            }
+        }
+        return "Regular";
+    }
+
     /** Retorna o nível de privilégio desse usuário.
      * 
      * 1 - Usuário comum

@@ -1,16 +1,17 @@
 package controller.handlers;
 
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import controller.RefreshID;
+import controller.commands.DisplayPopupCmd;
+import controller.commands.RefreshCmd;
 import framework.App;
 import model.Login;
 import model.User;
-import controller.commands.DisplayPopupCmd;
-import controller.commands.RefreshCmd;
 
 public class RefreshReservaHandler implements ActionListener {
     
@@ -39,7 +40,8 @@ public class RefreshReservaHandler implements ActionListener {
         }
         Login login = app.getLogin();
         User user = login.getUser(matriculaInt);
-        app.control().invoke(new RefreshCmd("UserShow", user));
+        app.control().invoke(new RefreshCmd(RefreshID.UserContext, user));
+        app.control().invoke(new RefreshCmd(RefreshID.BookListContext, user.getData().getReservedBooks()));
     }
 
   

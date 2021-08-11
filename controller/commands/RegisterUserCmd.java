@@ -17,9 +17,9 @@ public class RegisterUserCmd implements Command {
     public RegisterUserCmd(UserData data, String password, boolean isAdmin) {
         User user;
         if (isAdmin) {
-            user = new User(data, Crypto.crypt(password));
-        } {
             user = new Admin(data, Crypto.crypt(password));
+        } else {
+            user = new User(data, Crypto.crypt(password));
         }
         this.user = user;
     }

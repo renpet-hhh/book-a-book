@@ -7,10 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import framework.App;
-import framework.Command;
+import controller.RefreshID;
 import controller.commands.RefreshCmd;
-import controller.commands.ReserveBookCmd;
+import framework.App;
 
 public class Library {
 
@@ -44,10 +43,6 @@ public class Library {
         return this.booksByISBN.get(isbn);
     }
 
-    public void reserveBook(Book book, User user) {
-        Command reserveCmd = new ReserveBookCmd(book, user);
-        this.app.control().invoke(reserveCmd);
-    }
     /** Adiciona um livro à biblioteca e retorna false se o set não foi alterado. */
     public boolean addBook(Book book) {
         String title = book.getTitle();
@@ -59,7 +54,7 @@ public class Library {
         }
         boolean b = set.add(book);
         // notificamos os views que estão observando a mudança de estado "LibraryAddBook"
-        this.app.control().invoke(new RefreshCmd("LibraryAddBook"));
+        this.app.control().invoke(new RefreshCmd(RefreshID.LibraryAddBook));
         return b;
     }
     /** Retorna uma coleção de livros que satisfazem os filtros.

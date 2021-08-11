@@ -36,7 +36,9 @@ public class DisplayPopupCmd implements Command {
 
     @Override
     public void execute() {
-        JOptionPane.showMessageDialog(this.frame, this.message, title, this.messageType);
+        if (!App.get().shouldIgnorePopup() || this.messageType == JOptionPane.ERROR_MESSAGE) {
+            JOptionPane.showMessageDialog(this.frame, this.message, title, this.messageType);
+        }
     }
     
     @Override

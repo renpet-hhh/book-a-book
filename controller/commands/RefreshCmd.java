@@ -2,6 +2,7 @@ package controller.commands;
 
 import java.util.List;
 
+import controller.RefreshID;
 import framework.App;
 import framework.Command;
 import model.Book;
@@ -9,9 +10,9 @@ import model.User;
 
 public class RefreshCmd implements Command {
     
-    String changeID;
+    RefreshID changeID;
     Object[] args;
-    public RefreshCmd(String changeID, Object ...args) {
+    public RefreshCmd(RefreshID changeID, Object ...args) {
         this.changeID = changeID;
         this.args = args;
     }
@@ -21,23 +22,23 @@ public class RefreshCmd implements Command {
     public void execute() {
         App app = App.get();
         switch (this.changeID) {
-            case "UserShow":
-                app.setUserShow((User)args[0]);
+            case UserContext:
+                app.setUserContext((User)args[0]);
                 break;
-            case "BookShow":
-                app.setBookShow((Book)args[0]);
+            case BookContext:
+                app.setBookContext((Book)args[0]);
                 break;
-            case "UserListShow":
-                app.setUserListShow((List<User>)args[0]);
+            case UserListContext:
+                app.setUserListContext((List<User>)args[0]);
                 break;
-            case "BookListShow":
-                app.setBookListShow((List<Book>)args[0]);
+            case BookListContext:
+                app.setBookListContext((List<Book>)args[0]);
                 break;
-            case "CLEAR":
-                app.setUserShow(null);
-                app.setBookShow(null);
-                app.setUserListShow(null);
-                app.setBookListShow(null);
+            case CLEAR:
+                app.setUserContext(null);
+                app.setBookContext(null);
+                app.setUserListContext(null);
+                app.setBookListContext(null);
                 break;
             default:
                 // notifica a View mais externa,

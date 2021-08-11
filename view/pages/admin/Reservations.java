@@ -12,19 +12,22 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
-import model.Book;
-import model.User;
-import model.UserData;
+import controller.RefreshID;
+import controller.commands.DisplayPopupCmd;
+import controller.commands.EmprestarCmd;
 import controller.commands.RefreshCmd;
 import controller.handlers.RefreshReservaHandler;
 import framework.Page;
 import helpers.Margin;
+import model.Book;
+import model.User;
+import model.UserData;
 import view.components.AdminMenu;
 import view.components.BookResult;
 import view.components.Label;
 import view.components.base.MenuFactory;
-import view.pages.pagestemplate.SearchContentTemplate;
 import view.pages.pagestemplate.LayoutTemplate;
+import view.pages.pagestemplate.SearchContentTemplate;
 
 public class Reservations extends Page {
     
@@ -80,9 +83,31 @@ public class Reservations extends Page {
         /* Bottom */
         String[] bottomButtonsText = new String[] {"Cancelar", "Emprestar"};
         ActionListener cancelHandler = e -> {
-            this.app.control().invoke(new RefreshCmd("UserShow", (User)null));
+            this.app.control().invoke(new RefreshCmd(RefreshID.UserContext, (User)null));
+            this.app.control().invoke(new RefreshCmd(RefreshID.BookListContext, (List<Book>)null));
         };
-        ActionListener[] handlers = new ActionListener[] {cancelHandler, null};
+        ActionListener emprestarHandler = e -> {
+            User user = this.app.getUserContext();
+            if (user == null) return;
+            List<Book> reservedBooks = user.getData().getReservedBooks();
+            List<Book> listaDeLivrosParaEmprestar = new ArrayList<Book>();
+            for (int i = 0; i < reservedBooks.size(); i++) {
+                if (this.checkBoxes.get(i).isSelected()) {
+                    Book b = reservedBooks.get(i);
+                    listaDeLivrosParaEmprestar.add(b);
+                    // não vamos emprestar imediatamente, pois isso alteraria a ordem
+                    // dos livros reservados, vamos deixar para emprestar depois desse loop
+                }
+            }
+            this.app.shouldIgnorePopup(true);
+            for (Book b : listaDeLivrosParaEmprestar) {
+                this.app.control().invoke(new EmprestarCmd(b, user));
+            }
+            this.app.shouldIgnorePopup(false);
+            this.app.control().invoke(new RefreshCmd(RefreshID.BookListContext, user.getData().getReservedBooks()));
+            this.app.control().invoke(new DisplayPopupCmd("Livro(s) emprestado(s) com sucesso"));
+        };
+        ActionListener[] handlers = new ActionListener[] {cancelHandler, emprestarHandler};
         SearchContentTemplate buttonsTemplate = new SearchContentTemplate(new String[0], bottomButtonsText, handlers, false, -1, true);
         JComponent buttons = buttonsTemplate.build();
         this.rentButton = buttonsTemplate.getButtons()[1];
@@ -91,7 +116,7 @@ public class Reservations extends Page {
         pane.add(searchContent);
         pane.add(this.infoComponent);
         pane.add(buttons);
-        this.app.control().invoke(new RefreshCmd("UserShow", (User)null));
+        this.app.control().invoke(new RefreshCmd(RefreshID.UserContext, (User)null));
         return pane;
     }
 
@@ -127,31 +152,18 @@ public class Reservations extends Page {
     }
 
     @Override
-    public void refresh(String changeID, Object ...args) {
+    public void refresh(RefreshID changeID, Object ...args) {
         String userText = "Usuário: ";
         String statusText = "Situação: ";
-        String pendingText = "Devoluções pendentes: 0";
+        String pendingText = "Devoluções pendentes: ";
         String reservesText = "Reservas: ";
-        User user = this.app.getUserShow();
-        if ("UserShow".equals(changeID)) {
-            this.reservedBooksList.removeAll();
+        User user = this.app.getUserContext();
+        if (RefreshID.UserContext == changeID) {
             if (user != null) {
-                ActionListener checkboxHandler = e -> this.refreshForCheckBoxInteraction(user);
-                this.checkBoxes.clear();
                 UserData data = user.getData();
                 userText += data.getName();
-                for (Book reservedBook : data.getReservedBooks()) {
-                    BookResult bookResult = new BookResult(app, reservedBook, false, true, checkboxHandler);
-                    this.checkBoxes.add(bookResult.getCheckBox());
-                    this.reservedBooksList.add(bookResult);
-                    this.reservedBooksList.add(Margin.rigidVertical(SPACEBETWEENBOOKRESULTS));
-                }
-                this.reservedBooksList.validate();
-                boolean hasReservedBook = data.getReservedBooks().size() > 0;
-                this.scrollPane.setVisible(hasReservedBook);
-                if (!hasReservedBook) {
-                    reservesText += "NÃO ENCONTRADO";
-                }
+                statusText += user.status();
+                pendingText += data.getEmprestimos().size();
             } else {
                 userText += "NÃO ENCONTRADO";
                 reservesText += "NÃO ENCONTRADO";
@@ -162,6 +174,25 @@ public class Reservations extends Page {
             this.status.setText(statusText);
             this.pending.setText(pendingText);
             this.reserves.setText(reservesText);
+        }
+        if (RefreshID.BookListContext == changeID) {
+            List<Book> bookList = this.app.getBookListContext();
+            if (bookList != null) {
+                this.checkBoxes.clear();
+                this.reservedBooksList.removeAll();
+                ActionListener checkboxHandler = e -> this.refreshForCheckBoxInteraction(user);
+                for (Book reservedBook : bookList) {
+                    BookResult bookResult = new BookResult(app, reservedBook, false, true, checkboxHandler);
+                    this.checkBoxes.add(bookResult.getCheckBox());
+                    this.reservedBooksList.add(bookResult);
+                    this.reservedBooksList.add(Margin.rigidVertical(SPACEBETWEENBOOKRESULTS));
+                }
+                this.infoComponent.revalidate();
+                this.refreshForCheckBoxInteraction(user);
+            } else {
+                reservesText += "NÃO ENCONTRADO";
+            }
+            this.scrollPane.setVisible(bookList != null && bookList.size() > 0);
         }
         super.refresh(changeID, args);
     }

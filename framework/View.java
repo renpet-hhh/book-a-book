@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
+import controller.RefreshID;
+
 public abstract class View {
 
     App model;
@@ -25,7 +27,7 @@ public abstract class View {
      * @param changeID - Identificação da alteração do modelo, utilizado
      * para que as views possam reagir apenas a certos tipos de alterações.
      */
-    public void refresh(String changeID, Object... args) {
+    public void refresh(RefreshID changeID, Object... args) {
         for (View v : this.subviews) {
             v.refresh(changeID, args);
         }

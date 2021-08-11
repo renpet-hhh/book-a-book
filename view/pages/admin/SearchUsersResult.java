@@ -10,6 +10,7 @@ import javax.swing.JScrollPane;
 
 import framework.App;
 import framework.Page;
+import framework.View;
 import helpers.Margin;
 import model.User;
 import view.components.AdminMenu;
@@ -61,10 +62,14 @@ public class SearchUsersResult extends Page {
             // não há usuários!
             return new Label("Nenhum usuário encontrado");
         }
-        component.add(new UserResult(app, it.next()));
+        View userResultView = new UserResult(app, it.next());
+        component.add(userResultView.paint());
+        this.addView(userResultView);
         while (it.hasNext()) {
             component.add(Margin.rigidVertical(SPACEBETWEENRESULTS));
-            component.add(new UserResult(app, it.next()));
+            userResultView = new UserResult(app, it.next());
+            component.add(userResultView.paint());
+            this.addView(userResultView);
         }
         JScrollPane scrollPane = new JScrollPane(component, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);

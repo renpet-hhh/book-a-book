@@ -1,24 +1,26 @@
 package view.pages.admin;
 import java.awt.Color;
-
 import java.awt.event.ActionListener;
+
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import model.Book;
-import model.User;
-import model.UserData;
+import controller.RefreshID;
 import controller.commands.RefreshCmd;
+import controller.handlers.EmprestarToggleHandler;
 import controller.handlers.RefreshEmprestimoHandler;
 import framework.Page;
 import helpers.Margin;
+import model.Book;
+import model.User;
+import model.UserData;
 import view.components.AdminMenu;
 import view.components.Label;
 import view.components.base.MenuFactory;
-import view.pages.pagestemplate.SearchContentTemplate;
 import view.pages.pagestemplate.LayoutTemplate;
+import view.pages.pagestemplate.SearchContentTemplate;
 
 public class EmprestimosEDevolucoes extends Page {
     
@@ -59,10 +61,11 @@ public class EmprestimosEDevolucoes extends Page {
         /* Bottom */
         String[] bottomButtonsText = new String[] {"Cancelar", "Emprestar/Devolver"};
         ActionListener cancelHandler = e -> {
-            this.app.control().invoke(new RefreshCmd("UserShow", (User)null));
-            this.app.control().invoke(new RefreshCmd("BookShow", (Book)null));
+            this.app.control().invoke(new RefreshCmd(RefreshID.UserContext, (User)null));
+            this.app.control().invoke(new RefreshCmd(RefreshID.BookContext, (Book)null));
         };
-        ActionListener[] bottomHandlers = new ActionListener[] {cancelHandler, null};
+        ActionListener rentToggleHandler = new EmprestarToggleHandler();
+        ActionListener[] bottomHandlers = new ActionListener[] {cancelHandler, rentToggleHandler};
         SearchContentTemplate buttonsTemplate = new SearchContentTemplate(new String[0], bottomButtonsText, bottomHandlers, false);
         JComponent buttons = buttonsTemplate.build();
         this.rentButton = buttonsTemplate.getButtons()[1];
@@ -71,8 +74,8 @@ public class EmprestimosEDevolucoes extends Page {
         pane.add(searchContent);
         pane.add(this.infoComponent);
         pane.add(buttons);
-        this.app.control().invoke(new RefreshCmd("UserShow", (User)null));
-        this.app.control().invoke(new RefreshCmd("BookShow", (Book)null));
+        this.app.control().invoke(new RefreshCmd(RefreshID.UserContext, (User)null));
+        this.app.control().invoke(new RefreshCmd(RefreshID.BookContext, (Book)null));
         return pane;
     }
 
@@ -109,21 +112,27 @@ public class EmprestimosEDevolucoes extends Page {
         return wrapper2;
     }
     @Override
-    public void refresh(String changeID, Object... args) {
+    public void refresh(RefreshID changeID, Object... args) {
+        User user = this.app.getUserContext();
+        Book book = this.app.getBookContext();
+        boolean userFound = user != null;
+        boolean bookFound = book != null;
+
         String titleText = "Título: ";
         String authorsText = "Autor(es): ";
         String yearText = "Data de Publicação: ";
         String userText = "Usuário: ";
-        String statusText = "Situação:";
-        String pendingText = "Devoluções pendentes: 0";
-        User user = this.app.getUserShow();
-        Book book = this.app.getBookShow();
-        boolean userFound = user != null;
-        boolean bookFound = book != null;
-        if ("UserShow".equals(changeID)) {
+        String statusText = "Situação: ";
+        String pendingText = "Devoluções pendentes: ";
+
+        if (RefreshID.UserContext == changeID
+            || RefreshID.UserEmprestar == changeID
+            || RefreshID.UserDevolver == changeID) {
             if (userFound) {
                 UserData data = user.getData();
                 userText += data.getName();
+                statusText += user.status();
+                pendingText += data.getEmprestimos().size();
             } else {
                 userText += "NÃO ENCONTRADO";
             }
@@ -131,7 +140,7 @@ public class EmprestimosEDevolucoes extends Page {
             this.status.setText(statusText);
             this.pending.setText(pendingText);
         }
-        if ("BookShow".equals(changeID)) {
+        if (RefreshID.BookContext == changeID) {
             if (bookFound) {
                 titleText += book.getTitle();
                 authorsText += String.join(", ", book.getAuthors());
@@ -142,6 +151,16 @@ public class EmprestimosEDevolucoes extends Page {
             this.title.setText(titleText);
             this.authors.setText(authorsText);
             this.publishmentdate.setText(yearText);
+        }
+
+        if (bookFound && userFound) {
+            if (user.getData().hasBookRented(book)) {
+                this.rentButton.setText("Devolver");
+            } else {
+                this.rentButton.setText("Emprestar");
+            }
+        } else {
+            this.rentButton.setText("Emprestar/Devolver");
         }
         this.rentButton.setEnabled(userFound && bookFound);
         super.refresh(changeID, args);

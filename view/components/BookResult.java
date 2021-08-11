@@ -122,8 +122,8 @@ public class BookResult extends JComponent {
     private JComponent bottom(Book book) {
         int total = book.getHowManyTotal();
         int available = book.getHowManyAvailable();
-        int rent = total - available;
-        int reserved = 0;
+        int rent = book.getHowManyRented();
+        int reserved = book.getHowManyReserved();
         Label totalLabel = new Label("Exemplares: " + total);
         Label availableLabel = new Label("Disponíveis: " + available);
         Label rentLabel = new Label("Emprestados: " + rent);

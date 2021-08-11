@@ -6,11 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import framework.App;
-import framework.Command;
+import controller.RefreshID;
 import controller.commands.DisplayPopupCmd;
 import controller.commands.LoginCmd;
 import controller.commands.RefreshCmd;
+import framework.App;
+import framework.Command;
 
 public class Login {
 
@@ -31,7 +32,7 @@ public class Login {
     public void setUser(User user) {
         boolean userChanged = user != this.user;
         this.user = user;
-        if (userChanged) this.app.control().invoke(new RefreshCmd("LoginUserChanged"));
+        if (userChanged) this.app.control().invoke(new RefreshCmd(RefreshID.LoginUserChanged));
     }
     public void setIsLoggedIn(boolean isLoggedIn) { this.isLoggedIn = isLoggedIn; }
     public void setIsAdmin(boolean isAdmin) { this.isAdmin = isAdmin; }
@@ -47,7 +48,7 @@ public class Login {
     public int getMatricula() { return this.matriculaCounter; }
     public void incrementMatricula() {
         this.matriculaCounter += 1;
-        this.app.control().invoke(new RefreshCmd("LoginIncrementMatricula"));
+        this.app.control().invoke(new RefreshCmd(RefreshID.LoginIncrementMatricula));
     }
     /** Retorna uma coleção de usuários que satisfazem os filtros.
      * Um filtro nulo é satisfeito por qualquer usuário.
@@ -82,7 +83,7 @@ public class Login {
             throw new RuntimeException("Usuário já está cadastrado");
         }
         users.put(matricula, user);
-        this.app.control().invoke(new RefreshCmd("LoginAddUser", user));
+        this.app.control().invoke(new RefreshCmd(RefreshID.LoginAddUser, user));
     }
 
     /* Funções para salvar e carregar a base de dados */

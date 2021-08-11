@@ -1,19 +1,20 @@
 package controller.handlers;
 
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import controller.RefreshID;
+import controller.commands.DisplayPopupCmd;
+import controller.commands.RefreshCmd;
 import framework.App;
 import model.Book;
 import model.Library;
 import model.Login;
 import model.User;
-import controller.commands.DisplayPopupCmd;
-import controller.commands.RefreshCmd;
 
 public class RefreshEmprestimoHandler implements ActionListener {
     
@@ -49,8 +50,8 @@ public class RefreshEmprestimoHandler implements ActionListener {
         Login login = app.getLogin();
         Book book = lib.findByISBN(isbn);
         User user = login.getUser(matriculaInt);
-        app.control().invoke(new RefreshCmd("UserShow", user));
-        app.control().invoke(new RefreshCmd("BookShow", book));
+        app.control().invoke(new RefreshCmd(RefreshID.UserContext, user));
+        app.control().invoke(new RefreshCmd(RefreshID.BookContext, book));
     }
 
   

@@ -10,13 +10,14 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import framework.App;
+import framework.View;
 import helpers.Margin;
 import model.User;
 import model.UserData;
 import view.components.layout.PackLayout;
 import view.components.layout.StretchLayout;
 
-public class UserResult extends JComponent {
+public class UserResult extends View {
 
     /** 
      * SearchUsersResults exibe uma lista de UserResult.
@@ -44,23 +45,22 @@ public class UserResult extends JComponent {
     final static int LEFTMARGIN = 30;
     final static int RIGHTMARGIN = 30;
 
+    private App app;
+    private User user;
     public UserResult(App app, User user) {
-        PackLayout layout = new PackLayout(this, PackLayout.X_AXIS);
-        this.setLayout(layout);
-        JComponent left = this.left(user);
-        JComponent right = this.right(app, user);
-        this.add(left);
-        this.add(right);
+        super(app);
+        this.app = app;
+        this.user = user;
     }
 
-
+    private Label name, status, rent, reserved;
     private JComponent left(User user) {
         UserData data = user.getData();
         JComponent component = PackLayout.createVerticalBox();
-        Label name = new Label("Nome: " + data.getName());
-        Label status = new Label("Situação: OK");
-        Label rent = new Label("Livros emprestados: 0");
-        Label reserved = new Label("Livros reservados: 0");
+        this.name = new Label("Nome: " + data.getName());
+        this.status = new Label("Situação: " + user.status());
+        this.rent = new Label("Livros emprestados: " + data.getEmprestimos().size());
+        this.reserved = new Label("Livros reservados: " + data.getReservedBooks().size());
         JComponent bottom = Box.createHorizontalBox();
         bottom.add(rent);
         bottom.add(Margin.rigidHorizontal(SPACEBETWEENBOTTOMLABELS));
@@ -115,7 +115,7 @@ public class UserResult extends JComponent {
         Label address = new Label("Endereço: "+ data.getAddress());
         Label email = new Label("Email: " + data.getEmail());
         Label contact = new Label("Contato: " + data.getContact());
-        Label status = new Label("Situação: OK");
+        Label status = new Label("Situação: " + user.status());
         component.add(Margin.rigidVertical(TOPMARGIN));
         component.add(name);
         component.add(matricula);
@@ -137,4 +137,16 @@ public class UserResult extends JComponent {
         dialog.setLocationRelativeTo(frame);
         dialog.setVisible(true);
     }
+
+    @Override
+    public JComponent paint() {
+        JComponent component = PackLayout.createHorizontalBox();
+        JComponent left = this.left(this.user);
+        JComponent right = this.right(this.app, this.user);
+        component.add(left);
+        component.add(right);
+        return component;
+    }
+
+
 }
