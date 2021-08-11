@@ -2,8 +2,9 @@ package helpers;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import javax.swing.JComponent;
+
 import javax.swing.Box;
+import javax.swing.JComponent;
 
 /** Classe helper que adiciona margem ao criar um wrapper Box que contém um componente invisível */
 public class Margin {

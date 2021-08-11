@@ -1,23 +1,30 @@
 package view.components;
 
+import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.awt.Color;
 
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
+import controller.RefreshID;
+import controller.commands.DereserveBookCmd;
+import controller.commands.DisplayPopupCmd;
+import controller.commands.ReserveBookCmd;
 import framework.App;
+import framework.View;
 import helpers.Margin;
 import model.Book;
+import model.User;
+import model.UserData;
+import view.components.fixed.FixedButton;
 import view.components.layout.PackLayout;
 import view.components.layout.StretchLayout;
 
-public class BookResult extends JComponent {
+public class BookResult extends View {
 
     /** 
      * SearchUsersResults exibe uma lista de BookResult.
@@ -39,6 +46,14 @@ public class BookResult extends JComponent {
     final static Color BUTTONLABELCOLOR = new Color(0, 0, 0);
     final static Color LEFTBACKGROUNDCOLOR = new Color(255, 255, 255);
 
+    final static String DEFAULTTOTALTEXT = "Exemplares: ";
+    final static String DEFAULTAVAILABLETEXT = "Disponíveis: ";
+    final static String DEFAULTRENTTEXT = "Emprestados: ";
+    final static String DEFAULTRESERVEDTEXT = "Reservados: ";
+
+    final static String BUTTONRESERVETEXT = "Reservar";
+    final static String BUTTONDERESERVETEXT = "Remover reserva";
+
     /* Constantes para o POPUP */
     final static int TOPMARGIN = 40;
     final static int BOTTOMMARGIN = 40;
@@ -46,27 +61,30 @@ public class BookResult extends JComponent {
     final static int RIGHTMARGIN = 30;
 
     private JCheckBox checkbox = null;
+    private User user = null;
+    private App app;
+    private Book book;
+    private boolean editable, selectable, reservable;
+    private ActionListener checkboxHandler;
 
     public BookResult(App app, Book book) {
-        this(app, book, true, false, null);
+        this(app, book, true, false, false, null);
     }
-    public BookResult(App app, Book book, boolean editable, boolean selectable) {
-        this(app, book, editable, selectable, null);
+    public BookResult(App app, Book book, boolean editable, boolean selectable, boolean reservable) {
+        this(app, book, editable, selectable, reservable, null);
     }
-    public BookResult(App app, Book book, boolean editable, boolean selectable, ActionListener checkboxHandler) {
-        BoxLayout layout = new BoxLayout(this, BoxLayout.X_AXIS);
-        this.setLayout(layout);
-        if (selectable) {
-            this.checkbox = new JCheckBox();
-            if (checkboxHandler != null) this.checkbox.addActionListener(checkboxHandler);
-            this.add(this.checkbox);
-        }
-        JComponent bookRegister = StretchLayout.createHorizontalBox();
-        JComponent left = this.left(book);
-        JComponent right = this.right(app, book, editable);
-        bookRegister.add(left);
-        bookRegister.add(right);
-        this.add(bookRegister);
+    public BookResult(App app, Book book, boolean editable, boolean selectable, boolean reservable, ActionListener checkboxHandler) {
+        super(app);
+        this.app = app;
+        this.book = book;
+        this.editable = editable;
+        this.selectable = selectable;
+        this.reservable = reservable;
+        this.checkboxHandler = checkboxHandler;
+    }
+    /* Atribui o usuário associado às funcionalidades "Editar" e "Reservar" desse objeto */
+    public void setAssociatedUser(User user) {
+        this.user = user;
     }
 
     public JCheckBox getCheckBox() { return this.checkbox; }
@@ -95,20 +113,51 @@ public class BookResult extends JComponent {
         return wrapper;
     }
 
-    private JComponent right(App app, Book book, boolean editable) {
+    private Button editButton = null, reserveButton = null;
+    private JComponent right(App app, Book book, boolean editable, boolean reservable) {
         JComponent component = StretchLayout.createVerticalBox();
         ActionListener viewHandler = e -> {
             this.popupBookData(app, book);
         };
         Button view = new Button("Abrir registro", viewHandler, BUTTONLABELCOLOR, BUTTONBGGRAY);
-        Button edit = new Button("Editar", null, BUTTONLABELCOLOR, BUTTONBGGRAY);
         component.add(Margin.rigidVertical(BUTTONSVERTICALMARGIN));
         component.add(view);
         if (editable) {
+            ActionListener editHandler = e -> {
+                if (this.user == null) {
+                    throw new RuntimeException("Tentativa de editar um livro, mas não há usuário associado");
+                }
+                return;
+            };
+            this.editButton = new Button("Editar", editHandler, BUTTONLABELCOLOR, BUTTONBGGRAY);
             component.add(Margin.rigidVertical(SPACEBETWEENBUTTONS));
-            component.add(edit);
-        } else {
-            component.add(Margin.rigidVertical(0));
+            component.add(this.editButton);
+        }
+        if (reservable) {
+            ActionListener reserveHandler = e -> {
+                if (this.user == null) {
+                    throw new RuntimeException("Tentativa de reservar um livro, mas não há usuário associado");
+                }
+                UserData data = user.getData();
+                if (data.hasBookRented(book)) {
+                    return; // livro está emprestado
+                }
+                if (data.hasBookReserved(book)) {
+                    // vamos desreservar!
+                    app.control().invoke(new DereserveBookCmd(book, this.user));
+                    app.control().invoke(new DisplayPopupCmd("Reserva removida com sucesso!"));
+                    return;
+                }
+                app.control().invoke(new ReserveBookCmd(book, this.user));
+                app.control().invoke(new DisplayPopupCmd("Livro reservado com sucesso!"));
+            };
+            // escolhemos o maior dos tamanhos de label do botão
+            // pois o botão tem tamanho fixo
+            String reserveText = BUTTONRESERVETEXT.length() > BUTTONDERESERVETEXT.length() ?
+                                 BUTTONRESERVETEXT : BUTTONDERESERVETEXT;
+            this.reserveButton = new FixedButton(reserveText, reserveHandler, BUTTONLABELCOLOR, BUTTONBGGRAY);
+            component.add(Margin.rigidVertical(SPACEBETWEENBUTTONS));
+            component.add(this.reserveButton);
         }
         component.add(Margin.rigidVertical(BUTTONSVERTICALMARGIN));
         component.setOpaque(true);
@@ -119,15 +168,16 @@ public class BookResult extends JComponent {
         return wrapper;
     }
 
+    private Label totalLabel, availableLabel, rentLabel, reservedLabel;
     private JComponent bottom(Book book) {
         int total = book.getHowManyTotal();
         int available = book.getHowManyAvailable();
         int rent = book.getHowManyRented();
         int reserved = book.getHowManyReserved();
-        Label totalLabel = new Label("Exemplares: " + total);
-        Label availableLabel = new Label("Disponíveis: " + available);
-        Label rentLabel = new Label("Emprestados: " + rent);
-        Label reservedLabel = new Label("Reservados: " + reserved);
+        this.totalLabel = new Label(DEFAULTTOTALTEXT + total);
+        this.availableLabel = new Label(DEFAULTAVAILABLETEXT + available);
+        this.rentLabel = new Label(DEFAULTRENTTEXT + rent);
+        this.reservedLabel = new Label(DEFAULTRESERVEDTEXT + reserved);
         JComponent bottom = Box.createHorizontalBox();
         bottom.add(totalLabel);
         bottom.add(Margin.rigidHorizontal(SPACEBETWEENBOTTOMLABELS));
@@ -189,6 +239,52 @@ public class BookResult extends JComponent {
         dialog.pack();
         dialog.setLocationRelativeTo(frame);
         dialog.setVisible(true);
+    }
+
+    private JComponent rightComponent;
+    @Override
+    public JComponent paint() {
+        JComponent component = Box.createHorizontalBox();
+        if (selectable) {
+            this.checkbox = new JCheckBox();
+            if (checkboxHandler != null) this.checkbox.addActionListener(checkboxHandler);
+            component.add(this.checkbox);
+        }
+        JComponent bookRegister = StretchLayout.createHorizontalBox();
+        JComponent left = this.left(book);
+        this.rightComponent = this.right(app, book, editable, reservable);
+        bookRegister.add(left);
+        bookRegister.add(this.rightComponent);
+        component.add(bookRegister);
+        this.refresh(RefreshID.CLEAR);
+        return component;
+    }
+
+    private boolean hasMounted = false;
+    @Override
+    public void refresh(RefreshID changeID, Object... args) {
+        if (RefreshID.MOUNT == changeID) {
+            this.hasMounted = true;
+        }
+        if (this.user != null) {
+            boolean bookIsReserved = this.user.getData().hasBookReserved(this.book);
+            boolean bookIsRented = this.user.getData().hasBookRented(this.book);
+            if (RefreshID.UserReserveBook == changeID || RefreshID.UserUnreserveBook == changeID || RefreshID.CLEAR == changeID || RefreshID.MOUNT == changeID) {
+                int total = book.getHowManyTotal();
+                int available = book.getHowManyAvailable();
+                int rent = book.getHowManyRented();
+                int reserved = book.getHowManyReserved();
+                this.totalLabel.setText(DEFAULTTOTALTEXT + total);
+                this.availableLabel.setText(DEFAULTAVAILABLETEXT + available);
+                this.rentLabel.setText(DEFAULTRENTTEXT + rent);
+                this.reservedLabel.setText(DEFAULTRESERVEDTEXT + reserved);
+                if (this.hasMounted && this.reserveButton != null) {
+                    this.reserveButton.setText(bookIsReserved ? "Remover reserva" : "Reservar");
+                    this.reserveButton.setEnabled(!bookIsRented);
+                }
+            }
+        }
+        super.refresh(changeID, args);
     }
 
 }

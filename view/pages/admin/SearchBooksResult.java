@@ -11,6 +11,7 @@ import framework.App;
 import framework.Page;
 import helpers.Margin;
 import model.Book;
+import model.User;
 import view.components.AdminMenu;
 import view.components.BookResult;
 import view.components.GuestMenu;
@@ -59,10 +60,16 @@ public class SearchBooksResult extends Page {
             // não há usuários!
             return new Label("Nenhum livro encontrado");
         }
-        component.add(new BookResult(app, books.get(0), this.privilege == 2, false));
-        for (int i = 1; i < length; i++) {
-            component.add(Margin.rigidVertical(SPACEBETWEENRESULTS));
-            component.add(new BookResult(app, books.get(i), this.privilege == 2, false));
+        boolean editable = this.privilege == 2;
+        boolean selectable = false;
+        boolean reservable = this.privilege == 1;
+        User currentUser = app.getLogin().getUser();
+        for (int i = 0; i < length; i++) {
+            BookResult bookResultView = new BookResult(app, books.get(i), editable, selectable, reservable);
+            if (i > 0) component.add(Margin.rigidVertical(SPACEBETWEENRESULTS));
+            bookResultView.setAssociatedUser(currentUser);
+            this.addView(bookResultView);
+            component.add(bookResultView.paint());
         }
         JScrollPane scrollPane = new JScrollPane(component, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);

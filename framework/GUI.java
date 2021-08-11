@@ -2,6 +2,9 @@ package framework;
 
 import javax.swing.JFrame;
 
+import controller.RefreshID;
+import controller.commands.RefreshCmd;
+
 public class GUI {
     /** Exibe o modelo como uma interface gráfica */
 
@@ -22,6 +25,7 @@ public class GUI {
         page.init(this.app);
         this.frame.setContentPane(page.paint());
         this.frame.validate();
+        this.app.control().invoke(new RefreshCmd(RefreshID.MOUNT));
         this.frame.repaint();
     }
     

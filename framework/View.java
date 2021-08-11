@@ -39,5 +39,7 @@ public abstract class View {
     public void removeView(View v) {
         this.subviews.remove(v);
     }
-    
+    public void removeAllViews() {
+        this.subviews.clear();
+    }    
 }

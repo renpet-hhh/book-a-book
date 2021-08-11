@@ -99,11 +99,9 @@ public class Reservations extends Page {
                     // dos livros reservados, vamos deixar para emprestar depois desse loop
                 }
             }
-            this.app.shouldIgnorePopup(true);
             for (Book b : listaDeLivrosParaEmprestar) {
                 this.app.control().invoke(new EmprestarCmd(b, user));
             }
-            this.app.shouldIgnorePopup(false);
             this.app.control().invoke(new RefreshCmd(RefreshID.BookListContext, user.getData().getReservedBooks()));
             this.app.control().invoke(new DisplayPopupCmd("Livro(s) emprestado(s) com sucesso"));
         };
@@ -169,7 +167,6 @@ public class Reservations extends Page {
                 reservesText += "NÃO ENCONTRADO";
                 this.scrollPane.setVisible(false);
             }
-            this.refreshForCheckBoxInteraction(user);
             this.username.setText(userText);
             this.status.setText(statusText);
             this.pending.setText(pendingText);
@@ -177,19 +174,26 @@ public class Reservations extends Page {
         }
         if (RefreshID.BookListContext == changeID) {
             List<Book> bookList = this.app.getBookListContext();
+            this.checkBoxes.clear();
+            this.reservedBooksList.removeAll();
+            this.removeAllViews();
             if (bookList != null) {
-                this.checkBoxes.clear();
-                this.reservedBooksList.removeAll();
                 ActionListener checkboxHandler = e -> this.refreshForCheckBoxInteraction(user);
                 for (Book reservedBook : bookList) {
-                    BookResult bookResult = new BookResult(app, reservedBook, false, true, checkboxHandler);
-                    this.checkBoxes.add(bookResult.getCheckBox());
-                    this.reservedBooksList.add(bookResult);
+                    boolean editable = false;
+                    boolean selectable = true;
+                    boolean reservable = false;
+                    BookResult bookResultView = new BookResult(app, reservedBook, editable, selectable, reservable, checkboxHandler);
+                    bookResultView.setAssociatedUser(user);
+                    this.addView(bookResultView);
+                    this.reservedBooksList.add(bookResultView.paint());
                     this.reservedBooksList.add(Margin.rigidVertical(SPACEBETWEENBOOKRESULTS));
+                    this.checkBoxes.add(bookResultView.getCheckBox());
                 }
                 this.infoComponent.revalidate();
                 this.refreshForCheckBoxInteraction(user);
             } else {
+                this.checkBoxes.clear();
                 reservesText += "NÃO ENCONTRADO";
             }
             this.scrollPane.setVisible(bookList != null && bookList.size() > 0);

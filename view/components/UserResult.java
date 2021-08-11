@@ -1,8 +1,8 @@
 package view.components;
 
+import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.time.format.DateTimeFormatter;
-import java.awt.Color;
 
 import javax.swing.Box;
 import javax.swing.JComponent;

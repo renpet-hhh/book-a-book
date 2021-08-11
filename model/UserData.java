@@ -82,6 +82,9 @@ public class UserData {
         }
         return false;
     }
+    public boolean hasBookReserved(Book book) {
+        return this.getReservedBooks().contains(book);
+    }
 
     
 }
