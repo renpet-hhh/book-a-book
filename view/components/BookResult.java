@@ -90,7 +90,7 @@ public class BookResult extends View {
     public JCheckBox getCheckBox() { return this.checkbox; }
 
 
-    private JComponent left(Book book) {
+    private JComponent left() {
         JComponent component = PackLayout.createVerticalBox();
         Label title = new Label("Título: " + book.getTitle());
         Label author = new Label("Autor: " + book.getAuthors().get(0));
@@ -100,7 +100,7 @@ public class BookResult extends View {
         component.add(Margin.glueRight(author));
         component.add(Margin.glueRight(year));
         component.add(Box.createVerticalGlue());
-        component.add(this.bottom(book));
+        component.add(this.bottom());
         component.add(Margin.rigidVertical(INSIDEVERTICALMARGINLEFTCONTENT));
         component.setOpaque(true);
         component.setBackground(LEFTBACKGROUNDCOLOR);
@@ -114,10 +114,10 @@ public class BookResult extends View {
     }
 
     private Button editButton = null, reserveButton = null;
-    private JComponent right(App app, Book book, boolean editable, boolean reservable) {
+    private JComponent right(boolean editable, boolean reservable) {
         JComponent component = StretchLayout.createVerticalBox();
         ActionListener viewHandler = e -> {
-            this.popupBookData(app, book);
+            this.popupBookData();
         };
         Button view = new Button("Abrir registro", viewHandler, BUTTONLABELCOLOR, BUTTONBGGRAY);
         component.add(Margin.rigidVertical(BUTTONSVERTICALMARGIN));
@@ -169,7 +169,7 @@ public class BookResult extends View {
     }
 
     private Label totalLabel, availableLabel, rentLabel, reservedLabel;
-    private JComponent bottom(Book book) {
+    private JComponent bottom() {
         int total = book.getHowManyTotal();
         int available = book.getHowManyAvailable();
         int rent = book.getHowManyRented();
@@ -190,10 +190,10 @@ public class BookResult extends View {
         return bottom;
     }
     
-    private void popupBookData(App app, Book book) {
-        this.popupBookData(app.getFrame(), book);
+    public void popupBookData() {
+        this.popupBookData(app.getFrame());
     }
-    private void popupBookData(JFrame frame, Book book) {
+    public void popupBookData(JFrame frame) {
         String title = book.getTitle();
         String subtitle = book.getSubtitle();
         List<String> authors = book.getAuthors();
@@ -227,7 +227,7 @@ public class BookResult extends View {
         component.add(Margin.glueRight(whereLabel));
         component.add(Margin.glueRight(isbnLabel));
         component.add(Margin.rigidVertical(3));
-        component.add(this.bottom(book));
+        component.add(this.bottom());
         component.add(Margin.rigidVertical(3));
         component.add(Margin.rigidVertical(BOTTOMMARGIN));
         JComponent wrapper = Box.createHorizontalBox();
@@ -251,8 +251,8 @@ public class BookResult extends View {
             component.add(this.checkbox);
         }
         JComponent bookRegister = StretchLayout.createHorizontalBox();
-        JComponent left = this.left(book);
-        this.rightComponent = this.right(app, book, editable, reservable);
+        JComponent left = this.left();
+        this.rightComponent = this.right(editable, reservable);
         bookRegister.add(left);
         bookRegister.add(this.rightComponent);
         component.add(bookRegister);

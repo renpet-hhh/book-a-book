@@ -9,7 +9,7 @@ import controller.RefreshID;
 
 public abstract class View {
 
-    App model;
+    protected App model;
     List<View> subviews;
     public View(App model) {
         this.model = model;

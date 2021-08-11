@@ -1,5 +1,6 @@
 package view.pages.user;
 
+import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.awt.Font;
 
@@ -11,6 +12,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import controller.commands.NavigateCmd;
 import framework.App;
 import framework.Page;
 import helpers.Margin;
@@ -30,6 +32,7 @@ public class Profile extends Page {
     final static Color PROFILEMENUGRAY = new Color(178, 178, 178);
     final static Color PROFILEMENULIGHTGRAY = new Color(238, 236, 236);
     final static Color PROFILEMENULABELCOLOR = new Color(0, 0, 0);
+    final static Color PROFILEMARKEDMENULABELCOLOR = new Color(67, 70, 134);
     public final static Color HEADERWELCOMECOLOR = new Color(214, 224, 235);
 
     final static Font PROFILETITLEFONT = new Font("sansserif", Font.PLAIN, 36);
@@ -49,21 +52,28 @@ public class Profile extends Page {
     final static Border PROFILEMENUBORDER = BorderFactory.createLineBorder(PROFILEMENUGRAY, 1);
     final static Border PROFILEMENUBUTTONBORDER = BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(225, 225, 225), 1), BorderFactory.createEmptyBorder(PROFILEBUTTONVERTICALMARGIN, PROFILEBUTTONHORIZONTALMARGIN, PROFILEBUTTONVERTICALMARGIN, PROFILEBUTTONHORIZONTALMARGIN));
 
+    private User user;
+    public Profile() {
+        this(App.get().getLogin().getUser());
+    }
+    public Profile(User user) {
+        this.user = user;
+    }
+
     @Override
     public JComponent paint() {
         JComponent pane = Box.createVerticalBox();
-        User user = app.getLogin().getUser();
         UserData data = user.getData();
         JComponent menubar = Home.header(app, pane, false, data.getName());
         // Página incompleta por enquanto!
-        JComponent content = this.mainWrapper(app);
+        JComponent content = this.mainWrapper(app, user);
         pane.add(menubar);
         pane.add(content);
         //pane.add(Home.foot());
         return pane;
     }
 
-    public JComponent mainContent(App app) {
+    private JComponent mainContent(App app) {
         User user = app.getLogin().getUser();
         UserData data = user.getData();
         JComponent content = Box.createVerticalBox();
@@ -84,23 +94,25 @@ public class Profile extends Page {
         return wrapper;
     }
     
-    public JComponent mainWrapper(App app) {
+    private JComponent mainWrapper(App app, User user) {
         JComponent wrapper = Box.createHorizontalBox();
-        wrapper.add(this.leftMenu());
+        wrapper.add(Profile.leftMenu(app, user, -1));
         wrapper.add(this.mainContent(app));
         return wrapper;
     }
 
-    public JComponent leftMenu() {
+    public static JComponent leftMenu(App app, User user, int selectedIndex) {
         JComponent menu = new JPanel();
         StretchLayout layoutManager = new StretchLayout(menu, StretchLayout.Y_AXIS);
         menu.setLayout(layoutManager);
         Label profileLabel = new Label("Perfil", PROFILEMENULABELCOLOR, PROFILEMENUGRAY, PROFILETITLEFONT);
         profileLabel.setHorizontalAlignment(SwingConstants.CENTER);
         profileLabel.setBorder(new EmptyBorder(PROFILETITLEMARGIN, PROFILETITLEMARGIN, PROFILETITLEMARGIN, PROFILETITLEMARGIN));
-        Button myList = new Button("Minha lista", null, PROFILEMENULABELCOLOR, PROFILEMENULIGHTGRAY, PROFILEBUTTONFONT);
-        Button pending = new Button("Meus empréstimos", null, PROFILEMENULABELCOLOR, PROFILEMENULIGHTGRAY, PROFILEBUTTONFONT);
-        Button settings = new Button("Configurações", null, PROFILEMENULABELCOLOR, PROFILEMENULIGHTGRAY, PROFILEBUTTONFONT);
+        ActionListener myListHandler = e -> app.control().invoke(new NavigateCmd(new MyList(user)));
+        ActionListener meusEmprestimosHandler = e -> app.control().invoke(new NavigateCmd(new MeusEmprestimos(user)));
+        Button myList = new Button("Minha lista", myListHandler, selectedIndex == 0 ? PROFILEMARKEDMENULABELCOLOR : PROFILEMENULABELCOLOR, PROFILEMENULIGHTGRAY, PROFILEBUTTONFONT);
+        Button pending = new Button("Meus empréstimos", meusEmprestimosHandler, selectedIndex == 1 ? PROFILEMARKEDMENULABELCOLOR : PROFILEMENULABELCOLOR, PROFILEMENULIGHTGRAY, PROFILEBUTTONFONT);
+        Button settings = new Button("Configurações", null, selectedIndex == 2 ? PROFILEMARKEDMENULABELCOLOR : PROFILEMENULABELCOLOR, PROFILEMENULIGHTGRAY, PROFILEBUTTONFONT);
         /* Pintamos as bordas */
         myList.setBorder(PROFILEMENUBUTTONBORDER); myList.setBorderPainted(true);
         pending.setBorder(PROFILEMENUBUTTONBORDER); pending.setBorderPainted(true);

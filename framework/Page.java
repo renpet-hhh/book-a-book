@@ -4,7 +4,7 @@ public abstract class Page extends View {
 
     protected App app;
     public Page() {
-        super(null);
+        super(App.get());
     }
     public Page(App app) {
         super(app);

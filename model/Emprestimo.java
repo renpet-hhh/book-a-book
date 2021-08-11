@@ -29,10 +29,16 @@ public class Emprestimo {
         this.rentDate = LocalDateTime.now();
     }
     public boolean isExpired() {
-        return LocalDateTime.now().isAfter(this.rentDate.plusDays(PRAZO));
+        return LocalDateTime.now().isAfter(this.getExpireDate());
     }
     public Book getBook() {
         return this.book;
+    }
+    public User getUser() {
+        return this.user;
+    }
+    public LocalDateTime getExpireDate() {
+        return this.rentDate.plusDays(PRAZO);
     }
 
 }

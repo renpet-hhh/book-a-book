@@ -202,6 +202,7 @@ public class Home extends Page {
         component.setMaximumSize(new Dimension(Integer.MAX_VALUE, left.getPreferredSize().height));
         component.setOpaque(true);
         component.setBackground(HEADERRIGHTCOLOR);
+        component.setMinimumSize(new Dimension(component.getMinimumSize().width, left.getMinimumSize().height));
         return component;
     }
 
