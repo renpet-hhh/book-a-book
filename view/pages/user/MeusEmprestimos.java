@@ -73,6 +73,10 @@ public class MeusEmprestimos extends Page {
         this.scrollPane.setMinimumSize(scrollMinDim);
         return this.scrollPane;
     }
+    public static JComponent buildList(App app, User user) {
+        MeusEmprestimos m = new MeusEmprestimos(user);
+        return m.mainContent(app, user);
+    }
     
     @Override
     public void refresh(RefreshID changeID, Object... args) {

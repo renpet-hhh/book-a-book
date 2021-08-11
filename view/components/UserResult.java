@@ -16,6 +16,7 @@ import model.User;
 import model.UserData;
 import view.components.layout.PackLayout;
 import view.components.layout.StretchLayout;
+import view.pages.user.MeusEmprestimos;
 
 public class UserResult extends View {
 
@@ -116,16 +117,19 @@ public class UserResult extends View {
         Label email = new Label("Email: " + data.getEmail());
         Label contact = new Label("Contato: " + data.getContact());
         Label status = new Label("Situação: " + user.status());
+        Label pending = new Label("Empréstimos pendentes:");
         component.add(Margin.rigidVertical(TOPMARGIN));
-        component.add(name);
-        component.add(matricula);
-        component.add(birth);
-        component.add(address);
-        component.add(email);
-        component.add(contact);
+        component.add(Margin.glueRight(name));
+        component.add(Margin.glueRight(matricula));
+        component.add(Margin.glueRight(birth));
+        component.add(Margin.glueRight(address));
+        component.add(Margin.glueRight(email));
+        component.add(Margin.glueRight(contact));
         component.add(Margin.rigidVertical(3));
-        component.add(status);
+        component.add(Margin.glueRight(status));
         component.add(Margin.rigidVertical(3));
+        component.add(Margin.glueRight(pending));
+        component.add(MeusEmprestimos.buildList(app, user));
         component.add(Margin.rigidVertical(BOTTOMMARGIN));
         JComponent wrapper = Box.createHorizontalBox();
         wrapper.add(Margin.rigidHorizontal(LEFTMARGIN));
