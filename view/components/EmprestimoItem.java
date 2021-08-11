@@ -8,9 +8,7 @@ import java.awt.Color;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 
-import controller.RefreshID;
 import controller.commands.DereserveBookCmd;
 import framework.App;
 import framework.View;
@@ -19,7 +17,6 @@ import model.Book;
 import model.Emprestimo;
 import model.User;
 import view.components.layout.PackLayout;
-import view.components.layout.StretchLayout;
 
 public class EmprestimoItem extends View {
 

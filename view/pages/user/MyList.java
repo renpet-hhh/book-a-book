@@ -1,18 +1,11 @@
 package view.pages.user;
 
 import java.awt.Dimension;
-import java.awt.Color;
-import java.awt.Font;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import controller.RefreshID;
 import framework.App;
@@ -20,13 +13,11 @@ import framework.Page;
 import framework.View;
 import helpers.Margin;
 import model.Book;
-import model.Emprestimo;
 import model.User;
 import model.UserData;
-import view.components.Button;
 import view.components.EmprestimoItem;
 import view.components.Label;
-import view.components.layout.StretchLayout;
+import view.components.ScrollPane;
 import view.pages.Home;
 
 public class MyList extends Page {
@@ -86,11 +77,7 @@ public class MyList extends Page {
             if (i > 0) content.add(Margin.rigidVertical(SPACEBETWEENITEMS));
             content.add(view.paint());
         }
-        this.scrollPane = new JScrollPane(content);
-        this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        this.scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        this.scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        this.scrollPane = new ScrollPane(content);
         this.scrollPane.setMinimumSize(scrollMinDim);
         return this.scrollPane;
     }

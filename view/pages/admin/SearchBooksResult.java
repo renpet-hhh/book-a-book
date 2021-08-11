@@ -2,7 +2,6 @@ package view.pages.admin;
 
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -16,6 +15,7 @@ import view.components.AdminMenu;
 import view.components.BookResult;
 import view.components.GuestMenu;
 import view.components.Label;
+import view.components.ScrollPane;
 import view.components.UserMenu;
 import view.components.base.MenuFactory;
 import view.pages.pagestemplate.LayoutTemplate;
@@ -71,9 +71,7 @@ public class SearchBooksResult extends Page {
             this.addView(bookResultView);
             component.add(bookResultView.paint());
         }
-        JScrollPane scrollPane = new JScrollPane(component, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        JScrollPane scrollPane = new ScrollPane(component);
         return scrollPane;
     }
 

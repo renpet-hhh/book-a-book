@@ -3,7 +3,6 @@ package view.pages.admin;
 import java.util.Collection;
 import java.util.Iterator;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -15,6 +14,7 @@ import helpers.Margin;
 import model.User;
 import view.components.AdminMenu;
 import view.components.Label;
+import view.components.ScrollPane;
 import view.components.UserResult;
 import view.components.base.MenuFactory;
 import view.pages.pagestemplate.LayoutTemplate;
@@ -71,9 +71,7 @@ public class SearchUsersResult extends Page {
             component.add(userResultView.paint());
             this.addView(userResultView);
         }
-        JScrollPane scrollPane = new JScrollPane(component, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        JScrollPane scrollPane = new ScrollPane(component);
         return scrollPane;
     }
 

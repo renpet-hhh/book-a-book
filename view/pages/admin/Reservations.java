@@ -4,7 +4,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -25,6 +24,7 @@ import model.UserData;
 import view.components.AdminMenu;
 import view.components.BookResult;
 import view.components.Label;
+import view.components.ScrollPane;
 import view.components.base.MenuFactory;
 import view.pages.pagestemplate.LayoutTemplate;
 import view.pages.pagestemplate.SearchContentTemplate;
@@ -62,9 +62,7 @@ public class Reservations extends Page {
         this.reservedBooksList = Box.createVerticalBox();
         this.checkBoxes = new ArrayList<>();
 
-        this.scrollPane = new JScrollPane(this.reservedBooksList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        this.scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        this.scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        this.scrollPane = new ScrollPane(this.reservedBooksList);
 
         this.infoComponent = this.info();
 
