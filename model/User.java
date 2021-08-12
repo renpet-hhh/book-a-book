@@ -8,17 +8,21 @@ public class User {
     private UserData data;
 
     public UserData getData() { return this.data; }
-    /* Indica se a senha encriptografada passada como argumento é igual à senha encriptografada desse usuário */
+
+    /* Indica se a senha encriptografada passada como argumento é igual 
+     * à senha encriptografada desse usuário */
     public boolean comparePassword(String password) {
         return Crypto.crypt(password).equals(this.encryptedPassword);
     }
 
+    /* Método construtor */
     public User(UserData data, String encryptedPassword) {
         data.owner(this);
         this.data = data;
         this.encryptedPassword = encryptedPassword;
     }
 
+    /* Verifica se o usuário possui devoluções com atraso */
     public String status() {
         for (Emprestimo e : this.data.getEmprestimos()) {
             if (e.isExpired()) {

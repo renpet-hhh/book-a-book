@@ -74,7 +74,7 @@ public class Login {
         });
         return c;
     }
-    
+    /* Adiciona usuário */
     public void addUser(User user) {
         int matricula = this.getMatricula();
         user.getData().setMatricula(matricula);
@@ -103,6 +103,8 @@ public class Login {
         return u;
     }
 
+    /* Tenta realizar login de usuario, retornando erro caso usuário esteja logado
+     * ou caso matrícula ou senha estejam inseridas erradas */
     public void tryLogin(int matricula, String password) {
         if (this.isLoggedIn) {
             Command displayErr = new DisplayPopupCmd("Usuário já está logado");

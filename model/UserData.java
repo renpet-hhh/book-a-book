@@ -21,6 +21,7 @@ public class UserData {
     private List<Emprestimo> emprestimos = new ArrayList<>(); // livros emprestados
     User user; // a quem esses dados se referem
 
+    // Método construtor
     public UserData(String name, String address, String contact, String email, String document, LocalDate birthdate) {
         this.name = name;
         this.address = address;
@@ -29,8 +30,9 @@ public class UserData {
         this.document = document;
         this.birthdate = birthdate;
     }
-    public void owner(User user) {
-        this.user = user;
+
+    public void owner(User user) { 
+        this.user = user; 
     }
 
     public String getName() { return name; }
@@ -41,26 +43,33 @@ public class UserData {
     public String getEmail() { return email; }
     public int getMatricula() { return matricula; }
     public void setMatricula(int matricula) { this.matricula = matricula; }
+    
+    /* Reserva livro para o usuário */
     public void reserve(Book book) {
         this.reservedBooks.add(book);
         App.get().control().invoke(new RefreshCmd(RefreshID.UserReserveBook, book)); // notifica views observadoras
     }
+
+    /* Remove reserva de livro realizada para o usuário */
     public void removeReserved(Book book) {
         this.reservedBooks.remove(book);
         App.get().control().invoke(new RefreshCmd(RefreshID.UserUnreserveBook, book)); // notifica views observadoras
     }
+    
     public List<Book> getReservedBooks() { return Collections.unmodifiableList(this.reservedBooks); }
 
-
+    /* Empresta livro para o usuário */
     public void emprestar(Book book) {
         Emprestimo rent = new Emprestimo(book, this.user);
         this.emprestimos.add(rent);
         App.get().control().invoke(new RefreshCmd(RefreshID.UserEmprestar, book)); // notifica views observadoras
     }
+
+    /* Devolução de livro emprestado pelo usuário */
     public void devolver(Book book) {
         App app = App.get();
         Emprestimo toRemove = null;
-        for (Emprestimo e: this.emprestimos) {
+        for (Emprestimo e : this.emprestimos) {
             if (e.getBook() == book) {
                 toRemove = e;
             }
@@ -72,8 +81,10 @@ public class UserData {
         this.emprestimos.remove(toRemove);
         app.control().invoke(new RefreshCmd(RefreshID.UserDevolver, book)); // notifica views observadoras
     }
+
     public List<Emprestimo> getEmprestimos() { return Collections.unmodifiableList(this.emprestimos); }
 
+    /* Verifica se usuário possui livros emprestados */
     public boolean hasBookRented(Book book) {
         for (Emprestimo e: this.getEmprestimos()) {
             if (e.getBook() == book) {
@@ -82,6 +93,8 @@ public class UserData {
         }
         return false;
     }
+
+    /* Verifica se usuário possui livros reservados */
     public boolean hasBookReserved(Book book) {
         return this.getReservedBooks().contains(book);
     }

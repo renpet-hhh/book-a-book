@@ -12,6 +12,7 @@ public class Book {
     private int yearOfPublishment;
     private int howManyTotal = 0, howManyAvailable = 0, howManyReserved = 0;
 
+    /* Método construtor */
     public Book(String title, String subtitle, String edition, String isbn, String whereWasPublished, List<String> authors, int yearOfPublishment, int total) {
         this.title = title;
         this.subtitle = subtitle;

@@ -10,6 +10,7 @@ import framework.App;
 public class Author {
     private Set<Book> books = new HashSet<Book>();
 
+    /* Adiciona livro a um Autor */
     public void addBook(Book book) {
         this.books.add(book);
         App.get().control().invoke(new RefreshCmd(RefreshID.AuthorAddBook, book));

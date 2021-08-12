@@ -24,7 +24,7 @@ public class Library {
         this.authors = new HashMap<String, Set<Author>>();
         this.booksByISBN = new HashMap<String, Book>();
     }
-    /* Por enquanto, otimizado para encontrar por Título e por Nome de Autor, mas pode ser alterado */
+    /* Pesquisa de livros por Título e por Nome de Autor */
     public Set<Book> findByTitle(String title) {
         return this.books.getOrDefault(title, new HashSet<Book>());
     }
