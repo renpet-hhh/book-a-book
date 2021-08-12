@@ -19,6 +19,7 @@ import controller.handlers.RefreshReservaHandler;
 import framework.Page;
 import helpers.Margin;
 import model.Book;
+import model.Emprestimo;
 import model.User;
 import model.UserData;
 import view.components.AdminMenu;
@@ -89,14 +90,18 @@ public class Reservations extends Page {
             if (user == null) return;
             List<Book> reservedBooks = user.getData().getReservedBooks();
             List<Book> listaDeLivrosParaEmprestar = new ArrayList<Book>();
+            List<JCheckBox> checksToRemove = new ArrayList<JCheckBox>();
             for (int i = 0; i < reservedBooks.size(); i++) {
-                if (this.checkBoxes.get(i).isSelected()) {
+                JCheckBox checkbox = this.checkBoxes.get(i);
+                if (checkbox.isSelected()) {
                     Book b = reservedBooks.get(i);
                     listaDeLivrosParaEmprestar.add(b);
                     // não vamos emprestar imediatamente, pois isso alteraria a ordem
                     // dos livros reservados, vamos deixar para emprestar depois desse loop
+                    checksToRemove.add(checkbox);
                 }
             }
+            this.checkBoxes.removeAll(checksToRemove);
             for (Book b : listaDeLivrosParaEmprestar) {
                 this.app.control().invoke(new EmprestarCmd(b, user));
             }
@@ -154,7 +159,7 @@ public class Reservations extends Page {
         String pendingText = "Devoluções pendentes: ";
         String reservesText = "Reservas: ";
         User user = this.app.getUserContext();
-        if (RefreshID.UserContext == changeID) {
+        if (RefreshID.UserContext == changeID || RefreshID.UserEmprestar == changeID) {
             if (user != null) {
                 UserData data = user.getData();
                 userText += data.getName();
@@ -176,7 +181,7 @@ public class Reservations extends Page {
             this.reservedBooksList.removeAll();
             this.removeAllViews();
             if (bookList != null) {
-                ActionListener checkboxHandler = e -> this.refreshForCheckBoxInteraction(user);
+                ActionListener checkboxHandler = e -> this.refreshForCheckBoxInteraction(user, e.getSource());
                 for (Book reservedBook : bookList) {
                     boolean editable = false;
                     boolean selectable = true;
@@ -189,7 +194,7 @@ public class Reservations extends Page {
                     this.checkBoxes.add(bookResultView.getCheckBox());
                 }
                 this.infoComponent.revalidate();
-                this.refreshForCheckBoxInteraction(user);
+                this.refreshForCheckBoxInteraction(user, null);
             } else {
                 this.checkBoxes.clear();
                 reservesText += "NÃO ENCONTRADO";
@@ -199,15 +204,20 @@ public class Reservations extends Page {
         super.refresh(changeID, args);
     }
 
-    public void refreshForCheckBoxInteraction(User user) {
-        boolean someCheckBoxIsSelected = false;
+    public void refreshForCheckBoxInteraction(User user, Object source) {
+        int countSelectedCheckboxes = 0;
         for (JCheckBox check : this.checkBoxes) {
             if (check.isSelected()) {
-                someCheckBoxIsSelected = true;
-                break;
+                countSelectedCheckboxes += 1;
             }
         }
-        this.rentButton.setEnabled(user != null && someCheckBoxIsSelected);
+        if (source != null && source instanceof JCheckBox && user.getData().getEmprestimos().size() + countSelectedCheckboxes > Emprestimo.getMaxQuantity()) {
+            ((JCheckBox)source).setSelected(false);
+            countSelectedCheckboxes -= 1;
+            this.app.control().invoke(new DisplayPopupCmd("Selecionar mais 1 livro ultrapassa o limite de empréstimos por usuário"));
+        }
+        boolean canRent = user != null && countSelectedCheckboxes > 0;
+        this.rentButton.setEnabled(canRent);
     }
 
     

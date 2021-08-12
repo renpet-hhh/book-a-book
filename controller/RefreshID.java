@@ -22,6 +22,8 @@ public enum RefreshID {
     UserUnreserveBook, // reserva foi removida
     UserEmprestar, // empréstimo realizado
     UserDevolver, // devolução realizada
-    CLEAR, // Componente está finalizando a pintura. Chance de inicializar algo que falta antes de ser exibido na tela.
+    SettingsChanged, // alguma configuração mudou
+    CLEAR, // Contexto foi limpo.
+    INIT, // Componente será montado a seguir.
     MOUNT; // Componente foi montado (posições calculadas). Chance de alterar dados que dependem das posições dos componentes na tela.
 }

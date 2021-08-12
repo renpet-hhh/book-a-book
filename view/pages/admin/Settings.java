@@ -1,12 +1,20 @@
 package view.pages.admin;
 
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentListener;
 
-import controller.handlers.ClearHandler;
+import controller.RefreshID;
+import controller.commands.RefreshCmd;
+import controller.handlers.NotifyTextChangeListener;
+import controller.handlers.SaveSettingsHandler;
 import framework.Page;
+import model.Emprestimo;
 import view.components.AdminMenu;
 import view.pages.pagestemplate.SearchContentTemplate;
 import view.pages.pagestemplate.LayoutTemplate;
@@ -16,6 +24,9 @@ public class Settings extends Page {
     public final static String TITLE = "Configurações";
     @Override
     public String getTitle() { return TITLE; }
+
+    private List<JTextField> fields;
+    private JButton saveButton;
 
     @Override
     public JComponent paint() {
@@ -29,12 +40,41 @@ public class Settings extends Page {
         String[] buttonsText = new String[] {"Cancelar", "Salvar"};
         SearchContentTemplate template = new SearchContentTemplate(labelsText, buttonsText, false, true);
         JComponent content = template.build();
-        ActionListener cancelHandler = new ClearHandler<>(template.getClearableFields());
-        ActionListener[] handlers = new ActionListener[] {cancelHandler, null};
+        this.fields = template.getTextFields();
+        this.saveButton = template.getButtons()[1];
+        this.initFieldsListeners(this.fields);
+        ActionListener cancelHandler = e -> app.control().invoke(new RefreshCmd(RefreshID.INIT));
+        ActionListener saveHandler = new SaveSettingsHandler(this.fields);
+        ActionListener[] handlers = new ActionListener[] {cancelHandler, saveHandler};
         template.setHandlers(handlers);
         String path = "Administração >> Configurações";
         LayoutTemplate.build(pane, menubar, content, path);
         return pane;
+    }
+    private boolean hasChanged(List<JTextField> fields) {
+        return !(fields.get(0).getText().equals(String.valueOf(Emprestimo.getExpireLimit()))
+            && fields.get(1).getText().equals(String.valueOf(Emprestimo.getMaxQuantity()))
+            && fields.get(2).getText().equals(String.valueOf(Emprestimo.getMulta())));
+    }
+
+    private void initFieldsListeners(List<JTextField> fields) {
+        DocumentListener listener = new NotifyTextChangeListener(x -> {
+            this.saveButton.setEnabled(this.hasChanged(fields));
+        });
+        for (JTextField f: fields) {
+            f.getDocument().addDocumentListener(listener);
+        }
+    }
+    @Override
+    public void refresh(RefreshID changeID, Object... args) {
+        if (RefreshID.INIT == changeID || RefreshID.SettingsChanged == changeID) {
+            this.fields.get(0).setText(String.valueOf(Emprestimo.getExpireLimit()));
+            this.fields.get(1).setText(String.valueOf(Emprestimo.getMaxQuantity()));
+            this.fields.get(2).setText(String.valueOf(Emprestimo.getMulta()));
+            this.saveButton.setEnabled(false);
+        }
+
+        super.refresh(changeID, args);
     }
 
 }

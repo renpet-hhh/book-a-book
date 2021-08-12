@@ -14,6 +14,7 @@ import controller.handlers.RefreshEmprestimoHandler;
 import framework.Page;
 import helpers.Margin;
 import model.Book;
+import model.Emprestimo;
 import model.User;
 import model.UserData;
 import view.components.AdminMenu;
@@ -130,9 +131,10 @@ public class EmprestimosEDevolucoes extends Page {
             || RefreshID.UserDevolver == changeID) {
             if (userFound) {
                 UserData data = user.getData();
+                int numOfEmprestimos = data.getEmprestimos().size();
                 userText += data.getName();
                 statusText += user.status();
-                pendingText += data.getEmprestimos().size();
+                pendingText += numOfEmprestimos;
             } else {
                 userText += "NÃO ENCONTRADO";
             }
@@ -156,13 +158,16 @@ public class EmprestimosEDevolucoes extends Page {
         if (bookFound && userFound) {
             if (user.getData().hasBookRented(book)) {
                 this.rentButton.setText("Devolver");
+                this.rentButton.setEnabled(true);
             } else {
+                int numOfEmprestimos = user.getData().getEmprestimos().size();
                 this.rentButton.setText("Emprestar");
+                this.rentButton.setEnabled(numOfEmprestimos < Emprestimo.getMaxQuantity());
             }
         } else {
             this.rentButton.setText("Emprestar/Devolver");
+            this.rentButton.setEnabled(false);
         }
-        this.rentButton.setEnabled(userFound && bookFound);
         super.refresh(changeID, args);
     }
 }

@@ -2,6 +2,10 @@ package model;
 
 import java.time.LocalDateTime;
 
+import controller.RefreshID;
+import controller.commands.RefreshCmd;
+import framework.App;
+
 public class Emprestimo {
     
     private Book book;
@@ -9,6 +13,31 @@ public class Emprestimo {
     private User user;
     
     private static int PRAZO = 7; // prazo em dias
+    public static void changeExpireLimit(int days) {
+        Emprestimo.PRAZO = days;
+        App.get().control().invoke(new RefreshCmd(RefreshID.SettingsChanged));
+    }
+    public static int getExpireLimit() {
+        return Emprestimo.PRAZO;
+    }
+
+    private static int MAXQUANTITY = 3;
+    public static void changeMaxQuantity(int quantity) {
+        Emprestimo.MAXQUANTITY = quantity;
+        App.get().control().invoke(new RefreshCmd(RefreshID.SettingsChanged));
+    }
+    public static int getMaxQuantity() {
+        return Emprestimo.MAXQUANTITY;
+    }
+
+    private static double MULTA = 3.00;
+    public static void changeMulta(double amount) {
+        Emprestimo.MULTA = amount;
+        App.get().control().invoke(new RefreshCmd(RefreshID.SettingsChanged));
+    }
+    public static double getMulta() {
+        return Emprestimo.MULTA;
+    }
 
     /**
      * Associa o empréstimo de um livro a um usuário

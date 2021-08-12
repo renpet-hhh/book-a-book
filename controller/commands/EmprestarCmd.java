@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import framework.Command;
 import model.Book;
+import model.Emprestimo;
 import model.User;
 import model.UserData;
 
@@ -21,6 +22,9 @@ public class EmprestarCmd implements Command {
         UserData data = user.getData();
         if (data.hasBookRented(this.book)) {
             throw new RuntimeException("Tentativa de emprestar um livro que já está emprestado");
+        }
+        if (data.getEmprestimos().size() >= Emprestimo.getMaxQuantity()) {
+            throw new RuntimeException("Tentativa de ultrapassar o máximo de empréstimos permitidos");
         }
         if (data.getReservedBooks().contains(this.book)) {
             this.book.setHowManyReserved(this.book.getHowManyReserved() - 1);

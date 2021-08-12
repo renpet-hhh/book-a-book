@@ -24,6 +24,7 @@ public class GUI {
         this.currentPage = page;
         page.init(this.app);
         this.frame.setContentPane(page.paint());
+        this.app.control().invoke(new RefreshCmd(RefreshID.INIT));
         this.frame.validate();
         this.app.control().invoke(new RefreshCmd(RefreshID.MOUNT));
         this.frame.repaint();
