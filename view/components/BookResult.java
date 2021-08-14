@@ -9,7 +9,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
 import controller.RefreshID;
 import controller.commands.DereserveBookCmd;
