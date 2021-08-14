@@ -8,6 +8,7 @@ import java.awt.Color;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 
 import controller.commands.DereserveBookCmd;
 import framework.App;
@@ -19,6 +20,21 @@ import model.User;
 import view.components.layout.PackLayout;
 
 public class EmprestimoItem extends View {
+
+    /** Essa classe é responsável por renderizar um item
+     * de um empréstimo, que é definido informações de um Livro + Usuário.
+     * 
+     * Note que uma RESERVA também é definida com um Livro + Usuário,
+     * e as aparências são parecidas. Logo, essa classe permite
+     * representar tanto reservas quanto empréstimos.
+     * 
+     * O construtor Emprestimoitem(App, Book, User) deve ser usado para reservas
+     * e EmprestimoItem(App, Emprestimo) deve ser usado para empréstimos.w
+     * 
+     * Por padrão, reservas podem são exibidas com um botão DELETAR,
+     * já empréstimos não. Isso pode ser alterado com setShouldBeDeletable.
+     * 
+     */
 
     final static int LEFTCONTENTMARGIN = 10;
     final static int VERTICALCONTENTMARGIN = 6;
@@ -39,21 +55,37 @@ public class EmprestimoItem extends View {
         super(model);
         this.book = book;
         this.user = user;
+        this.shouldBeDeletable = true; // é uma reserva
+        this.shouldShowExpireDate = false;
     }
     public EmprestimoItem(App model, Emprestimo emprestimo) {
         super(model);
         this.book = emprestimo.getBook();
         this.user = emprestimo.getUser();
         this.expireDate = emprestimo.getExpireDate();
+        this.shouldBeDeletable = false; // é um empréstimo
+        this.shouldShowExpireDate = true;
     }
 
+    private JFrame frame = null;
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
+    private boolean shouldShowExpireDate;
+    public void setShouldShowExpireDate(boolean should) {
+        this.shouldShowExpireDate = should;
+    }
+    private boolean shouldBeDeletable;
+    public void setShouldBeDeletable(boolean should) {
+        this.shouldBeDeletable = should;
+    }
 
     @Override
     public JComponent paint() {
         JComponent component = PackLayout.createHorizontalBox();
         component.add(this.mainContent(this.book));
         // só há botão de deletar se isso é uma reserva
-        if (this.expireDate == null) component.add(this.deleteButton());
+        if (this.expireDate == null && this.shouldBeDeletable) component.add(this.deleteButton());
         component.add(this.infoButton());
         return component;
     }
@@ -77,7 +109,7 @@ public class EmprestimoItem extends View {
         JComponent wrapper = Box.createVerticalBox();
         Label expireLabel = new Label("Prazo: " + this.expireDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), EXPIREDATECOLOR);
         wrapper.add(content);
-        wrapper.add(Margin.glueLeft(Margin.horizontalRight(expireLabel, 10)));
+        if (this.shouldShowExpireDate) wrapper.add(Margin.glueLeft(Margin.horizontalRight(expireLabel, 10)));
         wrapper.setBackground(BGCOLOR);
         wrapper.setOpaque(true);
         return wrapper;
@@ -94,15 +126,23 @@ public class EmprestimoItem extends View {
         wrapper.setOpaque(true);
         return wrapper;
     }
-
+    
     public JComponent infoButton() {
-        ImageIcon img = new ImageIcon("./images/outline_info_black_24dp.png");
         ActionListener infoHandler = e -> {
             BookResult bk = new BookResult(model, book);
+            bk.setFrame(this.frame);
             bk.paint();
-            bk.popupBookData();
+            if (frame != null) {
+                bk.popupBookData(frame);
+            } else {
+                bk.popupBookData();
+            }
         };
-        Button icon = new Button(img, infoHandler, INFOBGCOLOR);
+        return this.infoButton(infoHandler);
+    }
+    public JComponent infoButton(ActionListener handler) {
+        ImageIcon img = new ImageIcon("./images/outline_info_black_24dp.png");
+        Button icon = new Button(img, handler, INFOBGCOLOR);
         JComponent wrapper = Margin.vertical(Margin.horizontal(icon, ICONHMARGIN), ICONVMARGIN);
         wrapper.setBackground(INFOBGCOLOR);
         wrapper.setOpaque(true);

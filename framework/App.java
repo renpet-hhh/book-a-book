@@ -16,6 +16,7 @@ import model.Book;
 import model.Crypto;
 import model.Library;
 import model.Login;
+import model.Reports;
 import model.User;
 import model.UserData;
 import view.pages.Home;
@@ -91,6 +92,10 @@ public class App {
         this.getCurrentPage().refresh(RefreshID.UserListContext, args);
     }
 
+    /* Relatórios */
+    private Reports reports = new Reports();
+    public Reports getReports() { return this.reports; }
+
     /* Ponto de partida da Interface Gráfica */
     public static void main(String args[]) {
         App app = App.get(); // Criação do Model
@@ -111,6 +116,7 @@ public class App {
         // ADMIN FALSO
         UserData d = new UserData("Admin mockup", "Endereço mockup", "(88) 99992-9999", "admin@gmail.com", "Documento mockup", LocalDate.of(2000, 12, 31));
         String passwordMockup1 = "bbbbbb";
+        User fakeAdmin = new User(d, Crypto.crypt(passwordMockup1));
         app.control().invoke(new RegisterUserCmd(d, passwordMockup1, true));
         // LIVRO FALSO
         List<String> authors = new ArrayList<>();
@@ -119,7 +125,7 @@ public class App {
         authors.add("Nome falso 3");
         for (int i = 0; i < 10; i++) {
             Book book = new Book("Título falso" + i, "Subtítulo falso", "Edição falsa", "21313132-123" + i, "Local falso", authors, 1997, 100);
-            app.control().invoke(new RegisterBookCmd(book));
+            app.control().invoke(new RegisterBookCmd(book, fakeAdmin));
             app.control().invoke(new ReserveBookCmd(book, fakeNormalUser));
         }
 

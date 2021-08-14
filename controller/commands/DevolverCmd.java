@@ -2,8 +2,11 @@ package controller.commands;
 
 import java.util.Arrays;
 
+import framework.App;
 import framework.Command;
 import model.Book;
+import model.Emprestimo;
+import model.Reports;
 import model.User;
 
 public class DevolverCmd implements Command {
@@ -17,8 +20,10 @@ public class DevolverCmd implements Command {
 
     @Override
     public void execute() {
+        App app = App.get();
         this.book.setHowManyAvailable(this.book.getHowManyAvailable() + 1);
-        this.user.getData().devolver(this.book);
+        Emprestimo emprestimo = this.user.getData().devolver(this.book);
+        app.control().invoke(new ReportCmd<>(emprestimo, Reports.Type.DEVOLUCAO));
     }
 
     @Override

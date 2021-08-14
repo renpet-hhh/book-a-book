@@ -1,7 +1,6 @@
 package model;
 
 public class User {
-
     /** Representa um usuário */
 
     private String encryptedPassword; // não armazenamos a senha, apenas sua versão criptografada

@@ -23,6 +23,9 @@ public enum RefreshID {
     UserEmprestar, // empréstimo realizado
     UserDevolver, // devolução realizada
     SettingsChanged, // alguma configuração mudou
+    CUSTOM1, // semântica variável, usados apenas para uma classe avisar a si mesma
+    CUSTOM2, // não devem ser chamadas pelo comando RefreshCmd
+    CUSTOM3, // seu uso se dá diretamente chamando this.refresh
     CLEAR, // Contexto foi limpo.
     INIT, // Componente será montado a seguir.
     MOUNT; // Componente foi montado (posições calculadas). Chance de alterar dados que dependem das posições dos componentes na tela.

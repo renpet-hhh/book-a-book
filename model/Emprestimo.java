@@ -6,7 +6,7 @@ import controller.RefreshID;
 import controller.commands.RefreshCmd;
 import framework.App;
 
-public class Emprestimo {
+public class Emprestimo  {
     
     private Book book;
     private LocalDateTime rentDate;

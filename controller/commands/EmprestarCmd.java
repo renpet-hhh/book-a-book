@@ -2,9 +2,11 @@ package controller.commands;
 
 import java.util.Arrays;
 
+import framework.App;
 import framework.Command;
 import model.Book;
 import model.Emprestimo;
+import model.Reports;
 import model.User;
 import model.UserData;
 
@@ -19,6 +21,7 @@ public class EmprestarCmd implements Command {
 
     @Override
     public void execute() {
+        App app = App.get();
         UserData data = user.getData();
         if (data.hasBookRented(this.book)) {
             throw new RuntimeException("Tentativa de emprestar um livro que já está emprestado");
@@ -33,6 +36,8 @@ public class EmprestarCmd implements Command {
             this.book.setHowManyAvailable(this.book.getHowManyAvailable() - 1);
         }
         data.emprestar(this.book);
+        Emprestimo emprestimo = data.getEmprestimos().get(data.getEmprestimos().size() - 1);
+        app.control().invoke(new ReportCmd<>(emprestimo, Reports.Type.EMPRESTIMO));
     }
 
     @Override

@@ -82,6 +82,13 @@ public class BookResult extends View {
         this.reservable = reservable;
         this.checkboxHandler = checkboxHandler;
     }
+
+    private JFrame frame;
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
+
+
     /* Atribui o usuário associado às funcionalidades "Editar" e "Reservar" desse objeto */
     public void setAssociatedUser(User user) {
         this.user = user;
@@ -117,7 +124,7 @@ public class BookResult extends View {
     private JComponent right(boolean editable, boolean reservable) {
         JComponent component = StretchLayout.createVerticalBox();
         ActionListener viewHandler = e -> {
-            this.popupBookData();
+            this.popupBookData(this.frame);
         };
         Button view = new Button("Abrir registro", viewHandler, BUTTONLABELCOLOR, BUTTONBGGRAY);
         component.add(Margin.rigidVertical(BUTTONSVERTICALMARGIN));
@@ -191,9 +198,10 @@ public class BookResult extends View {
     }
     
     public void popupBookData() {
-        this.popupBookData(app.getFrame());
+        this.popupBookData(null);
     }
     public void popupBookData(JFrame frame) {
+        if (frame == null) frame = app.getFrame();
         String title = book.getTitle();
         String subtitle = book.getSubtitle();
         List<String> authors = book.getAuthors();

@@ -5,12 +5,12 @@ import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
 import controller.RefreshID;
 import framework.App;
 import framework.Page;
-import framework.View;
 import helpers.Margin;
 import model.Emprestimo;
 import model.User;
@@ -31,8 +31,14 @@ public class MeusEmprestimos extends Page {
     private final static Dimension scrollMinDim = new Dimension(300, 120);
 
     private User user;
+    private JFrame frame = null;
+
     public MeusEmprestimos(User user) {
+        this(user, null);
+    }
+    public MeusEmprestimos(User user, JFrame frame) {
         this.user = user;
+        this.frame = frame;
     }
 
     private JComponent itemsList;
@@ -64,7 +70,8 @@ public class MeusEmprestimos extends Page {
         }
         for (int i = 0; i < emprestimos.size(); i++) {
             Emprestimo emprestimo = emprestimos.get(i);
-            View view = new EmprestimoItem(app, emprestimo);
+            EmprestimoItem view = new EmprestimoItem(app, emprestimo);
+            view.setFrame(this.frame);
             this.addView(view);
             if (i > 0) content.add(Margin.rigidVertical(SPACEBETWEENITEMS));
             content.add(view.paint());
@@ -74,7 +81,10 @@ public class MeusEmprestimos extends Page {
         return this.scrollPane;
     }
     public static JComponent buildList(App app, User user) {
-        MeusEmprestimos m = new MeusEmprestimos(user);
+        return MeusEmprestimos.buildList(app, user, null);
+    }
+    public static JComponent buildList(App app, User user, JFrame frame) {
+        MeusEmprestimos m = new MeusEmprestimos(user, frame);
         return m.mainContent(app, user);
     }
     

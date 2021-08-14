@@ -66,7 +66,7 @@ public class UserData {
     }
 
     /* Devolução de livro emprestado pelo usuário */
-    public void devolver(Book book) {
+    public Emprestimo devolver(Book book) {
         App app = App.get();
         Emprestimo toRemove = null;
         for (Emprestimo e : this.emprestimos) {
@@ -76,10 +76,11 @@ public class UserData {
         }
         if (toRemove == null) {
             app.control().invoke(new DisplayPopupCmd("Tentativa falha de devolver livro. Usuário não possui tal livro emprestado", JOptionPane.ERROR_MESSAGE));
-            return;
+            return toRemove;
         }
         this.emprestimos.remove(toRemove);
         app.control().invoke(new RefreshCmd(RefreshID.UserDevolver, book)); // notifica views observadoras
+        return toRemove;
     }
 
     public List<Emprestimo> getEmprestimos() { return Collections.unmodifiableList(this.emprestimos); }

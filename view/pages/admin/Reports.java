@@ -1,15 +1,21 @@
 package view.pages.admin;
 
+import java.awt.event.ActionListener;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JTextField;
 
+import controller.RefreshID;
+import controller.commands.RefreshCmd;
 import controller.handlers.ClearHandler;
+import controller.handlers.ReportListHandler;
 import framework.Page;
 import helpers.Margin;
 import view.components.AdminMenu;
@@ -32,8 +38,14 @@ public class Reports extends Page {
     final static int SPACEBETWEENDATERANGEANDBUTTONS = 120;
     final static int SPACEBETWEENBUTTONS = 70;
     final static int LEFTRIGHTMAINCONTENTMARGIN = MenuFactory.WRAPPERHORIZONTALMARGIN;
+    final static int POPUPMARGIN = 30;
 
     private List<JComponent> components = new ArrayList<>();
+
+    private JComboBox<String> chooser;
+    private JTextField fieldFrom, fieldTo;
+    private JCheckBox fullReportCheckbox;
+    private JButton generateButton;
 
     @Override
     public JComponent paint() {
@@ -42,6 +54,7 @@ public class Reports extends Page {
         String path = "Administração >> Relatórios";
         JComponent content = this.content();
         LayoutTemplate.build(pane, menubar, content, path);
+        app.control().invoke(new RefreshCmd(RefreshID.INIT));
         return pane;
     }
 
@@ -52,37 +65,43 @@ public class Reports extends Page {
         chooser.addItem("Livros devolvidos");
         chooser.addItem("Todos os livros");
         chooser.addItem("Usuários cadastrados");
-        chooser.addItem("Usuários com atraso");
         chooser.setMaximumSize(new Dimension(CHOOSERMAXWIDTH, CHOOSERMAXHEIGHT));
         this.components.add(chooser);
+        chooser.addActionListener(e -> {
+            int index = chooser.getSelectedIndex();
+            this.refresh(RefreshID.CUSTOM1, index);
+        });
         return chooser;
     }
 
     private JComponent selectDateRange() {
         JComponent component = Box.createHorizontalBox();
-        LabeledTextField fieldFrom = new LabeledTextField("De:");
-        LabeledTextField fieldUntil = new LabeledTextField("Até:");
-        JCheckBox fullReportCheckbox = new JCheckBox("Relatório Completo");
+        LabeledTextField from = new LabeledTextField("De:");
+        LabeledTextField to = new LabeledTextField("Até:");
+        this.fullReportCheckbox = new JCheckBox("Relatório Completo");
         fullReportCheckbox.setOpaque(false);
-        component.add(fieldFrom);
+        component.add(from);
         component.add(Margin.rigidHorizontal(DATERANGEHORIZONTALGAP));
-        component.add(fieldUntil);
+        component.add(to);
         component.add(Margin.rigidHorizontal(DATERANGEHORIZONTALGAP));
         component.add(fullReportCheckbox);
-        this.components.add(fieldFrom.getTextField());
-        this.components.add(fieldUntil.getTextField());
+        this.fieldFrom = from.getTextField();
+        this.fieldTo = to.getTextField();
+        this.components.add(fieldFrom);
+        this.components.add(fieldTo);
         this.components.add(fullReportCheckbox);
         return component;
     }
 
     private JComponent buttons() {
+        ActionListener openPopup = new ReportListHandler(this.chooser, this.fieldFrom, this.fieldTo, this.fullReportCheckbox);
         JComponent component = Box.createHorizontalBox();
         Button cancel = new Button("Cancelar", new ClearHandler<>(this.components));
-        Button generate = new Button("Gerar");
+        this.generateButton = new Button("Gerar", openPopup);
         component.add(Box.createHorizontalGlue());
         component.add(cancel);
         component.add(Margin.rigidHorizontal(SPACEBETWEENBUTTONS));
-        component.add(generate);
+        component.add(generateButton);
         component.add(Box.createHorizontalGlue());
         return component;
     }
@@ -91,7 +110,7 @@ public class Reports extends Page {
         JComponent wrapper2 = Box.createHorizontalBox();
         JComponent wrapper1 = Box.createHorizontalBox();
         JComponent component = Box.createVerticalBox();
-        JComboBox<String> chooser = this.chooser();
+        this.chooser = this.chooser();
         JComponent selectDateRange = this.selectDateRange();
         JComponent buttons = this.buttons();
         component.add(Box.createVerticalGlue());
@@ -112,5 +131,16 @@ public class Reports extends Page {
         return wrapper2;
     }
 
+    @Override
+    public void refresh(RefreshID changeID, Object... args) {
+        if (RefreshID.INIT == changeID) {
+            this.generateButton.setEnabled(false);
+        }
+        if (RefreshID.CUSTOM1 == changeID) {
+            int index = (int)args[0];
+            this.generateButton.setEnabled(index > 0);
+        }
+        super.refresh(changeID, args);
+    }
 
 }

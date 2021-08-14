@@ -48,10 +48,20 @@ public class UserResult extends View {
 
     private App app;
     private User user;
+    private boolean editable;
     public UserResult(App app, User user) {
+        this(app, user, true);
+    }
+    public UserResult(App app, User user, boolean editable) {
         super(app);
         this.app = app;
         this.user = user;
+        this.editable = editable;
+    }
+    
+    private JFrame frame = null;
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
     }
 
     private Label name, status, rent, reserved;
@@ -87,14 +97,16 @@ public class UserResult extends View {
     private JComponent right(App app, User user) {
         JComponent component = StretchLayout.createVerticalBox();
         ActionListener viewHandler = e -> {
-            this.popupUserData(app, user);
+            this.popupUserData(this.frame != null ? this.frame : app.getFrame(), user);
         };
         Button view = new Button("Abrir registro", viewHandler, BUTTONLABELCOLOR, BUTTONBGGRAY);
-        Button edit = new Button("Editar", null, BUTTONLABELCOLOR, BUTTONBGGRAY);
         component.add(Margin.rigidVertical(BUTTONSVERTICALMARGIN));
         component.add(view);
-        component.add(Margin.rigidVertical(SPACEBETWEENBUTTONS));
-        component.add(edit);
+        if (this.editable) {
+            Button edit = new Button("Editar", null, BUTTONLABELCOLOR, BUTTONBGGRAY);
+            component.add(Margin.rigidVertical(SPACEBETWEENBUTTONS));
+            component.add(edit);
+        }
         component.add(Margin.rigidVertical(BUTTONSVERTICALMARGIN));
         component.setOpaque(true);
         component.setBackground(WRAPPERBUTTONSGRAY);
@@ -108,6 +120,7 @@ public class UserResult extends View {
         this.popupUserData(app.getFrame(), user);
     }
     public void popupUserData(JFrame frame, User user) {
+        if (frame == null) frame = app.getFrame();
         UserData data = user.getData();
         JComponent component = Box.createVerticalBox();
         Label name = new Label("Nome: " + data.getName());
@@ -129,7 +142,7 @@ public class UserResult extends View {
         component.add(Margin.glueRight(status));
         component.add(Margin.rigidVertical(3));
         component.add(Margin.glueRight(pending));
-        component.add(MeusEmprestimos.buildList(app, user));
+        component.add(MeusEmprestimos.buildList(app, user, this.frame));
         component.add(Margin.rigidVertical(BOTTOMMARGIN));
         JComponent wrapper = Box.createHorizontalBox();
         wrapper.add(Margin.rigidHorizontal(LEFTMARGIN));
