@@ -140,8 +140,8 @@ public class Home extends Page {
             Button forgotPasswordBttn = ForgotPassword.getButton(pane);
             bottom.add(Margin.horizontal(forgotPasswordBttn, FORGOTPASSWORDMARGIN));
             // o texto padrão desses campos está assim só por enquanto, para facilitar os testes
-            JTextField emailField = new FixedJTextField(USERNAMEFIELDWIDTH, "0");
-            JTextField passwordField = new FixedJTextField(PASSWORDFIELDWIDTH, "aaaaaa");
+            JTextField emailField = new FixedJTextField(USERNAMEFIELDWIDTH, "1");
+            JTextField passwordField = new FixedJTextField(PASSWORDFIELDWIDTH, "bbbbbb");
             Button enter = new Button("Entrar", null, LABELCOLOR, HEADERRIGHTCOLOR);
             List<JTextField> loginFields = new ArrayList<>();
             loginFields.add(emailField);

@@ -38,17 +38,17 @@ public class Book {
     public int getHowManyTotal() { return this.howManyTotal; }
     public void setHowManyTotal(int howMany) {
         this.howManyTotal = howMany;
-        App.get().control().invoke(new RefreshCmd(RefreshID.BookTotal)); // notificamos as views observadoras
+        App.get().control().invoke(new RefreshCmd(RefreshID.BookTotal, this)); // notificamos as views observadoras
     }
     public int getHowManyAvailable() { return this.howManyAvailable; }
     public void setHowManyAvailable(int howMany) {
         this.howManyAvailable = howMany;
-        App.get().control().invoke(new RefreshCmd(RefreshID.BookAvailable)); // notificamos as views observadoras
+        App.get().control().invoke(new RefreshCmd(RefreshID.BookAvailable, this)); // notificamos as views observadoras
     }
     public int getHowManyReserved() { return this.howManyReserved; }
     public void setHowManyReserved(int howMany) {
         this.howManyReserved = howMany;
-        App.get().control().invoke(new RefreshCmd(RefreshID.BookReserved)); // notificamos as views observadoras
+        App.get().control().invoke(new RefreshCmd(RefreshID.BookReserved, this)); // notificamos as views observadoras
     }
     public int getHowManyRented() {
         return this.getHowManyTotal() - this.getHowManyAvailable() - this.getHowManyReserved();

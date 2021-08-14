@@ -2,6 +2,8 @@ package controller.commands;
 
 import java.util.Arrays;
 
+import controller.RefreshID;
+import framework.App;
 import framework.Command;
 import model.Book;
 import model.User;

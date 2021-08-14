@@ -9,6 +9,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import controller.RefreshID;
 import controller.commands.DereserveBookCmd;
@@ -81,6 +82,11 @@ public class BookResult extends View {
         this.selectable = selectable;
         this.reservable = reservable;
         this.checkboxHandler = checkboxHandler;
+        this.totalLabel = new Label("");
+        this.availableLabel = new Label("");
+        this.rentLabel = new Label("");
+        this.reservedLabel = new Label("");
+        this.refresh(RefreshID.CLEAR);
     }
 
     private JFrame frame;
@@ -177,14 +183,6 @@ public class BookResult extends View {
 
     private Label totalLabel, availableLabel, rentLabel, reservedLabel;
     private JComponent bottom() {
-        int total = book.getHowManyTotal();
-        int available = book.getHowManyAvailable();
-        int rent = book.getHowManyRented();
-        int reserved = book.getHowManyReserved();
-        this.totalLabel = new Label(DEFAULTTOTALTEXT + total);
-        this.availableLabel = new Label(DEFAULTAVAILABLETEXT + available);
-        this.rentLabel = new Label(DEFAULTRENTTEXT + rent);
-        this.reservedLabel = new Label(DEFAULTRESERVEDTEXT + reserved);
         JComponent bottom = Box.createHorizontalBox();
         bottom.add(totalLabel);
         bottom.add(Margin.rigidHorizontal(SPACEBETWEENBOTTOMLABELS));
@@ -235,7 +233,8 @@ public class BookResult extends View {
         component.add(Margin.glueRight(whereLabel));
         component.add(Margin.glueRight(isbnLabel));
         component.add(Margin.rigidVertical(3));
-        component.add(this.bottom());
+        BookResult bk = new BookResult(app, book);
+        component.add(bk.bottom());
         component.add(Margin.rigidVertical(3));
         component.add(Margin.rigidVertical(BOTTOMMARGIN));
         JComponent wrapper = Box.createHorizontalBox();
@@ -274,22 +273,38 @@ public class BookResult extends View {
         if (RefreshID.MOUNT == changeID) {
             this.hasMounted = true;
         }
+        if (RefreshID.CLEAR == changeID || RefreshID.MOUNT == changeID) {
+            int total = book.getHowManyTotal();
+            int available = book.getHowManyAvailable();
+            int rent = book.getHowManyRented();
+            int reserved = book.getHowManyReserved();
+            this.totalLabel.setText(DEFAULTTOTALTEXT + total);
+            this.availableLabel.setText(DEFAULTAVAILABLETEXT + available);
+            this.rentLabel.setText(DEFAULTRENTTEXT + rent);
+            this.reservedLabel.setText(DEFAULTRESERVEDTEXT + reserved);
+        }
         if (this.user != null) {
             boolean bookIsReserved = this.user.getData().hasBookReserved(this.book);
             boolean bookIsRented = this.user.getData().hasBookRented(this.book);
-            if (RefreshID.UserReserveBook == changeID || RefreshID.UserUnreserveBook == changeID || RefreshID.CLEAR == changeID || RefreshID.MOUNT == changeID) {
-                int total = book.getHowManyTotal();
-                int available = book.getHowManyAvailable();
-                int rent = book.getHowManyRented();
-                int reserved = book.getHowManyReserved();
-                this.totalLabel.setText(DEFAULTTOTALTEXT + total);
-                this.availableLabel.setText(DEFAULTAVAILABLETEXT + available);
-                this.rentLabel.setText(DEFAULTRENTTEXT + rent);
-                this.reservedLabel.setText(DEFAULTRESERVEDTEXT + reserved);
-                if (this.hasMounted && this.reserveButton != null) {
-                    this.reserveButton.setText(bookIsReserved ? "Remover reserva" : "Reservar");
-                    this.reserveButton.setEnabled(!bookIsRented);
+            if (args != null && args.length == 1 && args[0] == this.book) {
+                if (RefreshID.BookTotal == changeID) {
+                    int total = book.getHowManyTotal();
+                    this.totalLabel.setText(DEFAULTTOTALTEXT + total);
                 }
+                if (RefreshID.BookAvailable == changeID) {
+                    int available = book.getHowManyAvailable();
+                    this.availableLabel.setText(DEFAULTAVAILABLETEXT + available);
+                }
+                if (RefreshID.BookReserved == changeID) {
+                    int reserved = book.getHowManyReserved();
+                    this.reservedLabel.setText(DEFAULTRESERVEDTEXT + reserved);
+                }
+                int rent = book.getHowManyRented();
+                this.rentLabel.setText(DEFAULTRENTTEXT + rent);
+            }
+            if (this.hasMounted && this.reserveButton != null) {
+                this.reserveButton.setText(bookIsReserved ? "Remover reserva" : "Reservar");
+                this.reserveButton.setEnabled(!bookIsRented);
             }
         }
         super.refresh(changeID, args);
