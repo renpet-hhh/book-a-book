@@ -118,6 +118,10 @@ public class Home extends Page {
         }
         ActionListener aboutHandler = e -> app.control().invoke(new NavigateCmd(new About()));
         Button aboutButton = new Button("Sobre", aboutHandler, LABELCOLOR, HEADERRIGHTCOLOR);
+        //novo
+        ActionListener helpHandler = e -> app.control().invoke(new NavigateCmd(new Help()));
+        Button helpButton = new Button("Ajuda", helpHandler, LABELCOLOR, HEADERRIGHTCOLOR);
+        //novo
         top.add(Box.createHorizontalGlue());
         if (!isHomePage && username.length() > 0) {
             ActionListener libraryHandler = e -> app.control().invoke(new NavigateCmd(new SearchBooksUser()));
@@ -127,7 +131,7 @@ public class Home extends Page {
         }
         top.add(aboutButton);
         top.add(Margin.rigidHorizontal(SPACEBETWEENTOPHEADERBUTTONS));
-        top.add(new Label("Ajuda", LABELCOLOR));
+        top.add(helpButton);
         top.add(Margin.rigidHorizontal(RIGHTMARGINHELP));
         top.setMaximumSize(new Dimension(Integer.MAX_VALUE, height / 2 - 2 * HEADERTOPMARGIN));
         Box bottom = Box.createHorizontalBox();

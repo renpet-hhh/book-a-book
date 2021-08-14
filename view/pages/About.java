@@ -26,7 +26,7 @@ public class About extends Page {
         component.add(Home.header(app, pane, false, ""));
         JComponent wrap1 = Box.createHorizontalBox();
         wrap1.add(Margin.rigidHorizontal(70));
-        wrap1.add(About.mainContent());
+        wrap1.add(this.mainContent());
         wrap1.add(Box.createHorizontalGlue());
         component.add(wrap1);
         component.add(Home.foot());
@@ -34,7 +34,7 @@ public class About extends Page {
         return pane;
     }
 
-    public static JComponent mainContent() {
+    public JComponent mainContent() {
         JComponent component = Box.createVerticalBox();
         Label sobre = new Label("Sobre");
         Label content = new Label("<html>Sistema desenvolvido para se integrar à Biblioteca Universitária,<br/> possibilitando a pesquisa de livros disponíveis na biblioteca,<br/> além de permitir reserva, empréstimo e devolução de livros.</html>");

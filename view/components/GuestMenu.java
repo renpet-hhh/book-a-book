@@ -23,8 +23,8 @@ public class GuestMenu extends JMenuBar {
         return button;
     }
 
-    private Button ajuda() {
-        Button button = MenuFactory.helpButton();
+    private Button ajuda(App app) {
+        Button button = MenuFactory.helpButton(app);
         return button;
     }
 
@@ -37,7 +37,7 @@ public class GuestMenu extends JMenuBar {
         BoxLayout bLayout = new BoxLayout(this, BoxLayout.X_AXIS);
         this.setLayout(bLayout);
         Button searchBttn = this.pesquisa(app);
-        Button helpBttn = this.ajuda();
+        Button helpBttn = this.ajuda(app);
         Button exitBttn = this.sair(app);
         this.add(searchBttn);
         this.add(helpBttn);

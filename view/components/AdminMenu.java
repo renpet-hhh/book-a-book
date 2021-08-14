@@ -55,8 +55,8 @@ public class AdminMenu extends JMenuBar {
         return menu;
     }
 
-    private Button ajuda() {
-        Button button = MenuFactory.helpButton();
+    private Button ajuda(App app) {
+        Button button = MenuFactory.helpButton(app);
         return button;
     }
 
@@ -72,7 +72,7 @@ public class AdminMenu extends JMenuBar {
         JMenu circulacaoMenu = this.circulacao(app);
         Button catalogMenu = this.catalogacao(app);
         JMenu adminMenu = this.administracao(app);
-        Button helpBttn = this.ajuda();
+        Button helpBttn = this.ajuda(app);
         Button exitBttn = this.sair(app);
         this.add(pesquisaMenu);
         this.add(circulacaoMenu);

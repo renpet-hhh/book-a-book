@@ -13,7 +13,9 @@ import javax.swing.JMenuItem;
 import framework.App;
 import helpers.Margin;
 import controller.commands.LogoutCmd;
+import controller.commands.NavigateCmd;
 import view.components.Button;
+import view.pages.Help;
 
 public abstract class MenuFactory {
 
@@ -85,8 +87,8 @@ public abstract class MenuFactory {
         return button;
     }
 
-    public static Button helpButton() {
-        Button button = MenuFactory.createButton("Ajuda");
+    public static Button helpButton(App app) {
+        Button button = MenuFactory.createButton("Ajuda", e -> app.control().invoke(new NavigateCmd(new Help())));
         return button;
     }
     
