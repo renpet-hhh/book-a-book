@@ -66,5 +66,12 @@ public class Book {
     public int hashCode() {
         return this.isbn.hashCode();
     }
+
+    public Book copy() {
+        Book b = new Book(title, subtitle, edition, isbn, whereWasPublished, authors, yearOfPublishment, this.getHowManyTotal());
+        b.setHowManyAvailable(this.getHowManyAvailable());
+        b.setHowManyReserved(this.getHowManyReserved());
+        return b;
+    }
 }
 

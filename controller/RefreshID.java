@@ -18,6 +18,7 @@ public enum RefreshID {
     LoginUserChanged, // usuário logado mudou
     LoginIncrementMatricula, // número atual de matrícula foi incrementado
     LoginAddUser, // novo usuário foi cadastrado
+    UpdateUserData, // informação de um usuário foi atualizada
     UserReserveBook, // livro foi reservado
     UserUnreserveBook, // reserva foi removida
     UserEmprestar, // empréstimo realizado

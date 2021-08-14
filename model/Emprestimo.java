@@ -70,4 +70,9 @@ public class Emprestimo  {
         return this.rentDate.plusDays(PRAZO);
     }
 
+    public Emprestimo copy() {
+        Emprestimo e = new Emprestimo(book, user);
+        e.rentDate = LocalDateTime.from(this.rentDate);
+        return e;
+    }
 }

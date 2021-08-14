@@ -54,7 +54,7 @@ public class ReportListHandler implements ActionListener {
                 return;
             }
         }
-        Type[] types = new Type[] {Type.EMPRESTIMO, Type.DEVOLUCAO, Type.BOOK_REGISTER, Type.USER_REGISTER};
+        Type[] types = new Type[] {Type.EMPRESTIMO, Type.DEVOLUCAO, Type.BOOK_REGISTER, Type.USER_REGISTER, Type.USER_EDIT};
         JFrame frame = new JFrame();
         BoxLayout layout = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS);
         frame.setLayout(layout);

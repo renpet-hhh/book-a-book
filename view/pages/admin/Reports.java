@@ -65,6 +65,7 @@ public class Reports extends Page {
         chooser.addItem("Livros devolvidos");
         chooser.addItem("Todos os livros");
         chooser.addItem("Usuários cadastrados");
+        chooser.addItem("Edição de cadastro de usuário");
         chooser.setMaximumSize(new Dimension(CHOOSERMAXWIDTH, CHOOSERMAXHEIGHT));
         this.components.add(chooser);
         chooser.addActionListener(e -> {

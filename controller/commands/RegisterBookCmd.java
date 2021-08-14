@@ -34,7 +34,7 @@ public class RegisterBookCmd implements Command {
             app.control().invoke(new DisplayPopupCmd("Livro já está catalogado", JOptionPane.ERROR_MESSAGE));
             return;
         }
-        app.control().invoke(new ReportCmd<>(book, Reports.Type.BOOK_REGISTER, this.user));
+        app.control().invoke(new ReportCmd<>(book.copy(), Reports.Type.BOOK_REGISTER, this.user.copy()));
         app.control().invoke(new DisplayPopupCmd("Livro catalogado com sucesso."));
     }
     

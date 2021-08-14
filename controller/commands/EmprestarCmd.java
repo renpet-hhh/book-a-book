@@ -36,7 +36,7 @@ public class EmprestarCmd implements Command {
             this.book.setHowManyAvailable(this.book.getHowManyAvailable() - 1);
         }
         data.emprestar(this.book);
-        Emprestimo emprestimo = data.getEmprestimos().get(data.getEmprestimos().size() - 1);
+        Emprestimo emprestimo = data.getEmprestimos().get(data.getEmprestimos().size() - 1).copy();
         app.control().invoke(new ReportCmd<>(emprestimo, Reports.Type.EMPRESTIMO));
     }
 

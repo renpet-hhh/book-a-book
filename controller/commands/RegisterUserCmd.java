@@ -46,7 +46,9 @@ public class RegisterUserCmd implements Command {
             app.control().invoke(new DisplayPopupCmd(e.getMessage(), JOptionPane.ERROR_MESSAGE));
             return;
         }
-        app.control().invoke(new ReportCmd<>(user, Reports.Type.USER_REGISTER, registrador));
+        User userAfter = this.user.copy();
+        User r = registrador == null ? null : registrador.copy();
+        app.control().invoke(new ReportCmd<>(userAfter, Reports.Type.USER_REGISTER, r));
         app.control().invoke(new DisplayPopupCmd(okMessage, JOptionPane.INFORMATION_MESSAGE));
     }
     

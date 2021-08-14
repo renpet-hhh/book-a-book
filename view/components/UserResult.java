@@ -9,6 +9,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
+import controller.commands.NavigateCmd;
 import framework.App;
 import framework.View;
 import helpers.Margin;
@@ -16,6 +17,7 @@ import model.User;
 import model.UserData;
 import view.components.layout.PackLayout;
 import view.components.layout.StretchLayout;
+import view.pages.admin.RegisterUsers;
 import view.pages.user.MeusEmprestimos;
 
 public class UserResult extends View {
@@ -103,7 +105,10 @@ public class UserResult extends View {
         component.add(Margin.rigidVertical(BUTTONSVERTICALMARGIN));
         component.add(view);
         if (this.editable) {
-            Button edit = new Button("Editar", null, BUTTONLABELCOLOR, BUTTONBGGRAY);
+            ActionListener editHandler = e -> {
+                app.control().invoke(new NavigateCmd(new RegisterUsers(user)));
+            };
+            Button edit = new Button("Editar", editHandler, BUTTONLABELCOLOR, BUTTONBGGRAY);
             component.add(Margin.rigidVertical(SPACEBETWEENBUTTONS));
             component.add(edit);
         }

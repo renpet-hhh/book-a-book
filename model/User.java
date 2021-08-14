@@ -1,5 +1,9 @@
 package model;
 
+import controller.RefreshID;
+import controller.commands.RefreshCmd;
+import framework.App;
+
 public class User {
     /** Representa um usuário */
 
@@ -31,6 +35,12 @@ public class User {
         return "Regular";
     }
 
+    public void update(UserData d) {
+        if (d == null) throw new NullPointerException("Dados do usuário não pode ser null");
+        this.data.update(d);
+        App.get().control().invoke(new RefreshCmd(RefreshID.UpdateUserData, this.data));
+    }
+
     /** Retorna o nível de privilégio desse usuário.
      * 
      * 1 - Usuário comum
@@ -42,4 +52,11 @@ public class User {
     public int getPrivilege() {
         return User.USERPRIVILEGE;
     }
+
+    public User copy() {
+        UserData d = data.copy();
+        User u = new User(d, encryptedPassword);
+        return u;
+    }
+
 }

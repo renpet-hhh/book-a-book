@@ -100,5 +100,22 @@ public class UserData {
         return this.getReservedBooks().contains(book);
     }
 
+    public void update(UserData d) {
+        this.name = d.name;
+        this.address = d.address;
+        this.birthdate = d.birthdate;
+        this.contact = d.contact;
+        this.email = d.email;
+        this.document = d.document;
+    }
+
+    public UserData copy() {
+        UserData d = new UserData(name, address, contact, email, document, LocalDate.from(birthdate));
+        d.setMatricula(this.getMatricula());
+        d.emprestimos = List.copyOf(this.getEmprestimos());
+        d.reservedBooks = List.copyOf(this.getReservedBooks());
+        return d;
+    }
+
     
 }

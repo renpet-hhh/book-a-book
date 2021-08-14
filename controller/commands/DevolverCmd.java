@@ -22,7 +22,7 @@ public class DevolverCmd implements Command {
     public void execute() {
         App app = App.get();
         this.book.setHowManyAvailable(this.book.getHowManyAvailable() + 1);
-        Emprestimo emprestimo = this.user.getData().devolver(this.book);
+        Emprestimo emprestimo = this.user.getData().devolver(this.book).copy();
         app.control().invoke(new ReportCmd<>(emprestimo, Reports.Type.DEVOLUCAO));
     }
 

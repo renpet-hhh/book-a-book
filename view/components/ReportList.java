@@ -38,7 +38,7 @@ public class ReportList extends View {
     
     final static int SPACEBETWEENITEMS = 20;
     final static int SPACEBETWEENLABELANDREGISTER = 5;
-    final static Dimension minPopupDimension = new Dimension(200, 200);
+    final static Dimension minPopupDimension = new Dimension(400, 200);
     final static int windowPadding = 30;
     final static int RIGHTITEMPADDING = 100;
     
@@ -46,7 +46,7 @@ public class ReportList extends View {
     
     private Reports reports;
     private Reports.Type type;
-    private Dimension prefScrollDimension = new Dimension(480, 300);
+    private Dimension prefScrollDimension = new Dimension(600, 300);
     private LocalDate from, to;
 
     public ReportList(App app, Reports.Type type, LocalDate from, LocalDate to) {
@@ -61,10 +61,35 @@ public class ReportList extends View {
         this.to = to != null ? to : LocalDate.MAX;
     }
 
+    private ActionListener popupUserEdit(User registrador, User userBefore, User userAfter) {
+        JFrame frame = new JFrame();
+        String label1 = "Registro do admin que editou o cadastro do usuário: ";
+        String label2 = "Registro do usuário antes da edição: ";
+        String label3 = "Registro do usuário depois da edição: ";
+        String[] labels = new String[] {label1, label2, label3};
+        
+        UserResult uItem = null;
+        if (registrador != null) {
+            uItem = new UserResult(this.model, registrador, false);
+            uItem.setFrame(frame);
+        }
+
+        UserResult uItem2 = new UserResult(this.model, userBefore, false);
+        uItem2.setFrame(frame);
+
+        UserResult uItem3 = new UserResult(this.model, userAfter, false);
+        uItem3.setFrame(frame);
+
+        JComponent[] views = new JComponent[] {uItem == null ? null : uItem.paint(), uItem2.paint(), uItem3.paint()};
+    
+        return this.popup(frame, labels, views);
+    }
+
     private ActionListener popupUserRegister(User registrador, User newUser) {
         JFrame frame = new JFrame();
-        String label1 = "Admin que cadastrou o usuário: ";
-        String label2 = "Usuário cadastrado: ";
+        String label1 = "Registro do admin que cadastrou o usuário: ";
+        String label2 = "Registro do usuário cadastrado: ";
+        String[] labels = new String[] {label1, label2};
         
         UserResult uItem = null;
         if (registrador != null) {
@@ -74,14 +99,17 @@ public class ReportList extends View {
 
         UserResult uItem2 = new UserResult(this.model, newUser, false);
         uItem2.setFrame(frame);
+
+        JComponent[] views = new JComponent[] {uItem == null ? null : uItem.paint(), uItem2.paint()};
     
-        return this.popup(frame, label1, label2, uItem == null ? null : uItem.paint(), uItem2.paint());
+        return this.popup(frame, labels, views);
     }
     private ActionListener popupBookRegister(Book book, User user) {
         JFrame frame = new JFrame();
-        String label1 = "Admin que cadastrou o livro: ";
+        String label1 = "Registro do admin cadastrou o livro: ";
         String label2 = "Registro do livro: ";
-    
+        String[] labels = new String[] {label1, label2};
+
         UserResult uItem = new UserResult(this.model, user, false);
         uItem.setFrame(frame);
 
@@ -89,46 +117,46 @@ public class ReportList extends View {
         eItem.setFrame(frame);
         eItem.setShouldBeDeletable(false);
     
-        return this.popup(frame, label1, label2, uItem.paint(), eItem.paint());
+        JComponent[] views = new JComponent[] {uItem.paint(), eItem.paint()};
+    
+        return this.popup(frame, labels, views);
     }
     private ActionListener popupEmprestimo(Emprestimo emprestimo) {
         User user = emprestimo.getUser();
         JFrame frame = new JFrame();
         String label1 = "Registro do usuário associado a este empréstimo: ";
         String label2 = "Registro do empréstimo: ";
+        String[] labels = new String[] {label1, label2};
     
         UserResult uItem = new UserResult(this.model, user, false);
         uItem.setFrame(frame);
 
         EmprestimoItem eItem = new EmprestimoItem(this.model, emprestimo);
         eItem.setFrame(frame);
+
+        JComponent[] views = new JComponent[] {uItem.paint(), eItem.paint()};
     
-        return this.popup(frame, label1, label2, uItem.paint(), eItem.paint());
+        return this.popup(frame, labels, views);
     }
-    private ActionListener popup(JFrame frame, String label1, String label2, JComponent view1, JComponent view2) {
+    private ActionListener popup(JFrame frame, String[] labels, JComponent[] views) {
         return e -> {
             JComponent results = Box.createVerticalBox();
-            Label uLabel = new Label(label1);
-            Label bLabel = new Label(label2);
-
             results.add(Box.createVerticalGlue());
-            if (view1 != null) {
-                results.add(Margin.glueRight(uLabel));
+            for (int i = 0; i < labels.length; i++) {
+                Label label = new Label(labels[i]);
+                JComponent view = views[i];
+                if (label == null || view == null) continue;
+                results.add(Margin.glueRight(label));
                 results.add(Margin.rigidVertical(SPACEBETWEENLABELANDREGISTER));
-                results.add(view1);
+                results.add(view);
                 results.add(Margin.rigidVertical(SPACEBETWEENITEMS));
-            }
-            if (view2 != null) {
-                results.add(Margin.glueRight(bLabel));
-                results.add(Margin.rigidVertical(SPACEBETWEENLABELANDREGISTER));
-                results.add(view2);
             }
             results.add(Box.createVerticalGlue());
             results.setMinimumSize(minPopupDimension);
         
             frame.add(Margin.vertical(Margin.horizontal(results, windowPadding), windowPadding));
-            frame.setLocationRelativeTo(null);
             frame.pack();
+            frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         };
     }
@@ -181,26 +209,33 @@ public class ReportList extends View {
             for (Relatorio<Book> r : list) {
                 Book book = r.getReport();
                 User user = (User)(r.getData())[0];
-                String username = "Admin que cadastrou o livro: " + user.getData().getName();
-                String bookTitle = "Livro cadastrado: " + book.getTitle();
+                String username = "Registro do admin que cadastrou o livro: " + user.getData().getName();
+                String bookTitle = "Registro do livro cadastrado: " + book.getTitle();
                 component.add(this.reportItem(username, bookTitle, r.getDate(), this.popupBookRegister(book, user)));
                 component.add(Margin.rigidVertical(SPACEBETWEENITEMS));
             }
-        } else if (this.type == Reports.Type.USER_REGISTER) {
-            List<Relatorio<User>> list = this.filteredCopy(this.reports.getUsersRegister());
+        } else if (this.type == Reports.Type.USER_REGISTER || this.type == Reports.Type.USER_EDIT) {
+            boolean isEdit = this.type == Reports.Type.USER_EDIT;
+            List<Relatorio<User>> list = this.filteredCopy(isEdit ? this.reports.getUsersEdit() : this.reports.getUsersRegister());
             if (list.size() == 0) {
-                String msg = "Não há registro de cadastro de usuário";
+                String msg = isEdit ? "Não há registro de edição de cadastro de usuário" : "Não há registro de cadastro de usuário";
                 Label emptyLabel = new Label(msg);
                 component.add(emptyLabel);
                 return component;
             }
             for (Relatorio<User> r : list) {
-                User user = r.getReport(); // novo usuário cadastrado
-                User admin = (User)r.getData()[0]; // admin que cadastrou o usuário
-                String newUserName = "Novo usuário cadastrado: " + user.getData().getName();
-                String adminUserName = "Admin que fez o cadastrado: " + (admin == null ? "Usuário pré-cadastrado" : admin.getData().getName());
-                
-                component.add(this.reportItem(adminUserName, newUserName, r.getDate(), this.popupUserRegister(admin, user)));
+                User userAfter = r.getReport(); // novo usuário cadastrado (ou com cadastro editado)
+                User registrador = (User)r.getData()[0]; // admin que cadastrou ou editou o cadastro do usuário
+                User userBefore = null;
+                if (isEdit) {
+                    userBefore = (User)r.getData()[1];
+                }
+                String newUserName = isEdit ? "Registro do usuário que teve cadastro editado: " : "Registro do novo usuário cadastrado: ";
+                String adminUserName = isEdit ? "Registro do admin que fez a edição de cadastro: " : "Registro do admin que fez o cadastro: ";
+                newUserName += userAfter.getData().getName();
+                adminUserName += registrador == null ? "Usuário pré-cadastrado" : registrador.getData().getName();
+                ActionListener handler = isEdit ? this.popupUserEdit(registrador, userBefore, userAfter) : this.popupUserRegister(registrador, userAfter);
+                component.add(this.reportItem(adminUserName, newUserName, r.getDate(), handler));
                 component.add(Margin.rigidVertical(SPACEBETWEENITEMS));
             }
         }

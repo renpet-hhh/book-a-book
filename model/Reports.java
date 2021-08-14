@@ -11,7 +11,8 @@ public class Reports {
         EMPRESTIMO("Empréstimo"),
         DEVOLUCAO("Devolução"),
         BOOK_REGISTER("Cadastro de livro"),
-        USER_REGISTER("Cadastro de usuário");
+        USER_REGISTER("Cadastro de usuário"),
+        USER_EDIT("Edição de cadastro de usuário");
     
         private String representation;
         private Type(String representation) {
@@ -33,6 +34,7 @@ public class Reports {
     private List<Relatorio<Emprestimo>> devolucoes = new ArrayList<>();
     private List<Relatorio<Book>> booksRegister = new ArrayList<>(); // livros cadastrados
     private List<Relatorio<User>> usersRegister = new ArrayList<>(); // usuários cadastrados
+    private List<Relatorio<User>> usersEdit = new ArrayList<>(); // usuários cadastrados
 
     public void add(Object obj, Reports.Type type, Object... data) {
         if (type == Type.EMPRESTIMO) {
@@ -43,6 +45,8 @@ public class Reports {
             this.addBookRegister((Book)obj, type, data);
         } else if (type == Type.USER_REGISTER) {
             this.addUserRegister((User)obj, type, data);
+        } else if (type == Type.USER_EDIT) {
+            this.addUserEdit((User)obj, type, data);
         }
     }
 
@@ -58,6 +62,9 @@ public class Reports {
     private void addUserRegister(User e, Reports.Type type, Object... data) {
         this.usersRegister.add(new Relatorio<User>(e, type, data));
     }
+    private void addUserEdit(User e, Reports.Type type, Object... data) {
+        this.usersEdit.add(new Relatorio<User>(e, type, data));
+    }
 
     public List<Relatorio<Emprestimo>> getEmprestimos() {
         return Collections.unmodifiableList(this.emprestimos);
@@ -70,6 +77,9 @@ public class Reports {
     }
     public List<Relatorio<User>> getUsersRegister() {
         return Collections.unmodifiableList(this.usersRegister);
+    }
+    public List<Relatorio<User>> getUsersEdit() {
+        return Collections.unmodifiableList(this.usersEdit);
     }
     
 }

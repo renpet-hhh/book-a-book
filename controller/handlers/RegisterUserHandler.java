@@ -11,9 +11,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import framework.App;
+import model.User;
 import model.UserData;
 import controller.commands.DisplayPopupCmd;
 import controller.commands.RegisterUserCmd;
+import controller.commands.UpdateUserCmd;
 
 public class RegisterUserHandler implements ActionListener {
 
@@ -30,14 +32,23 @@ public class RegisterUserHandler implements ActionListener {
      * 4 - Email
      * 5 - Contato
      * 6 - Senha
-     * 7 - Confirmação de senha 
+     * 7 - Confirmação de senha
+     * 
+     * @param isAdmin - true se o cadastro é referente a um admin
+     * @param edit - true se é uma atualização de cadastro (em vez de um novo cadastro)
      */
 
     private List<JTextField> fields;
-    private boolean isAdmin;
+    private boolean isAdmin, edit;
+    private int matricula;
     public RegisterUserHandler(List<JTextField> fields, boolean isAdmin) {
+        this(fields, isAdmin, false, -1);
+    }
+    public RegisterUserHandler(List<JTextField> fields, boolean isAdmin, boolean edit, int matricula) {
         this.fields = fields;
         this.isAdmin = isAdmin;
+        this.edit = edit;
+        this.matricula = matricula;
     }
 
     @Override
@@ -58,12 +69,12 @@ public class RegisterUserHandler implements ActionListener {
         }
         String contact = this.fields.get(5).getText();
         String password = this.fields.get(6).getText();
-        if (password.length() < 6) {
+        if (!this.edit && password.length() < 6) {
             app.control().invoke(new DisplayPopupCmd("Senha deve ter no mínimo 6 caracteres", JOptionPane.ERROR_MESSAGE));
             return;
         }
         String confirmPassword = this.fields.get(7).getText();
-        if (!password.equals(confirmPassword)) {
+        if (!this.edit && !password.equals(confirmPassword)) {
             app.control().invoke(new DisplayPopupCmd("Senhas diferentes", JOptionPane.ERROR_MESSAGE));
             return;
         }
@@ -76,6 +87,12 @@ public class RegisterUserHandler implements ActionListener {
             return;
         }
         UserData data = new UserData(username, address, contact, email, document, birthdate);
+        if (this.edit) {
+            User currentAdmin = app.getLogin().getUser();
+            data.setMatricula(matricula);
+            app.control().invoke(new UpdateUserCmd(data, matricula, currentAdmin));
+            return;
+        }
         // o botão Cadastrar foi pressionado! vamos tentar cadastrar o usuário
         // mensagens de erro e confirmação são de responsabilidade do próprio comando abaixo
         app.control().invoke(new RegisterUserCmd(data, password, RegisterUserHandler.this.isAdmin));
