@@ -22,16 +22,16 @@ import view.components.layout.PackLayout;
 public class EmprestimoItem extends View {
 
     /** Essa classe é responsável por renderizar um item
-     * de um empréstimo, que é definido informações de um Livro + Usuário.
+     * de um empréstimo, que é definido com informações de um Livro + Usuário.
      * 
      * Note que uma RESERVA também é definida com um Livro + Usuário,
      * e as aparências são parecidas. Logo, essa classe permite
      * representar tanto reservas quanto empréstimos.
      * 
      * O construtor Emprestimoitem(App, Book, User) deve ser usado para reservas
-     * e EmprestimoItem(App, Emprestimo) deve ser usado para empréstimos.w
+     * e EmprestimoItem(App, Emprestimo) deve ser usado para empréstimos.
      * 
-     * Por padrão, reservas podem são exibidas com um botão DELETAR,
+     * Por padrão, reservas são exibidas com um botão DELETAR,
      * já empréstimos não. Isso pode ser alterado com setShouldBeDeletable.
      * 
      */
