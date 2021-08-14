@@ -5,6 +5,7 @@ import framework.Command;
 import framework.Page;
 import model.Login;
 import view.pages.Home;
+import view.pages.admin.SearchBooks;
 import view.pages.user.Profile;
 
 public class NavigateCmd implements Command {
@@ -26,7 +27,7 @@ public class NavigateCmd implements Command {
             return; // não fazemos nada quando já estamos na página de destino
         }
         if (this.page instanceof Home && login.isLoggedIn()) {
-            this.page = new Profile();
+            this.page = login.isAdmin() ? new SearchBooks() : new Profile();
         }
         app.getFrame().setTitle(this.page.getTitle());
         app.navigate(this.page);
