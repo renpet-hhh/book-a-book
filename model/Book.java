@@ -79,6 +79,19 @@ public class Book {
 
     }
 
+    public Book update(Book bookData) {
+        if (bookData == null) throw new NullPointerException("Dados do livro não podem ser null");
+        this.title = bookData.title;
+        this.subtitle = bookData.subtitle;
+        this.edition = bookData.edition;
+        this.isbn = bookData.isbn;
+        this.whereWasPublished = bookData.whereWasPublished;
+        this.authors = bookData.authors;
+        this.yearOfPublishment = bookData.yearOfPublishment;
+        App.get().control().invoke(new RefreshCmd(RefreshID.LibraryUpdateBook));
+        return this;
+    }
+
     @Override
     public int hashCode() {
         return this.isbn.hashCode();

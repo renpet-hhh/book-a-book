@@ -14,6 +14,7 @@ import view.pages.pagestemplate.LayoutTemplate;
 
 import java.util.List;
 import javax.swing.JTextField;
+import javax.swing.JButton;
 import model.Book;
 import controller.RefreshID;
 
@@ -24,6 +25,7 @@ public class RegisterBooks extends Page {
     public String getTitle() { return TITLE; }
 
     private List<JTextField> fields;
+    private JButton registerButton;
     private Book book;
 
     public RegisterBooks() {
@@ -54,6 +56,7 @@ public class RegisterBooks extends Page {
         template.setHandlers(handlers);
         String path = edit ?  "Pesquisa >> Livros >> Resultado >> Editar" : "Catalogação";
         LayoutTemplate.build(pane, menubar, content, path);
+        this.registerButton = template.getButtons()[1];
         this.refresh(RefreshID.CLEAR);
         return pane;
     }

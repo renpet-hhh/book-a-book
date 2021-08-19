@@ -56,6 +56,7 @@ public class Library {
      * com os metadados do @param book especificado
      */
     public boolean hasBook(Book book) {
+        if (book == null) return false;
         String isbn = book.getIsbn();
         return hasBook(isbn) && booksByISBN.get(isbn).isForAllIntentsAndPurposes(book);
     }
@@ -76,15 +77,23 @@ public class Library {
         return b;
     }
 
-    /** Remove oldBook, adiciona newBook à biblioteca e retorna true sse oldBook pertencesse a esta e não existesse livro na biblioteca com o isbn de newBook */
+    /** Atualiza @param oldBook com as informações de @param newBook e retorna true
+     * sse @param oldBook pertencesse a biblioteca e não existisse livro na
+     * biblioteca, além de @param oldBook, com o isbn de @param newBook */
     public boolean updateBook(Book oldBook, Book newBook) {
+        if (oldBook == null || newBook == null) return false;
+
+        String oldIsbn = oldBook.getIsbn();
         String newIsbn = newBook.getIsbn();
-        boolean b = hasBook(oldBook) && !hasBook(newIsbn);
+        
+        boolean b = hasBook(oldBook) && (oldBook.equals(newBook) || !hasBook(newIsbn));
+        
         if (b) {
             // remoção do livro antigo
             findByTitle(oldBook.getTitle()).remove(oldBook);
-            this.booksByISBN.remove(oldBook.getIsbn());
-            // inserção do novo livro
+            this.booksByISBN.remove(oldIsbn);
+            // atualização e reinserção do livro atualizado
+            newBook = oldBook.update(newBook);
             String newTitle = newBook.getTitle();
             Set<Book> newSet = findByTitle(newTitle);
             newSet.add(newBook);
