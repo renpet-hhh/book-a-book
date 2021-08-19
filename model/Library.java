@@ -77,7 +77,7 @@ public class Library {
         return b;
     }
 
-    /** Atualiza @param oldBook com as informações de @param newBook e retorna true
+    /** Remove @param oldBook, insere @param newBook e retorna true
      * sse @param oldBook pertencesse a biblioteca e não existisse livro na
      * biblioteca, além de @param oldBook, com o isbn de @param newBook */
     public boolean updateBook(Book oldBook, Book newBook) {
@@ -93,7 +93,7 @@ public class Library {
             findByTitle(oldBook.getTitle()).remove(oldBook);
             this.booksByISBN.remove(oldIsbn);
             // atualização e reinserção do livro atualizado
-            newBook = oldBook.update(newBook);
+            // newBook = oldBook.update(newBook);
             String newTitle = newBook.getTitle();
             Set<Book> newSet = findByTitle(newTitle);
             newSet.add(newBook);
@@ -101,7 +101,7 @@ public class Library {
             this.booksByISBN.put(newIsbn, newBook);
         }
         // notificamos os views que estão observando a mudança de estado "LibraryUpdateBook"
-        this.app.control().invoke(new RefreshCmd(RefreshID.LibraryUpdateBook));
+        this.app.control().invoke(new RefreshCmd(RefreshID.LibraryUpdateBook, newBook));
         return b;
     }
     /** Retorna uma coleção de livros que satisfazem os filtros.
