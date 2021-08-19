@@ -12,17 +12,30 @@ import framework.App;
 import model.Book;
 import controller.commands.DisplayPopupCmd;
 import controller.commands.RegisterBookCmd;
+import controller.commands.UpdateBookCmd;;
 
 public class RegisterBookHandler implements ActionListener {
     
     
     private List<JTextField> fields;
+    private Book bookToUpdate;
     public RegisterBookHandler(List<JTextField> fields) {
+        this(fields, null);
+    }
+    
+    public RegisterBookHandler(List<JTextField> fields, Book bookToUpdate) {
         this.fields = fields;
+        this.bookToUpdate = bookToUpdate;
+    }
+
+    public void setBookToUpdate(Book bookToUpdate) {
+        this.bookToUpdate = bookToUpdate;
     }
 
     @Override
     public void actionPerformed(ActionEvent ev) {
+        boolean edit = bookToUpdate != null;
+
         App app = App.get();
         String title = this.fields.get(0).getText();
         String subtitle = this.fields.get(1).getText();
@@ -75,7 +88,12 @@ public class RegisterBookHandler implements ActionListener {
         authors.add(author3);
         /* livro criado */
         Book book = new Book(title, subtitle, edition, isbn, whereWasPublished, authors, publishmentYearInt, totalNumInt);
-        app.control().invoke(new RegisterBookCmd(book));
+        if (edit) {
+            app.control().invoke(new UpdateBookCmd(bookToUpdate, book));
+        }
+        else {
+            app.control().invoke(new RegisterBookCmd(book));
+        }    
     }
 
   

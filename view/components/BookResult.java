@@ -24,6 +24,9 @@ import view.components.fixed.FixedButton;
 import view.components.layout.PackLayout;
 import view.components.layout.StretchLayout;
 
+import controller.commands.NavigateCmd;
+import view.pages.admin.RegisterBooks;
+
 public class BookResult extends View {
 
     /** 
@@ -139,7 +142,7 @@ public class BookResult extends View {
                 if (this.user == null) {
                     throw new RuntimeException("Tentativa de editar um livro, mas não há usuário associado");
                 }
-                return;
+                app.control().invoke(new NavigateCmd(new RegisterBooks(this.book)));
             };
             this.editButton = new Button("Editar", editHandler, BUTTONLABELCOLOR, BUTTONBGGRAY);
             component.add(Margin.rigidVertical(SPACEBETWEENBUTTONS));

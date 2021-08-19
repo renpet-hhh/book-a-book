@@ -62,6 +62,23 @@ public class Book {
         return b.isbn.equals(this.isbn);
     }
 
+    /* 
+     * retorna true sse this possui os mesmos metadados de @param book,
+     * desconsiderando os atributos relativos ao estoque (howManyTotal,
+     * howManyAvailable e howManyReserved)
+     */
+    public boolean isForAllIntentsAndPurposes(Book book) {
+        if (book == null) return false;
+        return title.equals(book.title) &&
+            subtitle.equals(book.subtitle) &&
+            edition.equals(book.edition) &&
+            isbn.equals(book.isbn) &&
+            whereWasPublished.equals(book.whereWasPublished) &&
+            authors.equals(book.authors) &&
+            yearOfPublishment == book.yearOfPublishment;
+
+    }
+
     @Override
     public int hashCode() {
         return this.isbn.hashCode();
@@ -73,5 +90,7 @@ public class Book {
         b.setHowManyReserved(this.getHowManyReserved());
         return b;
     }
+
+    // public void update()
 }
 

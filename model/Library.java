@@ -43,6 +43,24 @@ public class Library {
         return this.booksByISBN.get(isbn);
     }
 
+    /* 
+     * true retornado sse existe livro na biblioteca
+     * com o @param isbn especificado
+     */
+    public boolean hasBook(String isbn) {
+        return booksByISBN.containsKey(isbn);
+    }
+
+    /* 
+     * true retornado sse existe livro na biblioteca
+     * com os metadados do @param book especificado
+     */
+    public boolean hasBook(Book book) {
+        String isbn = book.getIsbn();
+        return hasBook(isbn) && booksByISBN.get(isbn).isForAllIntentsAndPurposes(book);
+    }
+
+
     /** Adiciona um livro à biblioteca e retorna false se o set não foi alterado. */
     public boolean addBook(Book book) {
         String title = book.getTitle();
@@ -55,6 +73,26 @@ public class Library {
         boolean b = set.add(book);
         // notificamos os views que estão observando a mudança de estado "LibraryAddBook"
         this.app.control().invoke(new RefreshCmd(RefreshID.LibraryAddBook));
+        return b;
+    }
+
+    /** Remove oldBook, adiciona newBook à biblioteca e retorna true sse oldBook pertencesse a esta e não existesse livro na biblioteca com o isbn de newBook */
+    public boolean updateBook(Book oldBook, Book newBook) {
+        String newIsbn = newBook.getIsbn();
+        boolean b = hasBook(oldBook) && !hasBook(newIsbn);
+        if (b) {
+            // remoção do livro antigo
+            findByTitle(oldBook.getTitle()).remove(oldBook);
+            this.booksByISBN.remove(oldBook.getIsbn());
+            // inserção do novo livro
+            String newTitle = newBook.getTitle();
+            Set<Book> newSet = findByTitle(newTitle);
+            newSet.add(newBook);
+            this.books.put(newTitle, newSet);
+            this.booksByISBN.put(newIsbn, newBook);
+        }
+        // notificamos os views que estão observando a mudança de estado "LibraryUpdateBook"
+        this.app.control().invoke(new RefreshCmd(RefreshID.LibraryUpdateBook));
         return b;
     }
     /** Retorna uma coleção de livros que satisfazem os filtros.

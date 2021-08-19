@@ -15,6 +15,7 @@ public enum RefreshID {
     BookAvailable, // quantidade disponível de algum livro foi modificada
     BookReserved, // quantidade reservada de algum livro foi modificada
     LibraryAddBook, // um livro foi adicionado à biblioteca
+    LibraryUpdateBook, // um livro foi atualizado na biblioteca
     LoginUserChanged, // usuário logado mudou
     LoginIncrementMatricula, // número atual de matrícula foi incrementado
     LoginAddUser, // novo usuário foi cadastrado
