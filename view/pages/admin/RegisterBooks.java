@@ -85,5 +85,7 @@ public class RegisterBooks extends Page {
             this.fields.get(9).setText(isbn);
             
         }
+
+        super.refresh(changeID, args);
     }
 }
