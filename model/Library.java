@@ -87,18 +87,12 @@ public class Library {
         String newIsbn = newBook.getIsbn();
         
         boolean b = hasBook(oldBook) && (oldBook.equals(newBook) || !hasBook(newIsbn));
+        if (newBook.getHowManyTotal() < oldBook.getHowManyTotal() - oldBook.getHowManyAvailable()) {
+            throw new RuntimeException("Não é possível reduzir a quantidade de exemplares se a nova quantidade não conseguir representar os livros pendentes (reservas ou empréstimos)");
+        }
         
         if (b) {
-            // remoção do livro antigo
-            findByTitle(oldBook.getTitle()).remove(oldBook);
-            this.booksByISBN.remove(oldIsbn);
-            // atualização e reinserção do livro atualizado
-            // newBook = oldBook.update(newBook);
-            String newTitle = newBook.getTitle();
-            Set<Book> newSet = findByTitle(newTitle);
-            newSet.add(newBook);
-            this.books.put(newTitle, newSet);
-            this.booksByISBN.put(newIsbn, newBook);
+            this.findByISBN(oldIsbn).update(newBook);
         }
         // notificamos os views que estão observando a mudança de estado "LibraryUpdateBook"
         this.app.control().invoke(new RefreshCmd(RefreshID.LibraryUpdateBook, newBook));

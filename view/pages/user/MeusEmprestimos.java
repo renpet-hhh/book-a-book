@@ -70,7 +70,8 @@ public class MeusEmprestimos extends Page {
         }
         for (int i = 0; i < emprestimos.size(); i++) {
             Emprestimo emprestimo = emprestimos.get(i);
-            EmprestimoItem view = new EmprestimoItem(app, emprestimo);
+            boolean fresh = true;
+            EmprestimoItem view = new EmprestimoItem(app, emprestimo, fresh);
             view.setFrame(this.frame);
             this.addView(view);
             if (i > 0) content.add(Margin.rigidVertical(SPACEBETWEENITEMS));

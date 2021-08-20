@@ -58,9 +58,9 @@ public class EmprestimoItem extends View {
         this.shouldBeDeletable = true; // é uma reserva
         this.shouldShowExpireDate = false;
     }
-    public EmprestimoItem(App model, Emprestimo emprestimo) {
+    public EmprestimoItem(App model, Emprestimo emprestimo, boolean fresh) {
         super(model);
-        this.book = emprestimo.getBook();
+        this.book = fresh ? emprestimo.getFreshBook() : emprestimo.getBook();
         this.user = emprestimo.getUser();
         this.expireDate = emprestimo.getExpireDate();
         this.shouldBeDeletable = false; // é um empréstimo

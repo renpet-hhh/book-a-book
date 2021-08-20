@@ -131,7 +131,8 @@ public class ReportList extends View {
         UserResult uItem = new UserResult(this.model, user, false);
         uItem.setFrame(frame);
 
-        EmprestimoItem eItem = new EmprestimoItem(this.model, emprestimo);
+        boolean fresh = false;
+        EmprestimoItem eItem = new EmprestimoItem(this.model, emprestimo, fresh);
         eItem.setFrame(frame);
 
         JComponent[] views = new JComponent[] {uItem.paint(), eItem.paint()};

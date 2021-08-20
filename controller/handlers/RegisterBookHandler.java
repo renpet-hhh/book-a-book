@@ -89,6 +89,10 @@ public class RegisterBookHandler implements ActionListener {
         /* livro criado */
         Book book = new Book(title, subtitle, edition, isbn, whereWasPublished, authors, publishmentYearInt, totalNumInt);
         if (edit) {
+            if (book.getHowManyTotal() < bookToUpdate.getHowManyTotal() - bookToUpdate.getHowManyAvailable()) {
+                app.control().invoke(new DisplayPopupCmd("Não é possível reduzir a quantidade de exemplares se a nova quantidade não conseguir representar os livros pendentes (reservas ou empréstimos)"));
+                return;
+            }
             app.control().invoke(new UpdateBookCmd(bookToUpdate, book));
         }
         else {

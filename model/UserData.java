@@ -70,7 +70,7 @@ public class UserData {
         App app = App.get();
         Emprestimo toRemove = null;
         for (Emprestimo e : this.emprestimos) {
-            if (e.getBook() == book) {
+            if (e.getBook().equals(book)) {
                 toRemove = e;
             }
         }
@@ -88,7 +88,7 @@ public class UserData {
     /* Verifica se usuário possui livros emprestados */
     public boolean hasBookRented(Book book) {
         for (Emprestimo e: this.getEmprestimos()) {
-            if (e.getBook() == book) {
+            if (e.getBook().equals(book)) {
                 return true;
             }
         }

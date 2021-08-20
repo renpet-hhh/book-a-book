@@ -60,6 +60,9 @@ public class Emprestimo  {
     public boolean isExpired() {
         return LocalDateTime.now().isAfter(this.getExpireDate());
     }
+    public Book getFreshBook() {
+        return App.get().getLibrary().findByISBN(this.book.getIsbn());
+    }
     public Book getBook() {
         return this.book;
     }

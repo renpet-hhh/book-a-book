@@ -79,7 +79,7 @@ public class Book {
 
     }
 
-    /* public Book update(Book bookData) {
+    public Book update(Book bookData) {
         if (bookData == null) throw new NullPointerException("Dados do livro não podem ser null");
         this.title = bookData.title;
         this.subtitle = bookData.subtitle;
@@ -88,9 +88,13 @@ public class Book {
         this.whereWasPublished = bookData.whereWasPublished;
         this.authors = bookData.authors;
         this.yearOfPublishment = bookData.yearOfPublishment;
-        App.get().control().invoke(new RefreshCmd(RefreshID.LibraryUpdateBook));
+        int newTotal = bookData.getHowManyTotal();
+        int newAvailable = newTotal - this.getHowManyRented() - this.getHowManyReserved();
+        this.setHowManyTotal(newTotal);
+        this.setHowManyAvailable(newAvailable);
+        App.get().control().invoke(new RefreshCmd(RefreshID.LibraryUpdateBook, this));
         return this;
-    } */
+    }
 
     @Override
     public int hashCode() {
