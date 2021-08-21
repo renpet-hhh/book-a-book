@@ -65,11 +65,10 @@ public class Profile extends Page {
         JComponent pane = Box.createVerticalBox();
         UserData data = user.getData();
         JComponent menubar = Home.header(app, pane, false, data.getName());
-        // Página incompleta por enquanto!
+
         JComponent content = this.mainWrapper(app, user);
         pane.add(menubar);
         pane.add(content);
-        //pane.add(Home.foot());
         return pane;
     }
 
@@ -112,15 +111,12 @@ public class Profile extends Page {
         ActionListener meusEmprestimosHandler = e -> app.control().invoke(new NavigateCmd(new MeusEmprestimos(user)));
         Button myList = new Button("Minha lista", myListHandler, selectedIndex == 0 ? PROFILEMARKEDMENULABELCOLOR : PROFILEMENULABELCOLOR, PROFILEMENULIGHTGRAY, PROFILEBUTTONFONT);
         Button pending = new Button("Meus empréstimos", meusEmprestimosHandler, selectedIndex == 1 ? PROFILEMARKEDMENULABELCOLOR : PROFILEMENULABELCOLOR, PROFILEMENULIGHTGRAY, PROFILEBUTTONFONT);
-        Button settings = new Button("Configurações", null, selectedIndex == 2 ? PROFILEMARKEDMENULABELCOLOR : PROFILEMENULABELCOLOR, PROFILEMENULIGHTGRAY, PROFILEBUTTONFONT);
         /* Pintamos as bordas */
         myList.setBorder(PROFILEMENUBUTTONBORDER); myList.setBorderPainted(true);
         pending.setBorder(PROFILEMENUBUTTONBORDER); pending.setBorderPainted(true);
-        settings.setBorder(PROFILEMENUBUTTONBORDER); settings.setBorderPainted(true);
         menu.add(profileLabel);
         menu.add(myList);
         menu.add(pending);
-        menu.add(settings);
         menu.add(Box.createVerticalGlue());
         menu.setBorder(PROFILEMENUBORDER);
         return menu;
