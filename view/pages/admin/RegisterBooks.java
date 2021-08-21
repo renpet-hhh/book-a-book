@@ -1,6 +1,7 @@
 package view.pages.admin;
 
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 
 import java.awt.event.ActionListener;
@@ -16,6 +17,8 @@ import java.util.List;
 import javax.swing.JTextField;
 import model.Book;
 import controller.RefreshID;
+import controller.commands.NavigateCmd;
+import controller.commands.RemoveBookCmd;
 
 public class RegisterBooks extends Page {
     
@@ -24,6 +27,7 @@ public class RegisterBooks extends Page {
     public String getTitle() { return TITLE; }
 
     private List<JTextField> fields;
+    private JButton[] buttons;
     private Book book;
 
     public RegisterBooks() {
@@ -43,14 +47,19 @@ public class RegisterBooks extends Page {
             "Título:", "Subtítulo:", "Autor 1:", "Autor 2:", "Autor 3:",
             "Edição:", "Ano de publicação:", "Local de publicação:", "Exemplares:", "ISBN:"
         };
-        String[] buttonsText = new String[] {"Cancelar", edit? "Atualizar": "Cadastrar"};
+        String[] buttonsText = edit ? new String[] {"Cancelar", "Atualizar", "Remover"} : new String[] {"Cancelar", "Cadastrar"};
         SearchContentTemplate template = new SearchContentTemplate(labelsText, buttonsText, null, false);
         JComponent content = template.build();
         this.fields = template.getTextFields();
+        this.buttons = template.getButtons();
         ActionListener cancelHandler = edit ? (e -> this.refresh(RefreshID.CLEAR)) : new ClearHandler<>(template.getClearableFields());
         RegisterBookHandler registerBookHandler = new RegisterBookHandler(this.fields);
         if (edit) registerBookHandler.setBookToUpdate(book);
-        ActionListener[] handlers = new ActionListener[] {cancelHandler, registerBookHandler};
+        ActionListener removeBookHandler = e -> {
+            app.control().invoke(new RemoveBookCmd(book));
+            app.control().invoke(new NavigateCmd(new SearchBooks()));
+        };
+        ActionListener[] handlers = edit ? new ActionListener[] {cancelHandler, registerBookHandler, removeBookHandler} : new ActionListener[] {cancelHandler, registerBookHandler};
         template.setHandlers(handlers);
         String path = edit ?  "Pesquisa >> Livros >> Resultado >> Editar" : "Catalogação";
         LayoutTemplate.build(pane, menubar, content, path);
@@ -62,12 +71,7 @@ public class RegisterBooks extends Page {
 
     @Override
     public void refresh(RefreshID changeID, Object... args) {
-        if (changeID == RefreshID.LibraryUpdateBook) {
-            book = (Book) args[0];
-            refresh(RefreshID.CLEAR);
-            return;
-        }
-        if (this.book != null && changeID == RefreshID.CLEAR) {
+        if (this.book != null && (changeID == RefreshID.CLEAR || changeID == RefreshID.LibraryUpdateBook)) {
             String title = book.getTitle();
             String subtitle = book.getSubtitle();
             String author1 = book.getAuthors().get(0);
@@ -89,7 +93,11 @@ public class RegisterBooks extends Page {
             this.fields.get(7).setText(whereWasPublished);
             this.fields.get(8).setText(String.valueOf(numberOfCopies));
             this.fields.get(9).setText(isbn);
-            
+            this.fields.get(9).setEnabled(false);
+            if (this.buttons.length == 3) {
+                JButton removeButton = this.buttons[2];
+                removeButton.setEnabled(this.book.getHowManyRented() == 0 && this.book.getHowManyReserved() == 0);
+            }
         }
 
         super.refresh(changeID, args);

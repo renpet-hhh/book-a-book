@@ -36,7 +36,7 @@ public class UpdateBookCmd implements Command {
             return;
         }
         app.control().invoke(new ReportCmd<>(bookData.copy(), Reports.Type.BOOK_REGISTER, this.user.copy()));
-        app.control().invoke(new DisplayPopupCmd("Livro catalogado com sucesso."));
+        app.control().invoke(new DisplayPopupCmd("Livro atualizado com sucesso."));
     }
     
 }

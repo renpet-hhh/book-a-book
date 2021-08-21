@@ -14,31 +14,19 @@ import framework.App;
 public class Library {
 
     private Map<String, Set<Book>> books;
-    private Map<String, Set<Author>> authors;
     private Map<String, Book> booksByISBN;
     private App app;
 
     public Library(App app) {
         this.app = app;
         this.books = new HashMap<String, Set<Book>>();
-        this.authors = new HashMap<String, Set<Author>>();
         this.booksByISBN = new HashMap<String, Book>();
     }
     /* Pesquisa de livros por Título e por Nome de Autor */
     public Set<Book> findByTitle(String title) {
         return this.books.getOrDefault(title, new HashSet<Book>());
     }
-    public Set<Author> findAuthor(String name) {
-        return this.authors.getOrDefault(name, new HashSet<Author>());
-    }
-    public Set<Book> findByAuthor(String name) {
-        Set<Author> authors = this.findAuthor(name);
-        Set<Book> books = new HashSet<Book>();
-        for (Author a : authors) {
-            books.addAll(a.getBooks());
-        }
-        return books;
-    }
+
     public Book findByISBN(String isbn) {
         return this.booksByISBN.get(isbn);
     }
@@ -77,6 +65,13 @@ public class Library {
         return b;
     }
 
+    public void removeBook(Book book) {
+        String isbn = book.getIsbn();
+        this.books.get(book.getTitle()).remove(book); // tenta remover se livro está presente
+        this.booksByISBN.remove(isbn);
+        this.app.control().invoke(new RefreshCmd(RefreshID.LibraryRemoveBook));
+    }
+
     /** Remove @param oldBook, insere @param newBook e retorna true
      * sse @param oldBook pertencesse a biblioteca e não existisse livro na
      * biblioteca, além de @param oldBook, com o isbn de @param newBook */
@@ -92,10 +87,26 @@ public class Library {
         }
         
         if (b) {
+            String title = oldBook.getTitle();
+            Set<Book> booksWithSameTitle = this.books.get(title);
+            for (Book book: booksWithSameTitle) {
+                if (book.equals(oldBook)) {
+                    book.update(newBook);
+                    break;
+                }
+            }
+            if (!oldBook.getTitle().equals(title)) {
+                booksWithSameTitle.remove(oldBook);
+                this.addBook(oldBook);
+                if (booksWithSameTitle.size() == 0) {
+                    this.books.remove(title);
+                }
+            }
+            // isbn não pode ter mudado, então vamos conseguir encontrar o livro a seguir
             this.findByISBN(oldIsbn).update(newBook);
         }
         // notificamos os views que estão observando a mudança de estado "LibraryUpdateBook"
-        this.app.control().invoke(new RefreshCmd(RefreshID.LibraryUpdateBook, newBook));
+        this.app.control().invoke(new RefreshCmd(RefreshID.LibraryUpdateBook));
         return b;
     }
     /** Retorna uma coleção de livros que satisfazem os filtros.

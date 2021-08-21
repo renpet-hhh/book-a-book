@@ -92,7 +92,7 @@ public class Book {
         int newAvailable = newTotal - this.getHowManyRented() - this.getHowManyReserved();
         this.setHowManyTotal(newTotal);
         this.setHowManyAvailable(newAvailable);
-        App.get().control().invoke(new RefreshCmd(RefreshID.LibraryUpdateBook, this));
+        App.get().control().invoke(new RefreshCmd(RefreshID.LibraryUpdateBook));
         return this;
     }
 
