@@ -22,5 +22,5 @@ Use as contas de usuário e de admin descritas a seguir.
 
 - Um usuário comum de matrícula 0 e senha `aaaaaa`.
 - Um admin de matrícula 1 e senha `bbbbbb`.
-- 10 livros são pré-cadastrados
-- 10 reservas são feitas para o usuário de matrícula 0
+- 6 livros são pré-cadastrados
+- Algumas reservas são pré-cadastradas para o usuário de mátricula 0
