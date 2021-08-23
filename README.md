@@ -24,3 +24,15 @@ Use as contas de usuário e de admin descritas a seguir.
 - Um admin de matrícula 1 e senha `bbbbbb`.
 - 6 livros são pré-cadastrados
 - Algumas reservas são pré-cadastradas para o usuário de mátricula 0
+
+## Organização
+
+Pastas
+
+- controller: Classes associadas ao controller. A pasta commands contém vários comandos, objetos que podem ser invocados. A pasta handlers contém várias classes que implementam ActionListener e portanto conseguem responder a eventos. RefreshID define várias constantes que representam alterações de estado do modelo, permitindo às views observadoras saber que tipo de alteração ocorreu e reagir apropriadamente.
+- framework: Classes que definem o framework utilizado (MVC, Páginas...). App é a classe principal (contém main).
+- helpers: Classes ajudantes que simplificam operações frequentemente utilizadas (como Margin), ou que são úteis para o próprio desenvolvimento do projeto (loggers).
+- images: Contém imagens utilizadas pelo projeto (como a logo da UFC).
+- model: Define classes responsáveis por lidar com a lógica interna da aplicação.
+- view: Define classes responsáveis pela geração de componentes gráficos. Na pasta pages há classes que geram as páginas da aplicação. Na pasta components estão definidos componentes reusáveis.
+ 
