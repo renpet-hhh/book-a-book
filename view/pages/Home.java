@@ -24,6 +24,7 @@ import view.components.ForgotPassword;
 import view.components.Label;
 import view.components.base.MenuFactory;
 import view.components.fixed.FixedJTextField;
+import view.components.layout.PackLayout;
 import view.pages.guest.SearchBooksGuest;
 import view.pages.user.Profile;
 import view.pages.user.SearchBooksUser;
@@ -211,14 +212,17 @@ public class Home extends Page {
     }
 
     public static JComponent mainContent(App app) {
-        JComponent component = Box.createVerticalBox();
-        Label mainText = new Label("Olá olá lorem ipsum pssum lorem ");
+        JComponent component = PackLayout.createVerticalBox();
+        Label mainText1 = new Label("Sistema de Biblioteca - Book a Book");
+        Label mainText2 = new Label("<html>Insira seus dados para ter acesso a sua conta.<br>Entre em contato com um administrador para<br>criar uma conta ou acesse a biblioteca sem conta.</html>");
         ActionListener enterAsGuestHandler = e -> app.control().invoke(new NavigateCmd(new SearchBooksGuest()));
         Button enterAsGuestBttn = new Button("Acessar a biblioteca sem conta", enterAsGuestHandler);
         component.add(Margin.rigidVertical(20));
-        component.add(mainText);
+        component.add(Margin.glueHorizontal(mainText1));
+        component.add(Margin.rigidVertical(10));
+        component.add(Margin.glueHorizontal(mainText2));
         component.add(Margin.rigidVertical(20));
-        component.add(enterAsGuestBttn);
+        component.add(Margin.glueHorizontal(enterAsGuestBttn));
         component.add(Margin.rigidVertical(100));
         return component;
     }
@@ -241,29 +245,13 @@ public class Home extends Page {
         return component;
     }
 
-    public static JComponent foot() {
-        Box component = Box.createHorizontalBox();
-        Label terms = new Label("Termos de Serviço", LABELCOLOR);
-        Label privacy = new Label("Política de Privacidade", LABELCOLOR);
-        component.add(terms);
-        component.add(Margin.rigidHorizontal(FOOTSPACEBETWEEN));
-        component.add(privacy);
-        component.add(Box.createHorizontalGlue());
-        Box wrapper = Margin.horizontal(Margin.vertical(component, FOOTMARGIN), FOOTMARGIN);
-        wrapper.setOpaque(true);
-        wrapper.setBackground(FOOTCOLOR);
-        return wrapper;
-    }
-
     @Override
     public JComponent paint() {
         JComponent pane = Box.createVerticalBox();
         JComponent header = Home.header(app, pane, true, "");
-        JComponent foot = Home.foot();
         JComponent mainWrapper = Home.mainWrapper(app);
         pane.add(header);
         pane.add(mainWrapper);
-        pane.add(foot);
         return pane;
     }
 

@@ -29,7 +29,6 @@ public class About extends Page {
         wrap1.add(this.mainContent());
         wrap1.add(Box.createHorizontalGlue());
         component.add(wrap1);
-        component.add(Home.foot());
         pane.add(component);
         return pane;
     }
