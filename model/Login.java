@@ -34,7 +34,9 @@ public class Login {
         this.user = user;
         if (userChanged) this.app.control().invoke(new RefreshCmd(RefreshID.LoginUserChanged));
     }
-    public void setIsLoggedIn(boolean isLoggedIn) { this.isLoggedIn = isLoggedIn; }
+    public void setIsLoggedIn(boolean isLoggedIn) {
+        this.isLoggedIn = isLoggedIn;
+    }
     public void setIsAdmin(boolean isAdmin) { this.isAdmin = isAdmin; }
 
     /* Base de dados */

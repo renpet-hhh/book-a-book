@@ -16,7 +16,6 @@ import framework.App;
 import framework.Page;
 import helpers.Margin;
 import controller.commands.DisplayPopupCmd;
-import controller.commands.LoginCmd;
 import controller.commands.NavigateCmd;
 import controller.commands.TryLoginCmd;
 import controller.handlers.FieldHandler;
@@ -25,6 +24,7 @@ import view.components.ForgotPassword;
 import view.components.Label;
 import view.components.base.MenuFactory;
 import view.components.fixed.FixedJTextField;
+import view.pages.guest.SearchBooksGuest;
 import view.pages.user.Profile;
 import view.pages.user.SearchBooksUser;
 
@@ -140,8 +140,8 @@ public class Home extends Page {
             Button forgotPasswordBttn = ForgotPassword.getButton(pane);
             bottom.add(Margin.horizontal(forgotPasswordBttn, FORGOTPASSWORDMARGIN));
             // o texto padrão desses campos está assim só por enquanto, para facilitar os testes
-            JTextField emailField = new FixedJTextField(USERNAMEFIELDWIDTH, "1");
-            JTextField passwordField = new FixedJTextField(PASSWORDFIELDWIDTH, "bbbbbb");
+            JTextField emailField = new FixedJTextField(USERNAMEFIELDWIDTH, "Matrícula");
+            JTextField passwordField = new FixedJTextField(PASSWORDFIELDWIDTH, "Senha");
             Button enter = new Button("Entrar", null, LABELCOLOR, HEADERRIGHTCOLOR);
             List<JTextField> loginFields = new ArrayList<>();
             loginFields.add(emailField);
@@ -213,7 +213,7 @@ public class Home extends Page {
     public static JComponent mainContent(App app) {
         JComponent component = Box.createVerticalBox();
         Label mainText = new Label("Olá olá lorem ipsum pssum lorem ");
-        ActionListener enterAsGuestHandler = e -> app.control().invoke(new LoginCmd());
+        ActionListener enterAsGuestHandler = e -> app.control().invoke(new NavigateCmd(new SearchBooksGuest()));
         Button enterAsGuestBttn = new Button("Acessar a biblioteca sem conta", enterAsGuestHandler);
         component.add(Margin.rigidVertical(20));
         component.add(mainText);

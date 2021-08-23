@@ -13,7 +13,16 @@ public class Controller {
     /* Invoca comandos */
     public void invoke(Command cmd) {
         // os comandos são definidos em controller/commands
-        this.logger.log(cmd);
         cmd.execute();
+        this.logger.log(cmd);
+        // try {
+        //     cmd.execute();
+        // } catch (Exception e) {
+        //     // a aplicação não vai crashar em caso de erro inesperado
+        //     // vai exibir um alerta de erro inesperado para o usuário
+        //     if (e != null) {
+        //         invoke(new DisplayPopupCmd("Erro inesperado: " + e.getMessage(), JOptionPane.ERROR_MESSAGE));
+        //     }
+        // }
     }
 }

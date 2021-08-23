@@ -14,6 +14,7 @@ public class LogoutCmd implements Command {
         App app = App.get();
         Login login = app.getLogin();
         if (!login.isLoggedIn()) {
+            app.control().invoke(new NavigateCmd(new Home()));
             return;
         }
         login.setUser(null);

@@ -118,16 +118,58 @@ public class App {
         String passwordMockup1 = "bbbbbb";
         User fakeAdmin = new User(d, Crypto.crypt(passwordMockup1));
         app.control().invoke(new RegisterUserCmd(d, passwordMockup1, true));
-        // LIVRO FALSO
-        List<String> authors = new ArrayList<>();
-        authors.add("Nome falso 1");
-        authors.add("Nome falso 2");
-        authors.add("Nome falso 3");
-        for (int i = 0; i < 10; i++) {
-            Book book = new Book("Título falso" + i, "Subtítulo falso", "Edição falsa", "21313132-123" + i, "Local falso", authors, 1997, 100);
-            app.control().invoke(new RegisterBookCmd(book, fakeAdmin));
-            app.control().invoke(new ReserveBookCmd(book, fakeNormalUser));
-        }
+        // LIVRO 1
+        List<String> authors1 = new ArrayList<>();
+        authors1.add("ASCENCIO, Ana Fernanda Gomes");
+        authors1.add("CAMPOS, Edilene Aparecida Veneruchi de");
+        String title1 = "Fundamentos da programação de computadores: algoritmos, Pascal, C/C++ e java";
+        String local1 = "São Paulo: Pearson Education do Brasil";
+        Book book1 = new Book(title1, "", "3. ed.", "9788564574168", local1, authors1, 2012, 70);
+        app.control().invoke(new RegisterBookCmd(book1, fakeAdmin));
+        app.control().invoke(new ReserveBookCmd(book1, fakeNormalUser));
+        // LIVRO 2
+        List<String> authors2 = new ArrayList<>();
+        authors2.add("CELES, Waldemar");
+        authors2.add("CERQUEIRA, Renato");
+        authors2.add("RANGEL, José Lucas");
+        String title2 = "Introdução a estruturas de dados: com técnicas de programação em C";
+        String local2 = "Rio de Janeiro, RJ: Elsevier: Campus";
+        Book book2 = new Book(title2, "", "14. ed.", "8535212280", local2, authors2, 2004, 22);
+        app.control().invoke(new RegisterBookCmd(book2, fakeAdmin));
+        app.control().invoke(new ReserveBookCmd(book2, fakeNormalUser));
+        // LIVRO 3
+        List<String> authors3 = new ArrayList<>();
+        authors3.add("MANZANO, José Augusto N. G.");
+        authors3.add("OLIVEIRA, Jayr Figueiredo de");
+        authors3.add("RANGEL, José Lucas");
+        String title3 = "Algoritmos: lógica para desenvolvimento de programação de computadores";
+        String local3 = "São Paulo, SP: Érica";
+        Book book3 = new Book(title3, "", "27. ed. rev.", "9788536502212", local3, authors3, 2014, 50);
+        app.control().invoke(new RegisterBookCmd(book3, fakeAdmin));
+        app.control().invoke(new ReserveBookCmd(book3, fakeNormalUser));
+        // LIVRO 4
+        List<String> authors4 = new ArrayList<>();
+        authors4.add("DEITEL, H. M.");
+        authors4.add("DEITEL, P. J.");
+        String title4 = "Java: Como programar";
+        String local4 = "Pearson Prentice Hall";
+        Book book4 = new Book(title4, "", "8a ed.", "9788546502212", local4, authors4, 2010, 100);
+        app.control().invoke(new RegisterBookCmd(book4, fakeAdmin));
+        // LIVRO 5
+        List<String> authors5 = new ArrayList<>();
+        authors5.add("LETHBRIDGE, Timothy C.");
+        authors5.add("LAGANIERE, Robert");
+        String title5 = "Object-Oriented Software Engineering: Practical Software Development Using UML and Java";
+        String local5 = "McGraw-Hill Publishing Company";
+        Book book5 = new Book(title5, "", "2 ed.", "978-0077109080", local5, authors5, 2004, 10);
+        app.control().invoke(new RegisterBookCmd(book5, fakeAdmin));
+        // LIVRO 6
+        List<String> authors6 = new ArrayList<>();
+        authors6.add("MEYER, Bertrand");
+        String title6 = "Object-oriented software construction";
+        String local6 = "Upper Saddle River, N. J.: Prentice Hall PTR";
+        Book book6 = new Book(title6, "", "2nd ed.", "0136291554", local6, authors6, 1997, 30);
+        app.control().invoke(new RegisterBookCmd(book6, fakeAdmin));
 
         // Já povoamos! Reativo os popups
         app.shouldIgnorePopup(false);

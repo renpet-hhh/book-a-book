@@ -74,9 +74,13 @@ public class RegisterBooks extends Page {
         if (this.book != null && (changeID == RefreshID.CLEAR || changeID == RefreshID.LibraryUpdateBook)) {
             String title = book.getTitle();
             String subtitle = book.getSubtitle();
-            String author1 = book.getAuthors().get(0);
-            String author2 = book.getAuthors().get(1);
-            String author3 = book.getAuthors().get(2);
+            String author1 = "";
+            String author2 = "";
+            String author3 = "";
+            List<String> authors = book.getAuthors();
+            try { author1 = authors.get(0); } catch (IndexOutOfBoundsException excp) {}
+            try { author2 = authors.get(1); } catch (IndexOutOfBoundsException excp) {}
+            try { author3 = authors.get(2); } catch (IndexOutOfBoundsException excp) {}
             String edition = book.getEdition();
             int publishingYear = book.getYearOfPublishment();
             String whereWasPublished = book.getWhereWasPublished();
