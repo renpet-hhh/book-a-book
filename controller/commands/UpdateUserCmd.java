@@ -7,6 +7,8 @@ import model.User;
 import model.UserData;
 
 public class UpdateUserCmd implements Command {
+
+    /** Atualiza informações de um usuário */
     
     private User registrador;
     private UserData data;

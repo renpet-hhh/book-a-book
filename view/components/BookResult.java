@@ -259,7 +259,7 @@ public class BookResult extends View {
             if (checkboxHandler != null) this.checkbox.addActionListener(checkboxHandler);
             component.add(this.checkbox);
         }
-        JComponent bookRegister = StretchLayout.createHorizontalBox();
+        JComponent bookRegister = PackLayout.createHorizontalBox();
         JComponent left = this.left();
         this.rightComponent = this.right(editable, reservable);
         bookRegister.add(left);

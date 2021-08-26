@@ -13,9 +13,16 @@ import model.UserData;
 
 public class RegisterUserCmd implements Command {
 
-    private User user;
-    private User registrador;
+    /** Cadastra um usuário */
+
+    private User user; // usuário a ser cadastrado
+    private User registrador; // usuário que fez o cadastro (admin)
+    /** data - dados do usuário cadastrado
+     * password - senha do usuário cadastrado
+     * isAdmin - se o usuário cadastrado é admin
+     */
     public RegisterUserCmd(UserData data, String password, boolean isAdmin) {
+        // se registrador não foi especificado, então pegamos o admin logado atualmente
         this(data, password, isAdmin, App.get().getLogin().getUser());
     }
     /** registrador é o administrador que está cadastrando esse usuário */
@@ -41,11 +48,13 @@ public class RegisterUserCmd implements Command {
         Login login = app.getLogin();
         String okMessage = "Usuário cadastrado com sucesso";
         try {
+            // alteramos o modelo para que esse usuário seja cadastrado
             login.addUser(this.user);
         } catch (RuntimeException e) {
             app.control().invoke(new DisplayPopupCmd(e.getMessage(), JOptionPane.ERROR_MESSAGE));
             return;
         }
+        // guardamos o usuário cadastrado e o registrador para propósito do relatório
         User userAfter = this.user.copy();
         User r = registrador == null ? null : registrador.copy();
         app.control().invoke(new ReportCmd<>(userAfter, Reports.Type.USER_REGISTER, r));

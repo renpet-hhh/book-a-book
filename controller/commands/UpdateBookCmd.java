@@ -10,6 +10,8 @@ import model.User;
 
 public class UpdateBookCmd implements Command {
 
+    /** Atualiza informações de um livro */
+
     @Override
     public String log() {
         return String.format("UpdateBookCmd: %s -> %s", (this.bookToUpdate == null? "null": this.bookToUpdate.getTitle()), (this.bookData == null? "null": this.bookData.getTitle()));

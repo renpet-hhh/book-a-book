@@ -8,8 +8,10 @@ import model.User;
 
 public class ReserveBookCmd implements Command {
 
-    Book book;
-    User user;
+    /** Reserva um livro */
+
+    Book book; // livro a ser reservado
+    User user; // usuário a reservar o livro
     public ReserveBookCmd(Book book, User user) {
         this.book = book;
         this.user = user;

@@ -10,9 +10,11 @@ import view.pages.user.Profile;
 
 public class NavigateCmd implements Command {
 
+    /** Navega até uma página */
 
     private Page page;
 
+    /** page é a página a ser pintada na tela */
     public NavigateCmd(Page page) {
         this.page = page;
     }
@@ -30,7 +32,7 @@ public class NavigateCmd implements Command {
             this.page = login.isAdmin() ? new SearchBooks() : new Profile();
         }
         app.getFrame().setTitle(this.page.getTitle());
-        app.navigate(this.page);
+        app.navigate(this.page); // usamos navigate de GUI
     }
 
     @Override

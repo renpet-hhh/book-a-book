@@ -11,8 +11,10 @@ import model.User;
 
 public class DevolverCmd implements Command {
 
-    Book book;
-    User user;
+    /** Realiza a devolução de um livro */
+
+    Book book; // livro que foi emprestado
+    User user; // usuário que pegou o livro emprestado
     public DevolverCmd(Book book, User user) {
         this.book = book;
         this.user = user;

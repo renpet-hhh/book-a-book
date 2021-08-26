@@ -8,6 +8,8 @@ import model.Reports;
 
 public class ReportCmd<T> implements Command {
 
+    /** Insere um relatório na base de dados dos relatórios */
+
     private T report;
     private Reports.Type type;
     private Object[] data;

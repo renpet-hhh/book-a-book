@@ -6,6 +6,10 @@ import model.Login;
 
 public class TryLoginCmd implements Command {
 
+    /** Tenta realizar login de usuario, mostrando erro caso usuário esteja logado
+     * ou caso matrícula ou senha estejam inseridas erradas
+     */
+
     private int matricula;
     private String password;
 
@@ -23,6 +27,7 @@ public class TryLoginCmd implements Command {
     public void execute() {
         App app = App.get();
         Login login = app.getLogin();
+        // para mais informações, veja tryLogin
         login.tryLogin(this.matricula, this.password);
     }
     

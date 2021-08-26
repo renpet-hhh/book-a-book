@@ -10,6 +10,8 @@ import model.User;
 
 public class RegisterBookCmd implements Command {
 
+    /** Cadastra um livro */
+
     @Override
     public String log() {
         return "RegisterBookCmd: " + (this.book == null ? "null" : this.book.getTitle());
@@ -22,18 +24,21 @@ public class RegisterBookCmd implements Command {
     }
     /* user é quem está cadastrando esse livro */
     public RegisterBookCmd(Book book, User user) {
-        this.book = book;
+        this.book = book; // livro a ser cadastrado
         this.user = user;
     }
 
     @Override
     public void execute() {
         App app = App.get();
+        // alteramos o modelo (Library)
         boolean changedLibrary = app.getLibrary().addBook(book);
         if (!changedLibrary) {
+            // livro já estava catalogado
             app.control().invoke(new DisplayPopupCmd("Livro já está catalogado", JOptionPane.ERROR_MESSAGE));
             return;
         }
+        // registramos o relatório e exibimos uma popup de sucesso
         app.control().invoke(new ReportCmd<>(book.copy(), Reports.Type.BOOK_REGISTER, this.user.copy()));
         app.control().invoke(new DisplayPopupCmd("Livro catalogado com sucesso."));
     }

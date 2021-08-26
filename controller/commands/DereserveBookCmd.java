@@ -8,8 +8,10 @@ import model.User;
 
 public class DereserveBookCmd implements Command {
 
-    Book book;
-    User user;
+    /** Remove a reserva de um livro (que está associada com um usuário) */
+
+    Book book; // livro do qual devemos remover a reserva
+    User user; // usuário que fez essa reserva
     public DereserveBookCmd(Book book, User user) {
         this.book = book;
         this.user = user;

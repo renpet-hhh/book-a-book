@@ -7,6 +7,8 @@ import model.Library;
 
 public class RemoveBookCmd implements Command {
 
+    /** Remove um livro da biblioteca */
+
     private Book book;
     /* book é o livro a ser removido */
     public RemoveBookCmd(Book book) {
@@ -24,6 +26,7 @@ public class RemoveBookCmd implements Command {
         App app = App.get();
         Library library = app.getLibrary();
         if (!library.hasBook(this.book)) {
+            // livro não estava na biblioteca
             app.control().invoke(new DisplayPopupCmd("Livro não está na biblioteca e portanto não pode ser removido"));
             return;
         }
@@ -31,6 +34,7 @@ public class RemoveBookCmd implements Command {
             app.control().invoke(new DisplayPopupCmd("Não é possível remover um livro que ainda possui pendências (reservas ou empréstimos)"));
             return;
         }
+        // altera o modelo
         library.removeBook(this.book);
         app.control().invoke(new DisplayPopupCmd("Livro removido com sucesso"));
     }

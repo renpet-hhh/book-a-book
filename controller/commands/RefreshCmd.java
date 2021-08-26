@@ -9,9 +9,14 @@ import model.Book;
 import model.User;
 
 public class RefreshCmd implements Command {
+
+    /** Chama refresh nas views observadoras.
+     * Mais precisamente, chama refresh na view principal (raiz),
+     * que por sua vez (segundo o padrão Composite) chama refresh as subviews
+     */
     
-    RefreshID changeID;
-    Object[] args;
+    RefreshID changeID; // identificador da alteração de estado do modelo
+    Object[] args; // argumentos adicionais, semântica variável
     public RefreshCmd(RefreshID changeID, Object ...args) {
         this.changeID = changeID;
         this.args = args;
@@ -22,6 +27,10 @@ public class RefreshCmd implements Command {
     public void execute() {
         App app = App.get();
         switch (this.changeID) {
+            // alguns refresh são alterações de contexto
+            // por exemplo podemos atualizar o usuário que está sendo exibido no momento
+            // ou o livro que está sendo exibido no momento
+            // o refresh típico é lidado no default desse switch
             case UserContext:
                 app.setUserContext((User)args[0]);
                 break;

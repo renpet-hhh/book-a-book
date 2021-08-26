@@ -14,13 +14,15 @@ import framework.Command;
  */
 public class DisplayPopupCmd implements Command {
 
-    JFrame frame;
-    String message, title;
-    int messageType;
+    JFrame frame; // frame (janela) pai desse popup (pode ser null, significando que esse popup não tem pai)
+    String message, title; // mensagem e título da janela popup
+    int messageType; // tipo de mensagem (definido por JOPtionPane)
+    // exemplo: JOptionPane.INFORMATION_MESSAGE, JOptionPane.ERROR_MESSAGE
 
-    private final static String defaultTitle = "";
+    private final static String defaultTitle = ""; // título padrão da janela popup exibida
     private final static int defaultMessageType = JOptionPane.INFORMATION_MESSAGE;
 
+    /* Construtores simplesmente povoam os atributos */
     public DisplayPopupCmd(JFrame frame, String message, String title, int messageType) {
         this.frame = frame;
         this.message = message;
@@ -36,6 +38,11 @@ public class DisplayPopupCmd implements Command {
 
     @Override
     public void execute() {
+        // se não devemos ignorar esse popup, ou se essa mensagem é um erro
+        // devemos mostrar o popup. Veja que JOptionPane.ERROR_MESSAGE sempre são exibidos
+        // e o App permite ignorar os popups via shouldIgnorePopup,
+        // útil para o pré-cadastro por exemplo (não queremos vários popups
+        // assim que iniciamos a aplicação)
         if (!App.get().shouldIgnorePopup() || this.messageType == JOptionPane.ERROR_MESSAGE) {
             JOptionPane.showMessageDialog(this.frame, this.message, title, this.messageType);
         }
