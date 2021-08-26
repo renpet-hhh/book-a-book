@@ -10,8 +10,12 @@ import model.User;
 
 public class ReserveHandler implements ActionListener {
 
-    private User user;
-    private Book book;
+    /** Simplesmente chama o comando de reservar o livro.
+     * Quando chamado sem argumentos, pega o livro e o usuário do contexto.
+     */
+
+    private User user; // usuário que está reservando
+    private Book book; // livro sendo reservado
     public ReserveHandler(User user, Book book) {
         this.user = user;
         this.book = book;

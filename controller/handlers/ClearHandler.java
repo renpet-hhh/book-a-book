@@ -13,6 +13,11 @@ import javax.swing.JTextField;
 
 public class ClearHandler<T extends JComponent> implements ActionListener {
 
+    /** Limpa componentes (lista deles é recebido como argumento).
+     * Limpar significa ir a um estado inicial (texto vazio, checkbox desmarcado,
+     * combobox com índice 0 selecionado)
+     */
+
     private List<T> components;
     public ClearHandler(List<T> components) {
         this.components = components;

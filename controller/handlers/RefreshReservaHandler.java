@@ -14,6 +14,15 @@ import model.Login;
 import model.User;
 
 public class RefreshReservaHandler implements ActionListener {
+
+    /** Pega informações dos campos de texto passados como argumento
+     * e atualiza o contexto com base nesse texto (matrícula do usuário).
+     * Alterar contexto é considerado "refresh", pois as views podem estar observando esse tipo
+     * de alteração.
+     * 
+     * O novo usuário do contexto é o usuário com a matrícula especificada no campo de texto.
+     * A nova lista de livros do contexto é a lista de livros reservados por esse usuário.
+     */
     
     private JTextField field;
     public RefreshReservaHandler(JTextField field) {

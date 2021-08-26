@@ -7,6 +7,10 @@ import javax.swing.event.DocumentListener;
 
 public class NotifyTextChangeListener implements DocumentListener {
 
+    /** Executa o handler sempre que o texto for alterado.
+     * É um DocumentListener (e não ActionListener), pois é um listener de campos de texto
+     */
+
     private Consumer<Void> handler;
     public NotifyTextChangeListener(Consumer<Void> handler) {
         this.handler = handler;

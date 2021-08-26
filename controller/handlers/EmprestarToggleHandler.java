@@ -13,6 +13,13 @@ import model.User;
 
 public class EmprestarToggleHandler implements ActionListener {
 
+    /** Concede um empréstimo de um livro a um usuário.
+     * Se o livro ou o usuário for especificado como null,
+     * eles seriam obtidos por meio do contexto.
+     * Dessa forma, esse handler consegue ser dinâmico,
+     * consegue se referir a outros usuários/livros, basta alterar o contexto.
+     */
+
     private User user;
     private Book book;
     /* "Toggle" porque empresta quando o livro não está emprestado e devolve qunado o livro já está emprestado */

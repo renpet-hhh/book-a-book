@@ -15,6 +15,8 @@ import controller.commands.RegisterBookCmd;
 import controller.commands.UpdateBookCmd;;
 
 public class RegisterBookHandler implements ActionListener {
+
+    /* Lê os campos de texto e fazer um cadastro de livro */
     
     
     private List<JTextField> fields;

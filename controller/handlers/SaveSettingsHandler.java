@@ -12,6 +12,11 @@ import framework.App;
 
 public class SaveSettingsHandler implements ActionListener {
 
+    /** Lê os campos de texto das configurações
+     * e chama os comandos para alterar o modelo conforme os campos de texto.
+     * Antes disso, checa se os campos de texto possuem conteúdo válido.
+     */
+
     private List<JTextField> fields;
     public SaveSettingsHandler(List<JTextField> fields) {
         this.fields = fields;

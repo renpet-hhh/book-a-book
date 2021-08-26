@@ -17,6 +17,15 @@ import model.Login;
 import model.User;
 
 public class RefreshEmprestimoHandler implements ActionListener {
+
+    /** Pega informações dos campos de texto passados como argumento
+     * e atualiza o contexto com base nesse texto (matrícula do usuário e isbn do livro).
+     * Alterar contexto é considerado "refresh", pois as views podem estar observando esse tipo
+     * de alteração.
+     * 
+     * O novo usuário do contexto é o usuário com a matrícula especificada no campo de texto.
+     * O novo livro do contexto é o livro cujo isbn foi especificado no campo de texto.
+     */
     
     private List<JTextField> fields;
     public RefreshEmprestimoHandler(List<JTextField> fields) {
@@ -50,6 +59,8 @@ public class RefreshEmprestimoHandler implements ActionListener {
         Login login = app.getLogin();
         Book book = lib.findByISBN(isbn);
         User user = login.getUser(matriculaInt);
+        // alteramos o contexto
+        // de forma que views observadoras poderão reagir apropriadamente
         app.control().invoke(new RefreshCmd(RefreshID.UserContext, user));
         app.control().invoke(new RefreshCmd(RefreshID.BookContext, book));
     }

@@ -22,6 +22,10 @@ import view.components.ReportList;
 
 public class ReportListHandler implements ActionListener {
 
+    /** Gera o popup de relatório apropriado conforme o item selecionado no combobox "chooser".
+     * A janela é definida pela classe ReportList.
+     */
+
     private JComboBox<String> chooser;
     private JTextField from, to;
     private JCheckBox complete;
